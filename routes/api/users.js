@@ -63,12 +63,12 @@ router.post('/', [
       {expiresIn: EXP},
       (err, token) => {
         if(err) throw err
-        res.json({ token })
+        res.status(200).json({ token })
       }
     )
   } catch(err) {
     console.error(err.message)
-    res.status(500).send({ errors: [{msg: 'Server error'}]})
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
     
   
