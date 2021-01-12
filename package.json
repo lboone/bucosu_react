@@ -1,7 +1,7 @@
 {
-  "name": "devconnector",
+  "name": "bucosu",
   "version": "1.0.0",
-  "description": "Social Network For Developers",
+  "description": "Bucosu - Building Condition Survey",
   "main": "server.js",
   "scripts": {
     "start": "node server",

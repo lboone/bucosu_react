@@ -4,108 +4,49 @@ const Schema = mongoose.Schema
 const ProfileSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
+    required: true
   },
-  company: {
-    type: String
-  },
-  website: {
-    type: String
-  },
-  location: {
-    type: String
-  },
-  status: {
+  firstname: {
     type: String,
     required: true
   },
-  skills: {
-    type: [String],
+  lastname: {
+    type: String,
     required: true
   },
-  bio: {
-    type: String
+  phone: {
+    type: String,
+    required: true
   },
-  githubusername: {
-    type: String
-  },
-  experience: [
+  settings: [
     {
-    title: {
-      type: String,
-      required: true
-    },
-    company: {
-      type: String,
-      required: true
-    },
-    location: {
-      type: String
-    },
-    from: {
-      type: Date,
-      required: true
-    },
-    to: {
-      type: Date
-    },
-    current: {
-      type: Boolean,
-      default: false
-    },
-    description: {
-      type: String
-    }
-  }
-  ],
-  education: [
-    {
-      school: {
+      name: {
         type: String,
         required: true
       },
-      degree: {
+      value: {
         type: String,
         required: true
-      },
-      fieldofstudy: {
-        type: String,
-        required: true
-      },
-      from: {
-        type: Date,
-        required: true
-      },
-      to: {
-        type: Date,
-        required: false
-      },
-      current: {
-        type: Boolean,
-        default: false
-      },
-      description: {
-        type: String
       }
     }
   ],
-  social: {
-    youtube: {
-      type: String
-    },
-    twitter: {
-      type: String
-    },
-    facebook: {
-      type: String
-    },
-    linkedin: {
-      type: String
-    },
-    instagram: {
-      type: String
+  logins: [
+    {
+      ipaddress: {
+        type: String,
+        required: true
+      },
+      device: {
+        type: String,
+        required: true
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
     }
-  },
+  ],
   date: {
     type: Date,
     default: Date.now

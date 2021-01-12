@@ -3,6 +3,7 @@ const router = express.Router()
 const bcrypt = require('bcryptjs')
 const auth = require('../../middleware/auth')
 const User = require('../../models/User')
+const Profile = require('../../models/Profile')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const { check, validationResult } = require('express-validator')
@@ -14,7 +15,9 @@ const EXP = process.env.EXP || 360000
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    let user = await User.findById(req.user.id)
+    .populate({path: 'usertype', model:'usertype'})
+    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype'}});
     res.json(user)
   } catch(err){
     console.error(err.message);
@@ -36,17 +39,18 @@ router.post('/', [
   const {email, password} = req.body 
   try {
     // See if user exists
-    let user = await User.findOne({ email })
+    let user = await User.findOne({ email }).select("+password")
     if(!user){
       return res.status(400).json({ errors: [{msg: 'Invalid Credentials'}]})
     }
     
+
     const isMatch = await bcrypt.compare(password,user.password)
 
     if(!isMatch){
       return res.status(400).json({ errors: [{msg: 'Invalid Credentials'}]})
     }
-
+    
     // Return jsonwebtoken
     // 1st create payload
     const payload = {
