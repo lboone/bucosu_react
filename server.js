@@ -2,6 +2,10 @@ const express = require('express')
 const connectDB = require('./config/db')
 const listEndpoints = require('express-list-endpoints')
 const auth = require('./middleware/auth')
+const {SWAGGEROPTIONS} = require('./config/constants')
+
+const swaggerJsdoc = require("swagger-jsdoc")
+const swaggerUi = require("swagger-ui-express")
 
 // Setup express app
 const app = express()
@@ -29,5 +33,14 @@ app.use('/api/endpoints',auth, function(req,res) {
 
 
 const PORT = process.env.PORT || 5001
+
+
+const specs = swaggerJsdoc(SWAGGEROPTIONS);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
+
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`))

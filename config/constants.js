@@ -20,6 +20,41 @@ const ACCESSTYPES = {
       "MEMBER":99
     }
   }
+
+  const SWAGGEROPTIONS = {
+    definition: {
+      openapi: "3.0.0",
+      info: {
+        title: "BUCOSU BCS API with Swagger",
+        version: "1.0.0",
+        description:
+          "This is a robust API made for the BUCOSU web application, made with Express and documented with Swagger",
+        license: {
+          name: "MIT",
+          url: "https://spdx.org/licenses/MIT.html",
+        },
+        contact: {
+          name: "LAMB Apps",
+          url: "https://lambapps.com",
+          email: "lloyd@lambapps.com",
+        },
+      },
+      servers: [
+        {
+          url: "http://localhost:5001/api",
+        },
+      ],
+    },
+    apis: [
+      "./models/Building.js",
+      "./models/Company.js",
+      "./models/CompanyType.js",
+      "./models/Profile.js",
+      "./models/User.js",
+      "./models/UserType.js"]
+  }
+
   module.exports = {
-    ACCESSTYPES
+    ACCESSTYPES,
+    SWAGGEROPTIONS
   }
