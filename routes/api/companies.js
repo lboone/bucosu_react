@@ -152,7 +152,6 @@ router.get('/:id', access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) =
       return res.status(404).json({ errors: [{msg: 'Company not found'}]})  
     }
     res.status(200).json(company)
-
   } catch (err) {
     console.error(err.message)
 

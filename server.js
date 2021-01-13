@@ -26,6 +26,7 @@ app.use('/api/companies',require('./routes/api/companies'))
 app.use('/api/profile',require('./routes/api/profile'))
 app.use('/api/usertypes',require('./routes/api/usertypes'))
 app.use('/api/companytypes',require('./routes/api/companytypes'))
+app.use('/api/buildings',require('./routes/api/buildings'))
 
 app.use('/api/endpoints',auth, function(req,res) {
   res.status(200).json(listEndpoints(app))

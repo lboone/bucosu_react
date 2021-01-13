@@ -24,6 +24,8 @@
  *              - city
  *              - state
  *              - zip
+ *              - lat
+ *              - lng
  *            properties:
  *              address:
  *                type: string
@@ -37,6 +39,19 @@
  *              zip:
  *                type: string
  *                description: The zip of the building
+ *              location:
+ *                type: object
+ *                required:
+ *                  - type
+ *                  - coordinates
+ *                properties:
+ *                  type:
+ *                    type: string
+ *                    default: 'Point'
+ *                    description: Identifies what type of location this is
+ *                  coordinates:
+ *                    type: number[]
+ *                    description: An array of two coordinates lat/lng
  *          isactive:
  *            type: boolean
  *            default: true
@@ -47,6 +62,8 @@
  *           city: City Of NoWhere
  *           state: NC
  *           zip: 12345
+ *           lng: 15.65745
+ *           lat: 12.25432
  *           isactive: true
  */
 const mongoose = require('mongoose')
@@ -83,6 +100,17 @@ const BuildingSchema = new Schema({
     zip: {
       type: String,
       required: true
+    },
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        required: true
+      },
+      coordinates: {
+        type: [Number],
+        required: true
+      }
     }
   },
   isactive: {
