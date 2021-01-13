@@ -1,14 +1,17 @@
 const express = require('express')
 const connectDB = require('./config/db')
+const listEndpoints = require('express-list-endpoints')
+const auth = require('./middleware/auth')
 
+// Setup express app
 const app = express()
-
 
 // Connect Database
 connectDB()
 
 // Init Middleware
 app.use(express.json({extended: false}))
+
 
 app.get('/',(req, res) => res.send('API Running'))
 
@@ -17,8 +20,13 @@ app.use('/api/users',require('./routes/api/users'))
 app.use('/api/auth',require('./routes/api/auth'))
 app.use('/api/companies',require('./routes/api/companies'))
 app.use('/api/profile',require('./routes/api/profile'))
-//app.use('/api/usertypes',require('./routes/api/usertypes'))
-//app.use('/api/companytypes',require('./routes/api/companytypes'))
+app.use('/api/usertypes',require('./routes/api/usertypes'))
+app.use('/api/companytypes',require('./routes/api/companytypes'))
+
+app.use('/api/endpoints',auth, function(req,res) {
+  res.status(200).json(listEndpoints(app))
+})
+
 
 const PORT = process.env.PORT || 5001
 

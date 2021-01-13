@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../middleware/auth')
+const access = require('../../middleware/access')
 const Profile = require('../../models/Profile')
 const User = require('../../models/User')
 const { check, validationResult } = require('express-validator')
-const request = require('request')
-const config = require('config')
+const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -74,10 +74,11 @@ router.post('/', [auth, [
 
 // @route   GET api/profile
 // @desc    Get all profiles
-// @access  Public
+// @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const profiles = await Profile.find().populate({path: 'user', model: 'user',populate: [{path:'usertype',model:'usertype'},{path: 'company',model:'company', populate: {path: 'companytype',model:'companytype'}}]})
+    const profiles = await Profile.find().populate({path: 'user', model: 'user',populate: [{path: 'company',model:'company'}]}).select(['-settings', '-logins'])
+    
     res.status(200).json(profiles)
   } catch (err) {
     console.error(err.message)
@@ -88,7 +89,7 @@ router.get('/', auth, async (req, res) => {
 // @route   GET api/profile/user/:user_id
 // @desc    Get profile by user ID
 // @access  Private
-router.get('/user/:user_id', auth, async (req, res) => {
+router.get('/user/:user_id', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id }).populate({path: 'user', model: 'user',populate: [{path:'usertype',model:'usertype'},{path: 'company',model:'company', populate: {path: 'companytype',model:'companytype'}}]})
 
@@ -182,7 +183,7 @@ router.get('/settings',auth, async (req,res) => {
 })
 
 // @route   POST api/profile/settings
-// @desc    Retrieve profile of logged in user & login tracking
+// @desc    Retrieve profile of logged in user update settings
 //  @access Private
 router.post('/settings', [auth,[
   check('name','Name is required').not().isEmpty(),
@@ -219,10 +220,9 @@ router.post('/settings', [auth,[
 // @route   DELETE api/profile/
 // @desc    Delete profile, user & posts
 // @access  Private
-router.delete('/',auth, async (req, res) => {
+router.delete('/',access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try {
-    // @todo - remove user's posts
-
+    
     // Remove Profile
     await Profile.findOneAndRemove({user: req.user.id})
 

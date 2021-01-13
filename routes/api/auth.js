@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken')
 const config = require('config')
 const { check, validationResult } = require('express-validator')
 
-const EXP = process.env.EXP || 360000
+const EXP = process.env.EXP || '365d'
 
 // @route   GET api/auth
 // @desc    Return user's data
@@ -17,7 +17,7 @@ router.get('/', auth, async (req, res) => {
   try {
     let user = await User.findById(req.user.id)
     .populate({path: 'usertype', model:'usertype'})
-    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype'}});
+    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype', populate: {path:'usertypes',model:'usertype'}}});
     res.json(user)
   } catch(err){
     console.error(err.message);

@@ -1,16 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const auth = require('../../middleware/auth')
+const access = require('../../middleware/access')
 const { check, validationResult } = require('express-validator')
 const CompanyType = require('../../models/CompanyType')
 const Company = require('../../models/Company')
 const User = require('../../models/User')
+const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
 
 // @route   POST api/companies/companytype/:companytype_id
 // @desc    Create a company
 // @access  Private
-router.post('/companytype/:companytype_id', [auth, [
+router.post('/companytype/:companytype_id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
   check('name','Name is required').not().isEmpty(),
   check('address','Address is required').not().isEmpty(),
   check('city','city is required').not().isEmpty(),
@@ -64,7 +66,7 @@ router.post('/companytype/:companytype_id', [auth, [
 // @route   PUT api/companies/:id
 // @desc    Update a company
 // @access  Private
-router.put('/:id', [auth, [
+router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
   check('name','Name is required').not().isEmpty(),
   check('address','Address is required').not().isEmpty(),
   check('city','city is required').not().isEmpty(),
@@ -114,9 +116,17 @@ router.put('/:id', [auth, [
 // @route   GET api/companies
 // @desc    Get all companies
 // @access  Private
-router.get('/',auth, async (req,res) => {
+router.get('/',access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) => {
   try{
-    const companies = await Company.find().populate('companytype',['name','level'])
+    const companies = await Company.find().populate({
+      path: "companytype",
+      model:"companytype",
+      populate: 
+      {
+        path: 'usertypes',
+        model: 'usertype'
+      }
+    })
     res.status(200).json(companies)
   } catch (err) {
     console.error(err.message)
@@ -127,9 +137,17 @@ router.get('/',auth, async (req,res) => {
 // @route   GET api/companies/:id
 // @desc    Get company by id
 // @access  Private
-router.get('/:id', auth, async (req,res) => {
+router.get('/:id', access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) => {
   try{
-    const company = await Company.findById(req.params.id).populate('companytype',['name','level'])
+    const company = await Company.findById(req.params.id).populate({
+      path: "companytype",
+      model:"companytype",
+      populate: 
+      {
+        path: 'usertypes',
+        model: 'usertype'
+      }
+    })
     if(!company){
       return res.status(404).json({ errors: [{msg: 'Company not found'}]})  
     }
@@ -148,7 +166,7 @@ router.get('/:id', auth, async (req,res) => {
 // @route   DELETE api/companies/:id
 // @desc    Delete company by id
 // @access  Private
-router.delete('/:id',auth, async (req,res) => {
+router.delete('/:id',access(COMPANY.ADMIN,USER.SUPERADMIN), async (req,res) => {
   try{
     const company = await Company.findById(req.params.id).populate('companytype',['name','level'])
     if(!company){
@@ -156,11 +174,6 @@ router.delete('/:id',auth, async (req,res) => {
     }
 
     const user = await User.findById(req.user.id).populate('usertype',['name','level'])
-
-    // Make sure user level is Admin
-    if(user.usertype.level > 0){
-      return res.status(401).json({ errors: [{msg: 'You are not authorized'}]})
-    }
 
     // Make sure company is not Admin Company
     if(company.companytype.level === 0){
@@ -183,7 +196,7 @@ router.delete('/:id',auth, async (req,res) => {
 // @route   PUT pi/companies/:id/deactivate
 // @desc    Deactivate a company
 // @access  Private
-router.put('/:id/deactivate', auth, async (req, res) => {
+router.put('/:id/deactivate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try{
     const company = await Company.findById(req.params.id)
     if(!company){
@@ -206,7 +219,7 @@ router.put('/:id/deactivate', auth, async (req, res) => {
 // @route   PUT pi/companies/:id/activate
 // @desc    Activate a company
 // @access  Private
-router.put('/:id/activate', auth, async (req, res) => {
+router.put('/:id/activate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try{
     const company = await Company.findById(req.params.id)
     if(!company){

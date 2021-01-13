@@ -15,7 +15,7 @@ const CompanyTypeSchema = new Schema({
     required: true,
     default: 999
   },
-  usertypes: [{ type: Schema.Types.ObjectId, ref: "companytype" }],
+  usertypes: [{ type: Schema.Types.ObjectId, ref: "usertype" }],
   date: {
     type: Date,
     default: Date.now

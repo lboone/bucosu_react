@@ -4,22 +4,23 @@ const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
-const auth = require('../../middleware/auth')
+const access = require('../../middleware/access')
 const { check, validationResult } = require('express-validator')
 const User = require('../../models/User')
 const Company = require('../../models/Company')
 const UserType = require('../../models/UserType')
+const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
 const EXP = process.env.EXP || 360000
 
 // @route   POST api/users
 // @desc    Register user
-// @access  Public
-router.post('/company/:company_id/usertype/:usertype_id/', [
+// @access  Private
+router.post('/company/:company_id/usertype/:usertype_id/', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN),[
   check('username','Username is required').not().isEmpty(),
   check('email','Please include a valid email').isEmail(),
   check('password', 'Please enter a password with 6 or more characters').isLength({min: 6})
-], async (req, res) => {
+]], async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){
     return res.status(400).json({errors: errors.array() })
@@ -86,10 +87,10 @@ router.post('/company/:company_id/usertype/:usertype_id/', [
 // @route   GET api/users
 // @desc    Get all users
 // @access  Private
-router.get('/', auth , async (req,res) => {
+router.get('/', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,res) => {
   try{
     const users = await User.find().populate({path: 'usertype', model:'usertype'})
-    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype'}});
+    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype', populate: {path: "usertypes",model: "usertype"}}});
     res.status(200).json(users)
   } catch (err) {
     console.error(err.message)
