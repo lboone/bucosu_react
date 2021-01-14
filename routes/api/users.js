@@ -10,7 +10,7 @@ const Company = require('../../models/Company')
 const UserType = require('../../models/UserType')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
-const EXP = process.env.EXP || 360000
+const EXP = process.env.EXP || '365d'
 
 // @route   POST api/users
 // @desc    Register user
@@ -101,5 +101,95 @@ router.get('/', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,res) => 
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   } 
 
+})
+
+// @route   PUT api/users/:id/deactivate
+// @desc    Deactivate a user
+// @access  Private
+router.put('/:id/deactivate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
+  try{
+    const user = await User.findById(req.params.id)
+    .populate("usertype",["level","name"])
+    .populate({
+      path: "company",
+      model:"company",
+      populate:{
+        path: "companytype",
+        model: "companytype"
+      }
+    })
+
+    if(!user){
+      return res.status(404).json({errors: [{msg: 'User not found'}]})
+    }
+
+    const currentUser = await User.findById(req.user.id)
+    .populate("usertype",["level","name"])
+    .populate({path: "company",model: "company",populate:{path: "companytype",model:"companytype"}})
+
+    const userLevel = user.usertype.level + user.company.companytype.level
+    const currentUserLevel = currentUser.usertype.level + currentUser.company.companytype.level
+
+    if(user.company.companytype.level === COMPANY.ADMIN || currentUserLevel >= userLevel ){
+      return res.status(401).json({ errors: [{msg: 'Access denied!'}]})
+    }
+
+    user.isactive = false
+    await user.save()
+    res.status(200).json(user)
+
+  } catch (err) {
+    console.error(err.message)
+
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'User not found'}]})   
+    }
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  } 
+})
+
+// @route   PUT pi/users/:id/activate
+// @desc    Activate a company
+// @access  Private
+router.put('/:id/activate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
+  try{
+    const user = await User.findById(req.params.id)
+    .populate("usertype",["level","name"])
+    .populate({
+      path: "company",
+      model:"company",
+      populate:{
+        path: "companytype",
+        model: "companytype"
+      }
+    })
+
+    if(!user){
+      return res.status(404).json({errors: [{msg: 'User not found'}]})
+    }
+
+    const currentUser = await User.findById(req.user.id)
+    .populate("usertype",["level","name"])
+    .populate({path: "company",model: "company",populate:{path: "companytype",model:"companytype"}})
+
+    const userLevel = user.usertype.level + user.company.companytype.level
+    const currentUserLevel = currentUser.usertype.level + currentUser.company.companytype.level
+
+    if(user.company.companytype.level === COMPANY.ADMIN || currentUserLevel >= userLevel ){
+      return res.status(401).json({ errors: [{msg: 'Access denied!'}]})
+    }
+
+    user.isactive = true
+    await user.save()
+    res.status(200).json(user)
+
+  } catch (err) {
+    console.error(err.message)
+
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'User not found'}]})   
+    }
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  } 
 })
 module.exports = router

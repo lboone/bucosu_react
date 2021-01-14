@@ -8,7 +8,6 @@ const UserType = require('../../models/UserType')
 const Menu = require('../../models/Menu')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
-
 // @route   POST api/menus
 // @desc    Create a top level menu
 // @access  Public
@@ -123,6 +122,86 @@ router.post('/parent/:parent_id', [access(COMPANY.ADMIN,USER.SUPERADMIN),[
   
 })
 
+// @route   PUT api/menus/:id
+// @desc    Update a menu
+// @access  Public
+router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN),[
+  check('label','Label is required').not().isEmpty(),
+  check('sort','Sort is required').not().isEmpty(),
+  check('icon','Icon is required').not().isEmpty(),
+  check('companytype','Company Type ID is required').not().isEmpty(),
+  check('usertype','User Type ID is required').not().isEmpty()
+]], async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors: errors.array() })
+  }
+  try {
+    const {label, headerlabel, link, icon, sort,
+      istoplevel, companytype, usertype} = req.body 
+
+    const cotype = await CompanyType.findById(companytype)
+    if(!cotype){
+      return res.status(400).json({ errors: [{msg: 'Invalid Company Type'}]})
+    }
+
+    const utype = await UserType.findById(usertype)
+    if(!utype){
+      return res.status(400).json({ errors: [{msg: 'Invalid User Type'}]})
+    }
+
+    const menuItem = await Menu.findById(req.params.id)
+    .populate({path: 'companytype',model: 'companytype'})
+    .populate({path: 'usertype',model: 'usertype'})
+
+    if (!menuItem){
+      return res.status(400).json({ errors: [{msg: 'Invalid Menu'}]})      
+    }
+    if(menuItem.label != label){
+      menuItem.label = label
+    }
+    if(menuItem.headerlabel != headerlabel){
+      menuItem.headerlabel = headerlabel
+    }
+    
+    if(menuItem.link != link){
+      menuItem.link = link
+    }
+    if(menuItem.icon != icon){
+      menuItem.icon = icon
+    }
+    if(menuItem.sort != sort){
+      menuItem.sort = sort
+    }
+    let changedTypes = false
+
+    if(menuItem.companytype.id != cotype.id){
+      changedTypes = true
+      console.log('changed: ', menuItem.companytype)
+      menuItem.companytype = cotype.id
+    }
+    if(menuItem.usertype.id != utype.id){
+      changedTypes = true
+      console.log('changed: ', menuItem.usertype)
+      menuItem.usertype = utype.id
+    }
+    if(menuItem.istoplevel != istoplevel){
+      menuItem.istoplevel = istoplevel
+    }
+
+    await menuItem.save()
+    if(changedTypes){
+      const menuItem2 = await Menu.findById(menuItem.id)
+    .populate({path: 'companytype',model: 'companytype'})
+    .populate({path: 'usertype',model: 'usertype'})
+    return res.status(200).json(menuItem2)
+    }
+    res.status(200).json(menuItem)
+  } catch(err) {
+    console.error(err.message)
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  }
+})
 
 // @route   GET api/menus
 // @desc    Get all menus

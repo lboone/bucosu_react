@@ -12,6 +12,7 @@
  *          - istoplevel
  *          - companytype
  *          - usertype
+ *          - isactive
  *        properties:
  *          label:
  *            type: string
@@ -41,6 +42,9 @@
  *          usertype:
  *            type: string
  *            description: An Object ID reference to the user type.
+ *          isactive:
+ *            type: boolean
+ *            description: Is the Menu active
  *        example:
  *           label: "Home"
  *           headerlabel: "Bucosu"
