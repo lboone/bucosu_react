@@ -49,6 +49,7 @@ const ACCESSTYPES = {
       "./models/Building.js",
       "./models/Company.js",
       "./models/CompanyType.js",
+      "./models/Menu.js",
       "./models/Profile.js",
       "./models/User.js",
       "./models/UserType.js"]

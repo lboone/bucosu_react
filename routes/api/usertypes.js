@@ -126,5 +126,4 @@ router.delete('/:id',access(COMPANY.ADMIN,USER.SUPERADMIN), async (req,res) => {
   } 
 })
 
-
 module.exports = router

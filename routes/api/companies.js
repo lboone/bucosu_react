@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../middleware/auth')
 const access = require('../../middleware/access')
 const { check, validationResult } = require('express-validator')
 const CompanyType = require('../../models/CompanyType')
@@ -59,6 +58,10 @@ router.post('/companytype/:companytype_id', [access(COMPANY.SCHOOLDISTRICT,USER.
     res.status(200).json(co)
   } catch (err) {
     console.error(err.message)
+
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'Company Type not found'}]})   
+    }
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
 })
@@ -109,6 +112,10 @@ router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
     res.status(200).json(company)
   } catch (err) {
     console.error(err.message)
+    
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'Company not found'}]})   
+    }
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
 })

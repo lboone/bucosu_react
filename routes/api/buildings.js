@@ -55,6 +55,11 @@ router.post('/:company_id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
     res.status(200).json(build)
   } catch (err) {
     console.error(err.message)
+
+    if(err.kind == 'ObjectId'){
+      return res.status(400).json({ errors: [{msg: 'Company not found'}]})
+    }
+
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
 })
@@ -105,6 +110,10 @@ router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
     res.status(200).json(building)
   } catch (err) {
     console.error(err.message)
+
+    if(err.kind == 'ObjectId'){
+      return res.status(400).json({ errors: [{msg: 'Building not found'}]})
+    }
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
 })
@@ -150,7 +159,6 @@ router.get('/:id', access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) =
   } 
 })
 
-
 // @route   GET api/buildings/company/:company_id
 // @desc    Get all buildings by company id
 // @access  Private
@@ -169,7 +177,7 @@ router.get('/company/:company_id', access(COMPANY.SCHOOLDISTRICT,USER.READER), a
     console.error(err.message)
 
     if(err.kind === 'ObjectId'){
-      return res.status(404).json({ errors: [{msg: 'Building not found'}]})   
+      return res.status(404).json({ errors: [{msg: 'Company not found'}]})   
     }
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   } 

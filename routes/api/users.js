@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
@@ -78,6 +77,11 @@ router.post('/company/:company_id/usertype/:usertype_id/', [access(COMPANY.SCHOO
     )
   } catch(err) {
     console.error(err.message)
+
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'Company or User Type not found'}]})   
+    }
+
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
     

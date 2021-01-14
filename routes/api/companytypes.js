@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../middleware/auth')
 const access = require('../../middleware/access')
 const CompanyType = require('../../models/CompanyType')
 const UserType = require('../../models/UserType')
@@ -104,7 +103,6 @@ router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN), [
   }
 })
 
-
 // @route   POST api/companytypes/:id/usertype/:usertype_id
 // @desc    Add a usertype to the company type
 // @access  Private - ADMIN / SUPERADMIN
@@ -130,7 +128,7 @@ router.post('/:id/usertype/:usertype_id', access(COMPANY.ADMIN,USER.SUPERADMIN),
     console.error(err.message)
 
     if(err.kind === 'ObjectId'){
-      return res.status(404).json({ errors: [{msg: 'Company Type not found'}]})   
+      return res.status(404).json({ errors: [{msg: 'Company Type or User Type not found'}]})   
     }
     
     res.status(500).json({ errors: [{msg: 'Server error'}]})
