@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react'
+import { connect } from 'react-redux'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,9 +16,6 @@ const Login = () => {
   }
   return (
     <Fragment>
-      <div className="alert alert-danger">
-        Invalid credentials
-      </div>
       <h1 className="large text-primary">Sign In</h1>
       <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
       <form className="form" onSubmit={e => onSubmit(e)}>
