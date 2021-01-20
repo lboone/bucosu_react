@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
 
-const Landing = () => {
+const Landing = ( { auth: { isAuthenticated, loading } }) => {
+
   return (
     <section className="landing">
       <div className="dark-overlay">
@@ -12,13 +15,21 @@ const Landing = () => {
             other developers
           </p>
           <div className="buttons">
-            <Link to="/register" className="btn btn-primary">Sign Up</Link>
-            <Link to="/login" className="btn btn-light">Login</Link>
+            { !loading && ( <Fragment> { !isAuthenticated &&  ( <Link to="/login" className="btn btn-light">Login</Link> ) } </Fragment> ) }
           </div>
+          
         </div>
       </div>
     </section>
   )
 }
 
-export default Landing
+Landing.propTypes = {
+  auth: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps)(Landing)

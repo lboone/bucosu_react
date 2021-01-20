@@ -5,6 +5,9 @@ import Navbar  from './components/layout/Navbar'
 import Landing from './components/layout/Landing'
 import Login from './components/auth/Login'
 import Alert from './components/layout/Alert'
+import Dashboard from './components/dashboard/Dashboard'
+import PrivateRoute from './components/routing/PrivateRoute'
+
 
 // Redux
 import { Provider } from 'react-redux'
@@ -17,6 +20,7 @@ import {
   getItem,
 } from './utils/manageLocalStorage'
 import setAuthToken from './utils/setAuthToken'
+import { ACCESSTYPES } from './utils/constants'
 
 if(getItem('token')){
   setAuthToken(getItem('token'))
@@ -36,6 +40,7 @@ const App = () => {
             <Alert />
             <Switch>
               <Route exact path="/login" component={Login} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} companyLevel={ACCESSTYPES.COMPANY.SCHOOLDISTRICT} userLevel={ACCESSTYPES.USER.READER}/>
             </Switch>
           </section>
         </Fragment>
