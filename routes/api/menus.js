@@ -207,12 +207,14 @@ router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN),[
 // @desc    Get all menus
 // @access  Public
 router.get('/', auth, async (req,res) => {
+  
   try{
     const menus = await Menu.find({istoplevel: true})
     .sort({sort:1})
     .populate({
       path: "submenus",
       model:"menu",
+      sort: {sort: 1},
       populate: [{
         path: "companytype",
         model: "companytype"
@@ -230,7 +232,13 @@ router.get('/', auth, async (req,res) => {
       model: "usertype"
     })
 
-    res.status(200).json(menus)
+    let user = await User.findById(req.user.id)
+    .populate({path: 'usertype', model:'usertype'})
+    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype'}});
+    
+    const newMenus = menus.filter(menu => menu.companytype.level >= user.company.companytype.level && menu.usertype.level >= user.usertype.level )
+
+    res.status(200).json(newMenus)
   } catch (err) {
     console.error(err.message)
     res.status(500).json({ errors: [{msg: 'Server error'}]})
