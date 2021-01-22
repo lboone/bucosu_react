@@ -209,6 +209,11 @@ router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN),[
 router.get('/', auth, async (req,res) => {
   
   try{
+
+    let user = await User.findById(req.user.id)
+    .populate('usertype',['level'])
+    .populate({path: 'company',model: 'company',populate: {path : 'companytype',select: 'level'}});
+
     const menus = await Menu.find({istoplevel: true})
     .sort({sort:1})
     .populate({
@@ -217,24 +222,21 @@ router.get('/', auth, async (req,res) => {
       sort: {sort: 1},
       populate: [{
         path: "companytype",
-        model: "companytype"
+        select: ["level","name"],
       },{
         path: "usertype",
-        model: "usertype"
+        select: ["level","name"],
       }]
     })
     .populate({
       path: "companytype",
-      model: "companytype"
+      select: ["level","name"],
     })
     .populate({
       path: "usertype",
-      model: "usertype"
+      select: ["level","name"],
     })
 
-    let user = await User.findById(req.user.id)
-    .populate({path: 'usertype', model:'usertype'})
-    .populate({path: 'company',model: 'company',populate: {path : 'companytype',model: 'companytype'}});
     
     const newMenus = menus.filter(menu => menu.companytype.level >= user.company.companytype.level && menu.usertype.level >= user.usertype.level )
 
