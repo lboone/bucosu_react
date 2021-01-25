@@ -1,10 +1,14 @@
+/* --primary-color: #17a2b8; * /
+/* --success-color: #28a745; */
 /* Global Styles */
 :root {
-  --primary-color: #17a2b8;
+  --primary-color: #1f70a8;
   --dark-color: #343a40;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
-  --success-color: #28a745;
+  --success-color: #37bc9b;
+  --bucosu-color: #1f70a8;
+  --bucosu-light-color: #37bc9b;
 }
 
 * {
@@ -17,7 +21,7 @@ body {
   font-family: 'Raleway', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #fff;
+  background-color: #eee;
   color: #333;
 }
 
@@ -42,6 +46,18 @@ img {
   padding: 0 2rem;
   margin-top: 6rem;
   margin-bottom: 3rem;
+}
+
+.container-center {
+  max-width: 600px;
+  margin: auto;
+  overflow: hidden;
+  padding: 0 2rem;
+  margin-top: 6rem;
+  margin-bottom: 3rem;
+  border: 1px solid var(--bucosu-color);
+  padding: 30px;
+  background-color: #fff;
 }
 
 /* Text Styles*/
@@ -180,6 +196,22 @@ img {
   color: #fff;
 }
 
+.btn-bucosu,
+.bg-bucosu,
+.badge-bucosu,
+.alert-bucosu {
+  background: var(--bucosu-color);
+  color: #fff;
+}
+
+.btn-bucosu-light,
+.bg-bucosu-light,
+.badge-bucosu-light,
+.alert-bucosu-light {
+  background: var(--bucosu-light-color);
+  color: #fff;
+}
+
 .btn-danger,
 .bg-danger,
 .badge-danger,
@@ -234,6 +266,15 @@ img {
   height: 100%;
 }
 
+/* Overlay */
+.light-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 /* Forms */
 .form .form-group {
   margin: 1.2rem 0;
@@ -255,7 +296,23 @@ img {
   width: 100%;
   padding: 0.4rem;
   font-size: 1.2rem;
-  border: 1px solid #ccc;
+  border: 1px solid #fff;
+  box-shadow: 0px 1px 0px #ccc !important;
+  -moz-box-shadow: 0px 1px 0px #ccc !important;
+  -webkit-box-shadow: 0px 1px 0px #ccc !important;
+}
+
+.form input[type='text']:focus,
+.form input[type='email']:focus,
+.form input[type='password']:focus,
+.form input[type='date']:focus,
+.form select:focus,
+.form textarea:focus {
+  box-shadow: 0px 1px 0px var(--bucosu-light-color) !important;
+  -moz-box-shadow: 0px 1px 0px var(--bucosu-light-color) !important;
+  -webkit-box-shadow: 0px 1px 0px var(--bucosu-light-color) !important;
+  outline-offset: 0px !important;
+  outline: none !important;
 }
 
 .form input[type='submit'],
@@ -308,7 +365,7 @@ button {
   z-index: 1;
   width: 100%;
   top: 0;
-  border-bottom: solid 1px var(--primary-color);
+  border-bottom: solid 1px var(--light-color);
   opacity: 0.9;
 }
 
@@ -322,8 +379,9 @@ button {
   margin: 0 0.25rem;
 }
 
-.navbar a:hover {
-  color: var(--primary-color);
+.navbar a:hover,
+.navbar a.selected {
+  color: var(--success-color);
 }
 
 .navbar .welcome span {
