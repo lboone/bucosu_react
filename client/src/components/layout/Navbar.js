@@ -5,16 +5,23 @@ import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth'
 import { Fragment } from 'react';
 import { useLocation } from 'react-router-dom'
+import { ACCESSTYPES } from '../../utils/constants'
 
-
-const Navbar = ({ auth: { isAuthenticated, loading }, logout}) => {
+const Navbar = ({ auth: { isAuthenticated, loading, level }, logout}) => {
+  const {COMPANY, USER } = ACCESSTYPES;
+  const loc = useLocation().pathname
+  const hasAccess = (level && (level.company <= COMPANY.SCHOOLDISTRICT && level.user <= USER.READER))
   const authLinks = (
     <ul>
         <li>
-          <Link to="/dashboard" className={useLocation().pathname === '/dashboard' ? 'selected' : ''}>
-            <i className="fa fa-chart-bar"></i>{' '}
-            <span className="hide-sm">Dashboard</span>
-          </Link>
+          {hasAccess && 
+          (
+            <Link to="/dashboard" className={loc === '/dashboard' ? 'selected' : ''}>
+              <i className="fa fa-chart-bar"></i>{' '}
+              <span className="hide-sm">Dashboard</span>
+            </Link>
+          )
+          }
           <a onClick={logout} href='#!'>
             <i className="fas fa-sign-out-alt"></i>{' '}
             <span className="hide-sm">Logout</span>

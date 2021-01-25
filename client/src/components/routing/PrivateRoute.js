@@ -8,7 +8,16 @@ const PrivateRoute = ({component: Component, companyLevel, userLevel, auth: {isA
   <Route 
     { ...rest } 
     render={props => 
-      (!isAuthenticated && !loading) || (!loading && (!level || level.company > companyLevel || level.user > userLevel)) ? (
+      (
+        (!isAuthenticated && !loading) || 
+        (!loading && 
+          (
+            !level || 
+            level.company > companyLevel || 
+            level.user > userLevel
+          )
+        )
+      ) ? (
         <Redirect to='/' />
       ) : (
         <Component {...props} />

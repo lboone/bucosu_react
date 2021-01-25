@@ -29,7 +29,7 @@ const App = () => {
   useEffect(() => {
     store.dispatch(loadUser())
   }, [])
-  
+  const { COMPANY, USER } = ACCESSTYPES
   return (
     <Provider store={store}>
       <Router>
@@ -40,7 +40,7 @@ const App = () => {
             <Alert />
             <Switch>
               <Route exact path="/login" component={Login} />
-              <PrivateRoute exact path="/dashboard" component={Dashboard} companyLevel={ACCESSTYPES.COMPANY.SCHOOLDISTRICT} userLevel={ACCESSTYPES.USER.READER}/>
+              <PrivateRoute exact path="/dashboard" component={Dashboard} companyLevel={ COMPANY.SCHOOLDISTRICT } userLevel={ USER.READER }/>
             </Switch>
           </section>
         </Fragment>
