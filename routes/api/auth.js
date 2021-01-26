@@ -6,6 +6,7 @@ const User = require('../../models/User')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const { check, validationResult } = require('express-validator')
+const publicIp = require('public-ip');
 
 const EXP = process.env.EXP || '365d'
 
@@ -50,6 +51,21 @@ router.post('/', [
       return res.status(400).json({ errors: [{msg: 'Invalid Credentials'}]})
     }
     
+    // Get Profile and log user login history
+
+    const device = req.get('User-Agent');
+    const ipaddress = await publicIp.v4()
+    console.log({device, ipaddress})
+
+    let profile = await Profile.findOne({ user: user._id })
+    if(profile){
+      profile.logins.unshift({ipaddress,device})
+      await profile.save()
+    } else {
+      return res.status(500).json({ errors: [{msg: 'No Profile found, please contact your administrator.'}]})
+    }
+    
+
     // Return jsonwebtoken
     // 1st create payload
     const payload = {

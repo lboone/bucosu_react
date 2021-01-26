@@ -16,6 +16,7 @@ import {
 const initialState = {
   token: getItem('token'),
   isAuthenticated: null,
+  userRegistered: null,
   loading: true,
   level: null,
   user: null
@@ -28,11 +29,17 @@ const reduce = function(state = initialState, action){
       return {
         ...state,
         isAuthenticated: true,
+        userRegistered: null,
         loading: false,
         level: payload.level,
         user: payload.user,
       }
     case REGISTER_SUCCESS:
+      return {
+        ...state,
+        userRegistered: payload,
+        loading: false
+      }
     case LOGIN_SUCCESS:
       setItem('token',payload.token)
       //localStorage.setItem('token', payload.token)
@@ -40,9 +47,15 @@ const reduce = function(state = initialState, action){
         ...state,
         ...payload,
         isAuthenticated: true,
+        userRegistered:null,
         loading: false
       }
     case REGISTER_FAIL:
+      return {
+        ...state,
+        userRegistered:null,
+        loading: false
+      }
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT:
@@ -51,6 +64,7 @@ const reduce = function(state = initialState, action){
       return {
         ...state,
         user: null,
+        userRegistered:null,
         token: null,
         level: null,
         isAuthenticated: false,

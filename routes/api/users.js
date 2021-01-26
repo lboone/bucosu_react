@@ -17,8 +17,11 @@ const EXP = process.env.EXP || '365d'
 // @access  Private
 router.post('/company/:company_id/usertype/:usertype_id/', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN),[
   check('username','Username is required').not().isEmpty(),
-  check('email','Please include a valid email').isEmail(),
-  check('password', 'Please enter a password with 6 or more characters').isLength({min: 6})
+  check('email','Please include a valid email').isEmail().normalizeEmail(),
+  check('password', 'Please enter a password with 6 or more characters').isLength({min: 6}),
+  check('firstname','First Name is required').not().isEmpty().trim().escape(),
+  check('lastname','Last Name is required').not().isEmpty().trim().escape(),
+  check('phone','A 10 digit Phone Number is required').isLength({min:10, max: 10}),
 ]], async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){
@@ -52,29 +55,30 @@ router.post('/company/:company_id/usertype/:usertype_id/', [access(COMPANY.SCHOO
       usertype: usertype.id
     })
 
+    
     // Encrypt password
     const salt = await bcrypt.genSalt(10)
     user.password = await bcrypt.hash(password, salt)
     
+
     // Save user to database
     await user.save()
 
-    // Return jsonwebtoken
-    // 1st create payload
-    const payload = {
-      user: {
-        id: user.id
-      }
+    // Now create the profile record
+
+    const {firstname, lastname, phone} = req.body 
+    const profileFields = {
+      user: user._id,
+      firstname,
+      lastname,
+      phone
     }
-    jwt.sign(
-      payload, 
-      config.get('jwtSecret'),
-      {expiresIn: EXP},
-      (err, token) => {
-        if(err) throw err
-        res.status(200).json({ token })
-      }
-    )
+
+    // Create new profile
+    const profile = new Profile(profileFields)
+    await profile.save()
+
+    res.status(200).json(user._id)
   } catch(err) {
     console.error(err.message)
 

@@ -6,6 +6,7 @@ import Landing from './components/layout/Landing'
 import Login from './components/auth/Login'
 import Alert from './components/layout/Alert'
 import Dashboard from './components/dashboard/Dashboard'
+import Register from './components/auth/Register'
 import PrivateRoute from './components/routing/PrivateRoute'
 
 
@@ -21,6 +22,7 @@ import {
 } from './utils/manageLocalStorage'
 import setAuthToken from './utils/setAuthToken'
 import { ACCESSTYPES } from './utils/constants'
+import Sidebar from './components/layout/Sidebar'
 
 if(getItem('token')){
   setAuthToken(getItem('token'))
@@ -35,12 +37,15 @@ const App = () => {
       <Router>
         <Fragment>
           <Navbar />
+          <Sidebar />
+          
           <Route exact path="/" component={ Landing }/>
           <section className="container">
             <Alert />
             <Switch>
               <Route exact path="/login" component={Login} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} companyLevel={ COMPANY.SCHOOLDISTRICT } userLevel={ USER.READER }/>
+              <PrivateRoute exact path="/register" component={Register} companyLevel={ COMPANY.SCHOOLDISTRICT } userLevel={ USER.ADMIN }/>
             </Switch>
           </section>
         </Fragment>

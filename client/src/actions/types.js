@@ -11,3 +11,14 @@ export const AUTH_ERROR = 'AUTH_ERROR'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
 export const LOGOUT = 'LOGOUT'
+//Profile
+export const GET_PROFILE = 'GET_PROFILE'
+export const PROFILE_SUCCESS = 'PROFILE_SUCCESS'
+export const PROFILE_ERROR = 'PROFILE_ERROR'
+
+//Company
+export const GET_COMPANIES = 'GET_COMPANIES'
+export const SET_COMPANY = 'SET_COMPANY'
+export const GET_COMPANY_USERTYPES = 'GET_COMPANY_USERTYPES'
+export const SET_COMPANY_USERTYPE = 'SET_COMPANY_USERTYPE'
+export const COMPANY_ERROR = 'COMPANY_ERROR'

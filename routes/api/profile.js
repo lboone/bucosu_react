@@ -32,7 +32,8 @@ router.get('/me', auth, async (req, res) => {
 router.post('/', [auth, [
   check('firstname', 'First name is required').not().isEmpty(),
   check('lastname','Last name is required').not().isEmpty(),
-  check('phone','Phone is required').not().isEmpty()
+  check('phone','Phone is required').not().isEmpty(),
+  check('userid','User ID is required').not().isEmpty(),
 ]], async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){
@@ -42,23 +43,24 @@ router.post('/', [auth, [
   const {
     firstname,
     lastname,
-    phone
+    phone,
+    userid
   } = req.body
 
   // Build profile object
 
   const profileFields = {}
-  profileFields.user = req.user.id
+  profileFields.user = userid
   if(firstname) profileFields.firstname = firstname
   if(lastname) profileFields.lastname = lastname
   if(phone) profileFields.phone = phone
   
 
   try{
-    let profile = await Profile.findOne({ user: req.user.id })
+    let profile = await Profile.findOne({ user: userid })
     if(profile){
       // Update profile
-      profile = await Profile.findOneAndUpdate({user: req.user.id},{$set: profileFields }, {new: true})
+      profile = await Profile.findOneAndUpdate({user: userid},{$set: profileFields }, {new: true})
     } else {
     // Create new profile
     profile = new Profile(profileFields)

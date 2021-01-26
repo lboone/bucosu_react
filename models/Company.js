@@ -52,6 +52,9 @@
  *              logo:
  *                type: string
  *                description: The company's logo url
+ *          relationships:
+ *            type: string[]
+ *            description: An array of Object ID references to other companies.
  *          isactive:
  *            type: boolean
  *            default: true
@@ -116,6 +119,7 @@ const CompanySchema = new Schema({
       required: true
     }
   },
+  relationships: [{ type: Schema.Types.ObjectId, ref: "company" }],
   isactive: {
     type: Boolean,
     required: true,
