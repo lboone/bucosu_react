@@ -17,7 +17,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout}) => {
           {hasAccess && 
           (
             <Link to="/dashboard" className={loc === '/dashboard' ? 'selected' : ''}>
-              <i className="fa fa-chart-bar"></i>{' '}
+              <i className="fa fa-tachometer-alt"></i>{' '}
               <span className="hide-sm">Dashboard</span>
             </Link>
           )

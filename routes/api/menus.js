@@ -203,6 +203,56 @@ router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN),[
   }
 })
 
+
+// @route   GET api/menus/:id/submenus
+// @desc    Get a menus submenus based on users access.
+// @access  Private
+router.get('/:id/submenus', auth, async (req, res) => {
+  try {
+    const menuItem = await Menu.findById(req.params.id)
+    .populate({
+      path: "submenus",
+      model:"menu",
+      options: {sort: {sort:1}},
+      populate: [{
+        path: "companytype",
+        select: ["level","name"],
+      },{
+        path: "usertype",
+        select: ["level","name"],
+      }]
+    })
+    .populate({
+      path: "companytype",
+      select: ["level","name"],
+    })
+    .populate({
+      path: "usertype",
+      select: ["level","name"],
+    })
+
+    if (!menuItem){
+      return res.status(400).json({ errors: [{msg: 'Invalid Menu'}]})      
+    }
+
+    let user = await User.findById(req.user.id)
+    .populate('usertype',['level'])
+    .populate({path: 'company',model: 'company',populate: {path : 'companytype',select: 'level'}});
+
+    if (!user){
+      return res.status(400).json({ errors: [{msg: 'Server Error!'}]})      
+    }
+
+    const subMenus = menuItem.submenus.filter(menu => menu.companytype.level >= user.company.companytype.level && menu.usertype.level >= user.usertype.level)
+
+
+    res.status(200).json(subMenus)
+  } catch(err) {
+    console.error(err.message)
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  }
+})
+
 // @route   GET api/menus
 // @desc    Get all menus
 // @access  Public
@@ -219,7 +269,7 @@ router.get('/', auth, async (req,res) => {
     .populate({
       path: "submenus",
       model:"menu",
-      sort: {sort: 1},
+      options: {sort: {sort:1}},
       populate: [{
         path: "companytype",
         select: ["level","name"],
