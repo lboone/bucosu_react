@@ -22,3 +22,10 @@ export const SET_COMPANY = 'SET_COMPANY'
 export const GET_COMPANY_USERTYPES = 'GET_COMPANY_USERTYPES'
 export const SET_COMPANY_USERTYPE = 'SET_COMPANY_USERTYPE'
 export const COMPANY_ERROR = 'COMPANY_ERROR'
+
+//Menu
+export const GET_MENUS = 'GET_MENUS'
+export const SET_MENU = 'SET_MENU'
+export const GET_SUBMENUS = 'GET_SUBMENUS'
+export const SET_SUBMENU = 'SET_SUBMENU'
+export const MENU_ERROR = 'MENU_ERROR'

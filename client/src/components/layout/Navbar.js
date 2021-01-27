@@ -1,26 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth'
 import { Fragment } from 'react';
 import { useLocation } from 'react-router-dom'
-import { ACCESSTYPES } from '../../utils/constants'
+import { getMenus, setMenu } from '../../actions/menu'
 
-const Navbar = ({ auth: { isAuthenticated, loading, level }, logout}) => {
-  const {COMPANY, USER } = ACCESSTYPES;
+
+const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getMenus, setMenu}) => {
+  useEffect(() => {
+    getMenus()
+  }, [getMenus])
+
+  console.log(menu)
+
   const loc = useLocation().pathname
-  const hasAccess = (level && (level.company <= COMPANY.SCHOOLDISTRICT && level.user <= USER.READER))
+
   const authLinks = (
     <ul>
         <li>
-          {hasAccess && 
-          (
-            <Link to="/dashboard" className={loc === '/dashboard' ? 'selected' : ''}>
-              <i className="fa fa-tachometer-alt"></i>{' '}
-              <span className="hide-sm">Dashboard</span>
-            </Link>
-          )
+          {menu.menus &&
+            menu.menus.map((menu) => {
+              return (
+                <Link id={menu._id} to={menu.link} className={loc === menu.link ? 'selected' : ''}>
+                  <i className={`fa ${menu.icon}`}></i>{' '}
+                  <span className="hide-sm">{menu.label}</span>
+                </Link>
+              )
+            })
           }
           <a onClick={logout} href='#!'>
             <i className="fas fa-sign-out-alt"></i>{' '}
@@ -52,12 +60,17 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout}) => {
 }
 
 Navbar.propTypes = {
+  getMenus: PropTypes.func.isRequired,
+  setMenu: PropTypes.func.isRequired,
+  menu: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
+  menu: state.menu,
   auth: state.auth
+
 })
 
-export default connect(mapStateToProps, { logout })(Navbar)
+export default connect(mapStateToProps, { logout, getMenus, setMenu })(Navbar)

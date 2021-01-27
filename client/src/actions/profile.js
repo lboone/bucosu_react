@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {setAlert} from './alert'
+import { getMenus } from './menu'
 
 import {
   GET_PROFILE,
@@ -16,6 +17,7 @@ export const getCurrentProfile = () => async dispatch => {
       type: GET_PROFILE,
       payload: res.data
     })
+    dispatch(getMenus())
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR,
