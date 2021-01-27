@@ -22,7 +22,6 @@ import {
 } from './utils/manageLocalStorage'
 import setAuthToken from './utils/setAuthToken'
 import { ACCESSTYPES } from './utils/constants'
-import Sidebar from './components/layout/Sidebar'
 
 if(getItem('token')){
   setAuthToken(getItem('token'))
@@ -36,9 +35,7 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <Fragment>
-          <Navbar />
-          <Sidebar />
-          
+          <Navbar />          
           <Route exact path="/" component={ Landing }/>
           <section className="container">
             <Alert />
