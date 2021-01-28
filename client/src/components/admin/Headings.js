@@ -3,15 +3,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 
-const Dashboard = ( { auth } ) => {
+const Headings = ( { auth } ) => {
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>BCS Headings</h1>
     </div>
   )
 }
 
-Dashboard.propTypes = {
+Headings.propTypes = {
   auth: PropTypes.object.isRequired,
 }
 
@@ -19,5 +19,5 @@ const mapStateToProps = state => ({
   auth: state.auth,
 })
   
-export default connect(mapStateToProps, null)(Dashboard)
+export default connect(mapStateToProps, null)(Headings)
   

@@ -14,6 +14,7 @@ import {
   getItem, 
 } from '../utils/manageLocalStorage'
 import {getCurrentProfile} from './profile'
+import { getMenus } from './menu'
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -35,6 +36,9 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload
     })
+    dispatch(getCurrentProfile())
+    dispatch(getMenus())
+    
   } catch (err) {
     dispatch({
       type: AUTH_ERROR
@@ -57,7 +61,7 @@ export const login = (email, password) => async dispatch => {
       payload: res.data
     })
     dispatch(loadUser())
-    dispatch(getCurrentProfile())
+    
   } catch (err) {
     const errors = err.response.data.errors
 

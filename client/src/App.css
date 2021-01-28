@@ -46,6 +46,7 @@ img {
   padding: 0 2rem;
   margin-top: 6rem;
   margin-bottom: 3rem;
+  padding-top: 15px;
 }
 
 .container-center {
@@ -369,6 +370,10 @@ button {
   opacity: 0.9;
 }
 
+.menubar {
+  top: 61px;
+}
+
 .navbar ul {
   display: flex;
 }
@@ -382,6 +387,11 @@ button {
 .navbar a:hover,
 .navbar a.selected {
   color: var(--success-color);
+}
+
+.menubar a:hover,
+.menubar a.selected {
+  color: var(--primary-color);
 }
 
 .navbar .welcome span {
@@ -547,9 +557,10 @@ button {
 }
 
 /* Mobile Styles */
-@media (max-width: 700px) {
+@media (max-width: 1000px) {
   .container {
     margin-top: 8rem;
+    padding-top: 25px;
   }
 
   .hide-sm {
@@ -575,6 +586,9 @@ button {
     text-align: center;
   }
 
+  .menubar {
+    top: 102px;
+  }
   .navbar ul {
     text-align: center;
     justify-content: center;

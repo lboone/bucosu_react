@@ -1,45 +1,71 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Fragment, useEffect} from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth'
-import { Fragment } from 'react';
 import { useLocation } from 'react-router-dom'
 import { getMenus, setMenu } from '../../actions/menu'
-
+import Menu from './Menu'
 
 const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getMenus, setMenu}) => {
-  useEffect(() => {
-    getMenus()
-  }, [getMenus])
-
-  console.log(menu)
-
   const loc = useLocation().pathname
+  const history = useHistory()
+  
+  useEffect(() => {
+    if(menu && !menu.loading && !menu.menus){
+      getMenus()
+    }
+    if(menu.menus && !menu.loading && !menu.menu){
+      menu.menus.forEach((menu) => {
+        const newLoc = loc.split('/')
+          if ('/'+newLoc[1] === menu.link) {
+            setMenu(menu._id) 
+          }
+      })
+    }
+  }, [getMenus, menu, setMenu, loc])
+  
+  const onClick = (menuId)=> {
+    setMenu(menuId)
+  }
+
+  const doLogout = () => {
+    logout()
+    history.push('/login')
+  }
 
   const authLinks = (
     <ul>
-        <li>
-          {menu.menus &&
-            menu.menus.map((menu) => {
-              return (
-                <Link id={menu._id} to={menu.link} className={loc === menu.link ? 'selected' : ''}>
-                  <i className={`fa ${menu.icon}`}></i>{' '}
-                  <span className="hide-sm">{menu.label}</span>
-                </Link>
-              )
-            })
-          }
-          <a onClick={logout} href='#!'>
-            <i className="fas fa-sign-out-alt"></i>{' '}
-            <span className="hide-sm">Logout</span>
-          </a>
-        </li>
-      </ul>
+      {menu.menus &&
+        menu.menus.map((menu) => {
+          return (
+            <li key={menu._id}>
+              <Link 
+                to={menu.link} 
+                onClick={(e)=>onClick(menu._id)}
+                className={`/${loc.split('/')[1]}` === menu.link ? 'selected' : ''}
+              >
+                <i 
+                  className={`fa ${menu.icon}`}
+                  title={menu.label}
+                ></i>{' '}
+                <span className="hide-sm">{menu.label}</span>
+              </Link>
+            </li>
+          )
+        })
+      }
+      <li key={'0304030'}>
+        <a onClick={doLogout} href='#!'>
+          <i className="fas fa-sign-out-alt"></i>{' '}
+          <span className="hide-sm">Logout</span>
+        </a>
+      </li>
+    </ul>
   )
   const guestLinks = (
     <ul>
-      <li>
+      <li key={'3984903'}>
         <Link to="/login" className={useLocation().pathname === '/login' ? 'selected' : ''}>
         <i className="fas fa-sign-in-alt"></i>{' '}
             <span className="hide-sm">Login</span>
@@ -48,14 +74,17 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getM
     </ul>
   )
   return (
-    <nav className="navbar bg-bucosu">
-      <h1>
-        <Link to="/">
-          <span><strong>BUCOSU</strong><span style={{color: 'lightgray', fontWeight: '100'}}>.com</span></span>
-        </Link>
-      </h1>
-      { !loading && (<Fragment>{ isAuthenticated ? authLinks : guestLinks }</Fragment>) }
-    </nav>
+    <Fragment>
+      <nav className="navbar bg-bucosu">
+        <h1>
+          <Link to="/">
+            <span><strong>BUCOSU</strong><span style={{color: 'lightgray', fontWeight: '100'}}>.com</span></span>
+          </Link>
+        </h1>
+        { !loading && (<Fragment>{ isAuthenticated ? authLinks : guestLinks }</Fragment>) }
+      </nav>
+      <Menu/>
+    </Fragment>
   )
 }
 
