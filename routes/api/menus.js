@@ -214,6 +214,9 @@ router.get('/:id/submenus', auth, async (req, res) => {
       path: "submenus",
       model:"menu",
       options: {sort: {sort:1}},
+      match: {
+        isactive: true
+      },
       populate: [{
         path: "companytype",
         select: ["level","name"],
@@ -264,12 +267,15 @@ router.get('/', auth, async (req,res) => {
     .populate('usertype',['level'])
     .populate({path: 'company',model: 'company',populate: {path : 'companytype',select: 'level'}});
 
-    const menus = await Menu.find({istoplevel: true})
+    const menus = await Menu.find({istoplevel: true, isactive: true})
     .sort({sort:1})
     .populate({
       path: "submenus",
       model:"menu",
       options: {sort: {sort:1}},
+      match: {
+        isactive: true
+      },
       populate: [{
         path: "companytype",
         select: ["level","name"],

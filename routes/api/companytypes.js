@@ -11,7 +11,7 @@ const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 // @access  Private
 router.get('/', access(COMPANY.ADMIN,USER.SUPERADMIN), async (req, res) => {
   try{
-    const companytypes = await CompanyType.find().sort('level').populate({path:"usertypes",model:"usertype"})
+    const companytypes = await CompanyType.find({isactive: true}).sort('level').populate({path:"usertypes",model:"usertype"})
 
     if(!companytypes){
       return res.status(400).json({ errors: [{msg: 'There are no Company Types.'}]})

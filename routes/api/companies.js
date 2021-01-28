@@ -125,7 +125,7 @@ router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
 // @access  Private
 router.get('/',access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) => {
   try{
-    const companies = await Company.find().populate({
+    const companies = await Company.find( { isactive: true } ).populate({
       path: "companytype",
       model:"companytype",
       populate: 
@@ -150,10 +150,16 @@ router.get('/relationships',access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (re
     .populate({
       path: 'company',
       select: ['name'],
+      match: {
+        isactive: true
+      },
       populate: {
         path: 'relationships',
         model: 'company',
         select: ['name'],
+        match: {
+          isactive: true
+        },
         populate: {
           path: 'companytype',
           select: ['level','name'],

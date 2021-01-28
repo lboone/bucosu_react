@@ -55,7 +55,6 @@ router.post('/', [
 
     const device = req.get('User-Agent');
     const ipaddress = await publicIp.v4()
-    console.log({device, ipaddress})
 
     let profile = await Profile.findOne({ user: user._id })
     if(profile){

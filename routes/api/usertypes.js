@@ -10,7 +10,7 @@ const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 // @access  Private
 router.get('/', access(COMPANY.ADMIN,USER.SUPERADMIN), async (req, res) => {
   try{
-    const usertypes = await UserType.find().sort('level')
+    const usertypes = await UserType.find({isactive: true}).sort('level')
 
     if(!usertypes){
       return res.status(400).json({ errors: [{msg: 'There are no User Types.'}]})
