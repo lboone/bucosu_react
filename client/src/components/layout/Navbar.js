@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { getMenus, setMenu } from '../../actions/menu'
 import Menu from './Menu'
 
-const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getMenus, setMenu}) => {
+const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu, getMenus, setMenu}) => {
   const loc = useLocation().pathname
   
   useEffect(() => {
@@ -52,7 +52,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getM
       <li key={'0304030'}>
         <a onClick={logout} href='/login'>
           <i className="fas fa-sign-out-alt"></i>{' '}
-          <span className="hide-sm">Logout</span>
+          <span className="hide-sm">Logout <span style={{color: '#37bc9b'}}>{user && ` - ${user.username.toLowerCase()}`}</span></span>
         </a>
       </li>
     </ul>
@@ -71,7 +71,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getM
     <Fragment>
       <nav className="navbar bg-bucosu">
         <h1>
-          <Link to="/">
+          <Link onClick={getMenus} to="/">
             <span><strong>BUCOSU</strong><span style={{color: 'lightgray', fontWeight: '100'}}>.com</span></span>
           </Link>
         </h1>
