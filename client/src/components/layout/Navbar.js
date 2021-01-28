@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect} from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth'
@@ -9,7 +9,6 @@ import Menu from './Menu'
 
 const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getMenus, setMenu}) => {
   const loc = useLocation().pathname
-  const history = useHistory()
   
   useEffect(() => {
     if(menu && !menu.loading && !menu.menus){
@@ -28,12 +27,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getM
   const onClick = (menuId)=> {
     setMenu(menuId)
   }
-
-  const doLogout = () => {
-    logout()
-    history.push('/login')
-  }
-
+  
   const authLinks = (
     <ul>
       {menu.menus &&
@@ -56,7 +50,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level }, logout,  menu, getM
         })
       }
       <li key={'0304030'}>
-        <a onClick={doLogout} href='#!'>
+        <a onClick={logout} href='/login'>
           <i className="fas fa-sign-out-alt"></i>{' '}
           <span className="hide-sm">Logout</span>
         </a>
