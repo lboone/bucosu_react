@@ -4,8 +4,14 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom'
 import { getSubMenus, setSubMenu } from '../../actions/menu'
+import { css } from '@emotion/core'
+import BarLoader from 'react-spinners/BarLoader'
+
+const override = css`
+  display: contents;
 
 
+`
 const Menu = ( {menu, getSubMenus, setSubMenu}) => {
   const loc = useLocation().pathname
   useEffect(() => {
@@ -25,13 +31,13 @@ const Menu = ( {menu, getSubMenus, setSubMenu}) => {
     setSubMenu(subMenuId)
   }
 
-
+  const showSpinner = loc !== '/login'
   const menuLoaded = menu && !menu.loading && menu.submenus && (menu.submenus.length > 0)
   return (
     <Fragment>
-      {menuLoaded && 
+      {menuLoaded ? 
         (
-          <nav className="navbar menubar bg-bucosu-light">
+          <nav className="navbar menubar bg-bucosu">
           <ul>
             {menu.submenus &&
               menu.submenus.map((submenu) => {
@@ -46,7 +52,7 @@ const Menu = ( {menu, getSubMenus, setSubMenu}) => {
                         className={`fa ${submenu.icon}`}
                         title={submenu.label}
                       ></i>{' '}
-                      <span className="hide-sm">{submenu.label}</span>
+                      <span className="hide-md">{submenu.label}</span>
                     </Link>
                   </li>
                 )
@@ -55,6 +61,8 @@ const Menu = ( {menu, getSubMenus, setSubMenu}) => {
           }
           </ul>
         </nav>
+        ) : (
+            showSpinner && <BarLoader color={'#37bc9b'} loading={true} css={override} width={200} size={5} />
         )
       }
     </Fragment>

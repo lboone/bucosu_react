@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
+const axios = require('axios')
 const auth = require('../../middleware/auth')
 const User = require('../../models/User')
 const jwt = require('jsonwebtoken')
@@ -58,29 +59,35 @@ router.post('/', [
 
     let profile = await Profile.findOne({ user: user._id })
     if(profile){
-      profile.logins.unshift({ipaddress,device})
-      await profile.save()
+      
+        // Return jsonwebtoken
+      // 1st create payload
+      const payload = {
+        user: {
+          id: user.id
+        }
+      }
+      jwt.sign(
+        payload, 
+        config.get('jwtSecret'),
+        {expiresIn: EXP},
+        async (err, token) => {
+          if(err) {
+            throw err
+          }
+          
+          axios.defaults.headers.common['x-auth-token'] = token
+          const geoLoc = await axios.get(`http://localhost:5001/api/ipgeolocation/${ipaddress}`)
+          const geolocation = geoLoc.data._id
+          profile.logins.unshift({ipaddress,device,geolocation})
+          await profile.save()
+          res.json({ token })
+        }
+      )
     } else {
       return res.status(500).json({ errors: [{msg: 'No Profile found, please contact your administrator.'}]})
     }
     
-
-    // Return jsonwebtoken
-    // 1st create payload
-    const payload = {
-      user: {
-        id: user.id
-      }
-    }
-    jwt.sign(
-      payload, 
-      config.get('jwtSecret'),
-      {expiresIn: EXP},
-      (err, token) => {
-        if(err) throw err
-        res.json({ token })
-      }
-    )
   } catch(err) {
     console.error(err.message)
     res.status(500).json({ errors: [{msg: 'Server error'}]})

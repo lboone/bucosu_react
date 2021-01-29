@@ -24,8 +24,6 @@
  *              - city
  *              - state
  *              - zip
- *              - lat
- *              - lng
  *            properties:
  *              address:
  *                type: string

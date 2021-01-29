@@ -28,6 +28,7 @@ app.use('/api/usertypes',require('./routes/api/usertypes'))
 app.use('/api/companytypes',require('./routes/api/companytypes'))
 app.use('/api/buildings',require('./routes/api/buildings'))
 app.use('/api/menus',require('./routes/api/menus'))
+app.use('/api/ipgeolocation',require('./routes/api/ipgeolocation'))
 
 
 app.use('/api/endpoints', auth, function(req,res) {

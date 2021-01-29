@@ -1,4 +1,5 @@
 {
   "mongoURI": "mongodb+srv://lboone:uKBSLkKQIAMQMDXn@cluster0.ftgp1.mongodb.net/bucosu_bcs?retryWrites=true&w=majority",
-  "jwtSecret":";F]m%OovUNmS9fT7$Q~8kjICV^d}xPyOB6m}^D*TB|;i0B#VMkN(}aq+%3yqxmL"
+  "jwtSecret":";F]m%OovUNmS9fT7$Q~8kjICV^d}xPyOB6m}^D*TB|;i0B#VMkN(}aq+%3yqxmL",
+  "ipGeolocation":"at_5e9KHiWXx8dhmcHBAEcKINP4MMnNp"
 }

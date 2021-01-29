@@ -49,6 +49,15 @@ img {
   padding-top: 15px;
 }
 
+.container-full {
+  margin: auto;
+  overflow: hidden;
+  padding: 0 3rem;
+  margin-top: 6rem;
+  margin-bottom: 3rem;
+  padding-top: 15px;
+}
+
 .container-center {
   max-width: 600px;
   margin: auto;
@@ -61,9 +70,22 @@ img {
   background-color: #fff;
 }
 
-.container h1 {
+.content-center {
+  max-width: 80%;
+  margin: auto;
+  overflow: hidden;
+  padding: 0 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--bucosu-color);
+  padding: 30px;
+  background-color: #fff;
+}
+
+.container h1,
+.container-full h1 {
   color: var(--primary-color);
-  font-size: 2rem;
+  font-size: 3rem;
 }
 /* Text Styles*/
 .x-large {
@@ -349,6 +371,9 @@ button {
 .form .social-input i.fa-linkedin {
   color: #0077b5;
 }
+.table {
+  width: 100%;
+}
 
 .table th,
 .table td {
@@ -365,7 +390,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.7rem 2rem;
+  padding: 0.2rem 2rem;
   position: fixed;
   z-index: 1;
   width: 100%;
@@ -375,7 +400,8 @@ button {
 }
 
 .menubar {
-  top: 61px;
+  top: 45px;
+  padding: 0.5rem 2rem;
 }
 
 .navbar ul {
@@ -395,7 +421,7 @@ button {
 
 .menubar a:hover,
 .menubar a.selected {
-  color: var(--primary-color);
+  color: var(--success-color);
 }
 
 .navbar .welcome span {
@@ -562,12 +588,16 @@ button {
 
 /* Mobile Styles */
 @media (max-width: 1000px) {
-  .container {
+  .container,
+  .container-full {
     margin-top: 8rem;
     padding-top: 25px;
   }
 
-  .hide-sm {
+  .content-center {
+    max-width: 100%;
+  }
+  .hide-md {
     display: none;
   }
 
@@ -591,7 +621,7 @@ button {
   }
 
   .menubar {
-    top: 102px;
+    top: 86px;
   }
   .navbar ul {
     text-align: center;
@@ -649,5 +679,14 @@ button {
   .post a,
   .post button {
     padding: 0.3rem 0.4rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .content-center {
+    max-width: 100%;
+  }
+  .hide-sm {
+    display: none;
   }
 }

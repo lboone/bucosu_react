@@ -43,7 +43,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu
                   className={`fa ${menu.icon}`}
                   title={menu.label}
                 ></i>{' '}
-                <span className="hide-sm">{menu.label}</span>
+                <span className="hide-md">{menu.label}</span>
               </Link>
             </li>
           )
@@ -69,7 +69,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu
   )
   return (
     <Fragment>
-      <nav className="navbar bg-bucosu">
+      <nav className="navbar bg-dark">
         <h1>
           <Link onClick={getMenus} to="/">
             <span><strong>BUCOSU</strong><span style={{color: 'lightgray', fontWeight: '100'}}>.com</span></span>

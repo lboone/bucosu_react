@@ -43,6 +43,7 @@
  *            required:
  *              - ipaddress
  *              - device
+ *              - geolocation
  *            properties:
  *              ipaddress:
  *                type: string
@@ -50,6 +51,9 @@
  *              device:
  *                type: string
  *                description: The device info of the logged in user.
+ *              geolocation:
+ *                type: string
+ *                description: An object id of the geolocation of the ip address.
  *            example:
  *                name: "75.182.219.244"
  *                value: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
@@ -99,6 +103,11 @@ const ProfileSchema = new Schema({
       },
       device: {
         type: String,
+        required: true
+      },
+      geolocation: {
+        type: Schema.Types.ObjectId,
+        ref: 'ipgeolocation',
         required: true
       },
       date: {

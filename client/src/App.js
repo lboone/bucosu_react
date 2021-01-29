@@ -18,6 +18,7 @@ import AuthorizedRoutes from './routes/authorized'
 import BcsRoutes from './routes/bcs'
 import DashboardRoutes from './routes/dashboard'
 import ProjectsRoutes from './routes/projects'
+import UserRoutes from './routes/user'
 
 // Stylesheet
 import './App.css';
@@ -41,7 +42,7 @@ const App = () => {
         <Fragment>
           <Navbar/>
           <Route exact path="/" component={ Landing }/>
-          <section className="container">
+          <section className="container-full">
             <Alert />
             <Switch>
               <Route 
@@ -55,6 +56,7 @@ const App = () => {
             <BcsRoutes />
             <DashboardRoutes />
             <ProjectsRoutes />
+            <UserRoutes />
           </section>
         </Fragment>
       </Router>

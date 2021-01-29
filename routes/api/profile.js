@@ -12,7 +12,27 @@ const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 // @access  Private
 router.get('/me', auth, async (req, res) => {
   try{
-    const profile = await Profile.findOne({ user: req.user.id }).populate({path: 'user', model: 'user',populate: [{path:'usertype',model:'usertype'},{path: 'company',model:'company', populate: {path: 'companytype',model:'companytype'}}]})
+    const profile = await Profile.findOne({ user: req.user.id })
+    .populate({
+      path: 'user', 
+      model: 'user',
+      populate: [{
+        path:'usertype',
+        model:'usertype'
+      },{
+        path: 'company',
+        model:'company', 
+        populate: {
+          path: 'companytype',
+          model:'companytype'
+        }
+      }]
+    })
+    .populate({
+      path: 'logins.geolocation',
+      model: 'ipgeolocation',
+      select: ['-logins']
+    })
 
     if(!profile){
       return res.status(400).json({ errors: [{msg: 'There is no profile for this user'}]})
