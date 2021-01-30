@@ -7,9 +7,10 @@ import PrivateRoute from '../../components/routing/PrivateRoute'
 import Admin from '../../components/admin/Admin'
 import Menus from '../../components/admin/Menus'
 import Headings from '../../components/admin/Headings'
-import Purposes from '../../components/admin/Purposes'
-import Statuses from '../../components/admin/Statuses'
-import Types from '../../components/admin/Types'
+import Projects from '../../components/admin/projects/Projects'
+import Purposes from '../../components/admin/projects/Purposes'
+import Statuses from '../../components/admin/projects/Statuses'
+import Types from '../../components/admin/projects/Types'
 import UserData from '../../components/admin/UserData'
 import { ACCESSTYPES } from '../../utils/constants'
 const { COMPANY, USER } = ACCESSTYPES
@@ -41,21 +42,28 @@ export default function AdminRoutes (){
       />
       <PrivateRoute 
         exact 
-        path="/admin/purposes" 
+        path="/admin/projects" 
+        component={Projects} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/projects/purposes" 
         component={Purposes} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
-        path="/admin/statuses" 
+        path="/admin/projects/statuses" 
         component={Statuses} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
-        path="/admin/types" 
+        path="/admin/projects/types" 
         component={Types} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }

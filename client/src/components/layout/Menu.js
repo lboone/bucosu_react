@@ -41,12 +41,13 @@ const Menu = ( {menu, getSubMenus, setSubMenu}) => {
           <ul>
             {menu.submenus &&
               menu.submenus.map((submenu) => {
+                console.log({first: loc.split('/')[2], link: submenu.link.split('/')[2]})
                 return (
                   <li key={submenu._id}>
                     <Link 
                       to={submenu.link} 
                       onClick={(e)=>onClick(submenu._id)}
-                      className={loc === submenu.link ? 'selected' : ''}
+                      className={loc.split('/')[2] === submenu.link.split('/')[2] ? 'selected' : ''}
                     >
                       <i 
                         className={`fa ${submenu.icon}`}

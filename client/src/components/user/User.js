@@ -1,17 +1,15 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import UserHistoryList from './components/UserHistoryList'
-
+import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
 
 const User = ( { auth } ) => {
   
   return (
-    <Fragment>
-      <h1>User</h1>
-      <hr/>
+    <PageWithoutNavbar title="User">
       <UserHistoryList />
-    </Fragment>
+    </PageWithoutNavbar>
   )
 }
 

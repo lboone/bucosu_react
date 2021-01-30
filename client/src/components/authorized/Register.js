@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { setAlert } from '../../actions/alert'
 import { register } from '../../actions/auth'
 import CompanyList from '../company/CompanyList'
+import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
 
 const Register = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {
   
@@ -45,11 +46,8 @@ const Register = ( { auth:{ userRegistered }, company:{company, usertype }, regi
   }
 
   return (
-    <>
+    <PageWithoutNavbar title="Add A User">
       <div className="container-center" style={{marginTop:'5px'}}>
-        
-        <h1 className="large text-primary">Add User</h1>
-        <hr/>
         <form className="form"  onSubmit={e => onSubmit(e)}>
           <br />
           <p className="lead">
@@ -140,7 +138,7 @@ const Register = ( { auth:{ userRegistered }, company:{company, usertype }, regi
           <input type="submit" className="btn btn-primary" value="Add User" />
         </form>
       </div>
-    </>
+    </PageWithoutNavbar>
   )
 }
 

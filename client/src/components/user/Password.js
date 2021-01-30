@@ -1,14 +1,13 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
+import PageWithoutNavBar from '../layout/page/PageWithoutNavbar'
 
 const Password = ( { auth } ) => {
   return (
-    <Fragment>
-      <h1>Change Password</h1>
-      <hr/>
-    </Fragment>
+    <PageWithoutNavBar title="Change Your Password">
+      <h2>Change Your Password Page</h2>
+    </PageWithoutNavBar>
   )
 }
 

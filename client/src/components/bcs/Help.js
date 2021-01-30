@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
+import PageWithoutNavBar from '../layout/page/PageWithoutNavbar'
 
 const Help = ( { auth } ) => {
   return (
-    <div>
-      <h1>Help</h1>
-      <hr/>
-    </div>
+    <PageWithoutNavBar title="Help">
+      <h2>Help Page</h2>
+    </PageWithoutNavBar>
   )
 }
 

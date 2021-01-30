@@ -1,14 +1,13 @@
-import React, {Fragment} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
+import PageWithoutNavBar from '../layout/page/PageWithoutNavbar'
 
 const Profile = ( { auth } ) => {
   return (
-    <Fragment>
-      <h1>Edit Profile</h1>
-      <hr/>
-    </Fragment>
+    <PageWithoutNavBar title="Update Your Profile">
+      <h2>Update Your Profile Page</h2>
+    </PageWithoutNavBar>
   )
 }
 

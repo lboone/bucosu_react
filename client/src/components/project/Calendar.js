@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
+import PageWithoutNavBar from '../layout/page/PageWithoutNavbar'
 
 const Calendar = ( { auth } ) => {
   return (
-    <div>
-      <h1>Calendar</h1>
-      <hr/>
-    </div>
+    <PageWithoutNavBar title="Calendar">
+      <h2>Calendar Page</h2>
+    </PageWithoutNavBar>
   )
 }
 

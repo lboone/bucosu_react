@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-
+import PageWithNavBar from '../../layout/page/PageWithNavbar'
 
 const Statuses = ( { auth } ) => {
   return (
-    <div>
-      <h1>Project Statuses</h1>
-      <hr/>
-    </div>
+    <PageWithNavBar title="Projects | Statuses">
+      <h1>Hi there from the Projects | Statuses content section.</h1>
+    </PageWithNavBar>
   )
 }
 
