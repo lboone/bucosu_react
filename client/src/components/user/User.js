@@ -1,16 +1,17 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import UserHistory from './components/UserHistory'
+import UserHistoryList from './components/UserHistoryList'
 
 
 const User = ( { auth } ) => {
   
   return (
-    <div>
+    <Fragment>
       <h1>User</h1>
-      <UserHistory />
-    </div>
+      <hr/>
+      <UserHistoryList />
+    </Fragment>
   )
 }
 

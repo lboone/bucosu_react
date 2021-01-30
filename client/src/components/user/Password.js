@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 
 const Password = ( { auth } ) => {
   return (
-    <div>
+    <Fragment>
       <h1>Change Password</h1>
-    </div>
+      <hr/>
+    </Fragment>
   )
 }
 

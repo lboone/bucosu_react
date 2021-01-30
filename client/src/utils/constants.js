@@ -21,6 +21,12 @@ const ACCESSTYPES = {
   }
 }
 
+/*
+ *  Google Maps Information:
+ *  Login: lloyd@bucosu.com
+ *  API Key Name: Bucosu-DEV-Map-API-Key
+ *  API Key Type: Maps Javascript API
+ */ 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyBHYOELmZ1_30HVStYZehPBRTGDBf2LJu4'
 
 export {

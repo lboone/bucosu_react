@@ -61,3 +61,11 @@ const ACCESSTYPES = {
     ACCESSTYPES,
     SWAGGEROPTIONS
   }
+
+
+  /*
+   * Note the api used for getting the ip goelocation is found at
+   * https://geo.ipify.org/docs
+   * Login: lloyd@lambapps.com
+   * Password: IPGeolocationAPI#1
+   */ 
