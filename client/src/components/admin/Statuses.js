@@ -7,6 +7,7 @@ const Statuses = ( { auth } ) => {
   return (
     <div>
       <h1>Project Statuses</h1>
+      <hr/>
     </div>
   )
 }

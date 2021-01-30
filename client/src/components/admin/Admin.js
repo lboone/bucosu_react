@@ -7,6 +7,7 @@ const Admin = ( { auth } ) => {
   return (
     <div>
       <h1>Admin</h1>
+      <hr/>
     </div>
   )
 }

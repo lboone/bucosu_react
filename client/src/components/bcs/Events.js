@@ -7,6 +7,7 @@ const Events = ( { auth } ) => {
   return (
     <div>
       <h1>Events</h1>
+      <hr/>
     </div>
   )
 }

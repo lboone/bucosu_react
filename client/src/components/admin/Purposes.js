@@ -7,6 +7,7 @@ const Purposes = ( { auth } ) => {
   return (
     <div>
       <h1>Project Purposes</h1>
+      <hr/>
     </div>
   )
 }

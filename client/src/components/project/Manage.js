@@ -7,6 +7,7 @@ const Manage = ( { auth } ) => {
   return (
     <div>
       <h1>Manage</h1>
+      <hr/>
     </div>
   )
 }

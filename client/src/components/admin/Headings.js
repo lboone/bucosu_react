@@ -7,6 +7,7 @@ const Headings = ( { auth } ) => {
   return (
     <div>
       <h1>BCS Headings</h1>
+      <hr/>
     </div>
   )
 }

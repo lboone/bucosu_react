@@ -7,6 +7,7 @@ const Types = ( { auth } ) => {
   return (
     <div>
       <h1>Project Types</h1>
+      <hr/>
     </div>
   )
 }

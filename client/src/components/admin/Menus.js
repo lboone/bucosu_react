@@ -7,6 +7,7 @@ const Menus = ( { auth } ) => {
   return (
     <div>
       <h1>Nav Menus</h1>
+      <hr/>
     </div>
   )
 }

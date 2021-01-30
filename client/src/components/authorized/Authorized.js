@@ -7,6 +7,7 @@ const Authorized = ( { auth } ) => {
   return (
     <div>
       <h1>Auth</h1>
+      <hr/>
     </div>
   )
 }

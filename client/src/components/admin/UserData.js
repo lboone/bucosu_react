@@ -7,6 +7,7 @@ const UserData = ( { auth } ) => {
   return (
     <div>
       <h1>User Data</h1>
+      <hr/>
     </div>
   )
 }

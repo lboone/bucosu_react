@@ -7,6 +7,7 @@ const Timeline = ( { auth } ) => {
   return (
     <div>
       <h1>Timeline</h1>
+      <hr/>
     </div>
   )
 }

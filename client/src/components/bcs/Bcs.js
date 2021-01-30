@@ -7,6 +7,7 @@ const Bcs = ( { auth } ) => {
   return (
     <div>
       <h1>BCS</h1>
+      <hr/>
     </div>
   )
 }

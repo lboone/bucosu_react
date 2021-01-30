@@ -7,6 +7,7 @@ const Users = ( { auth } ) => {
   return (
     <div>
       <h1>Users</h1>
+      <hr/>
     </div>
   )
 }
