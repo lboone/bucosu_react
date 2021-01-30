@@ -32,6 +32,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu
     <ul>
       {menu.menus &&
         menu.menus.map((menu) => {
+          //console.log({navbar:{'loc.split': loc.split('/')[1], link: menu.link}})
           return (
             <li key={menu._id}>
               <Link 

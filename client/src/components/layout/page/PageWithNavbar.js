@@ -3,27 +3,25 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import './Page.css'
 import './SideNav.css'
+import SubMenu from '../SubMenu'
 
-const PageWithNavbar = ( { menu , title, footer , children } ) => {
+const PageWithNavbar = ( { auth , title, footer , children } ) => {
   footer = footer ? footer : 'Bucosu.com'
   return (
-    <div class="pagecontainer">
-      <div class="header">
+    <div className="pagecontainer">
+      <div className="header">
         <h1>{title}</h1>
         <hr/>
       </div>
-      <div class="navigation-menu">
-        <div class="sidenav">
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#clients">Clients</a>
-          <a href="#contact">Contact</a>
+      <div className="navigation-menu">
+        <div className="sidenav">
+          <SubMenu />
         </div>
       </div>
-      <div class="main-content">
+      <div className="main-content">
         {children}
       </div>
-      <div class="footer">
+      <div className="footer">
         {footer}
       </div>
     </div>
@@ -31,11 +29,11 @@ const PageWithNavbar = ( { menu , title, footer , children } ) => {
 }
 
 PageWithNavbar.propTypes = {
-  menu: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  menu: state.menu
+  auth: state.auth
 })
 
 export default connect(mapStateToProps)(PageWithNavbar)

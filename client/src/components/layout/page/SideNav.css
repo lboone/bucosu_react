@@ -4,21 +4,26 @@
   z-index: 1;
   background: #eee;
   overflow-x: hidden;
-  padding-top: 20px;
+  padding-top: 0px;
   border-right: 1px solid var(--primary-color);
 }
 
 .sidenav a {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
-  font-size: 20px;
+  font-size: 16px;
   color: var(--success-color);
   display: block;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .sidenav a:hover,
 .sidenav a.selected {
-  color: var(--primary-color);
+  /*color: var(--primary-color); */
+  color: #fff;
+  background-color: var(--primary-color);
+  margin-right: 5px;
 }
 
 @media screen and (max-width: 750px) {
@@ -31,5 +36,14 @@
   }
   .sidenav a {
     font-size: 18px;
+    display: inline-block;
+    padding-right: 15px;
+    margin-right: 1px;
+  }
+
+  .sidenav a:hover,
+  .sidenav a.selected {
+    padding-right: 15px;
+    margin-right: 1px;
   }
 }

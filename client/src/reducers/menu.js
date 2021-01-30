@@ -3,6 +3,8 @@ import {
   SET_MENU,
   GET_SUBMENUS,
   SET_SUBMENU,
+  GET_SUBSUBMENUS,
+  SET_SUBSUBMENU,
   MENU_ERROR,
 } from '../actions/types'
 
@@ -11,6 +13,8 @@ const initialState = {
   menu: null,
   submenus: [],
   submenu: null,
+  subsubmenus: [],
+  subsubmenu: null,
   loading: true,
   error: {}
 }
@@ -26,6 +30,8 @@ const reduce = function(state = initialState, action) {
         menu: null,
         submenus: [],
         submenu: null,
+        subsubmenus: [],
+        subsubmenu: null,
         loading: false,
         error: {}
       }
@@ -35,6 +41,8 @@ const reduce = function(state = initialState, action) {
         menu: payload,
         submenus: null,
         submenu: null,
+        subsubmenus: [],
+        subsubmenu: null,
         loading: false,
         error: {}
       }
@@ -43,6 +51,8 @@ const reduce = function(state = initialState, action) {
         ...state,
         submenus: payload,
         submenu: null,
+        subsubmenus: [],
+        subsubmenu: null,
         loading: false,
         error: {}
       }
@@ -50,9 +60,26 @@ const reduce = function(state = initialState, action) {
       return {
         ...state,
         submenu: payload,
+        subsubmenus: [],
+        subsubmenu: null,
         loading: false,
         error: {}
       }
+    case GET_SUBSUBMENUS:
+      return {
+        ...state,
+        subsubmenus: payload,
+        subsubmenu: null,
+        loading: false,
+        error: {}
+      }
+    case SET_SUBSUBMENU:
+      return {
+        ...state,
+        subsubmenu: payload,
+        loading: false,
+        error: {}
+      }      
     case MENU_ERROR:
       return {
         ...state,

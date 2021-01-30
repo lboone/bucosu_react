@@ -6,15 +6,15 @@ import './Page.css'
 const PageWithNavbar = ( { auth , title, footer, children } ) => {
   footer = footer ? footer : 'Bucosu.com'
   return (
-    <div class="pagecontainer">
-      <div class="header">
+    <div className="pagecontainer">
+      <div className="header">
         <h1>{title}</h1>
         <hr/>
       </div>
-      <div class="main-content-no-nav">
+      <div className="main-content-no-nav">
         {children}
       </div>
-      <div class="footer">
+      <div className="footer">
         {footer}
       </div>
     </div>

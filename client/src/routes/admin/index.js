@@ -6,7 +6,15 @@ import PrivateRoute from '../../components/routing/PrivateRoute'
 
 import Admin from '../../components/admin/Admin'
 import Menus from '../../components/admin/Menus'
-import Headings from '../../components/admin/Headings'
+import Bcs from '../../components/admin/bcs/Bcs'
+import Agreements from '../../components/admin/bcs/Agreements'
+import Companies from '../../components/admin/bcs/Companies'
+import AddCompany from '../../components/admin/bcs/companies/AddCompany'
+import Buildings from '../../components/admin/bcs/Buildings'
+import CompanyTypes from '../../components/admin/bcs/CompanyTypes'
+import Headings from '../../components/admin/bcs/Headings'
+import Profiles from '../../components/admin/bcs/Profiles'
+import Questions from '../../components/admin/bcs/Questions'
 import Projects from '../../components/admin/projects/Projects'
 import Purposes from '../../components/admin/projects/Purposes'
 import Statuses from '../../components/admin/projects/Statuses'
@@ -35,8 +43,64 @@ export default function AdminRoutes (){
       />
       <PrivateRoute 
         exact 
-        path="/admin/headings" 
+        path="/admin/bcs" 
+        component={Bcs} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/agreements" 
+        component={Agreements} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/companies" 
+        component={Companies} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/companies/addcompany" 
+        component={AddCompany} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/buildings" 
+        component={Buildings} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/companytypes" 
+        component={CompanyTypes} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/headings" 
         component={Headings} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/profiles" 
+        component={Profiles} 
+        companyLevel={ COMPANY.ADMIN } 
+        userLevel={ USER.SUPERADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/questions" 
+        component={Questions} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />

@@ -20,7 +20,7 @@ const Menu = ( {menu, getSubMenus, setSubMenu}) => {
     }
     if(menu.submenus && !menu.loading && !menu.submenu){
       menu.submenus.forEach((submenu) => {
-          if (loc === submenu.link) {
+          if (loc.split('/')[2] === submenu.link.split('/')[2]) {
             setSubMenu(submenu._id) 
           }
       })
@@ -41,7 +41,7 @@ const Menu = ( {menu, getSubMenus, setSubMenu}) => {
           <ul>
             {menu.submenus &&
               menu.submenus.map((submenu) => {
-                console.log({first: loc.split('/')[2], link: submenu.link.split('/')[2]})
+                //console.log({menu:{'loc.split': loc.split('/')[2], link: submenu.link.split('/')[2]}})
                 return (
                   <li key={submenu._id}>
                     <Link 
