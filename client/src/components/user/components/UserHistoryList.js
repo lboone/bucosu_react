@@ -10,15 +10,15 @@ const UserHistoryList = ( { profile } ) => {
   return (
     <Fragment>
       <div className="content-centers">
-        <p class="lead">
-          <i class="fab fa-connectdevelop"></i> {!profile.loading && profile.profile && profile.profile.firstname} {!profile.loading && profile.profile && profile.profile.lastname} Last {userLogins && userLogins.length > 5 ? 5 : userLogins.length} Login Events
+        <p className="lead">
+          <i className="fab fa-connectdevelop"></i> {!profile.loading && profile.profile && profile.profile.firstname} {!profile.loading && profile.profile && profile.profile.lastname} Last {userLogins && userLogins.length > 5 ? 5 : userLogins.length} Login Events
         </p>
         <div className="profiles">
         {userLogins &&
               userLogins.map((login, index) => {
                 if(index < 5){
                   return (
-                    <UserHistory login={login}></UserHistory>
+                    <UserHistory key={login._id} login={login}></UserHistory>
                   )
                 } else {
                   return ''

@@ -107,6 +107,89 @@ router.get('/', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,res) => 
 
 })
 
+// @route   GET api/users
+// @desc    Get users for my level
+// @access  Private
+router.get('/mylevel', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,res) => {
+  try{
+    const user = await User.findById(req.user.id)
+    .populate({
+      path: 'usertype',
+      select: ['name','level']
+    })
+    .populate({
+      path: 'company',
+      model: 'company',
+      populate: [{
+        path: 'relationships',
+        select: ['name']
+      },{
+        path : 'companytype',
+        select:['level','name']
+      }]
+    })
+    const uLevel = user.usertype.level
+    const cLevel = user.company.companytype.level
+    const cRels =  user.company.relationships
+    
+    const users = await User.find({_id:{$ne:user._id}})
+      .populate({
+        path: 'usertype', 
+        select:['level','name']
+      })
+      .populate({
+        path: 'company',
+        model: 'company',
+        populate: [{
+          path: 'relationships',
+          select: ['name']
+        },{
+          path : 'companytype',
+          select:['level','name']
+        }],
+      });
+
+
+    if (cLevel === COMPANY.ADMIN && uLevel === USER.SUPERADMIN){
+      return res.status(200).json(users)
+    }
+
+    
+    const filteredUsers = users.filter((item) => {
+      const userLevel = item.usertype.level
+      const companyLevel = item.company.companytype.level
+      const companyName = item.company.name
+      let userPass;
+      if(uLevel === USER.ARCHITECT){
+        userPass = userLevel >= uLevel
+      } else {
+        userPass = userLevel > uLevel
+      }
+      console.log({name:item.email,userPass,userLevel,uLevel,cRels})
+      let companyPass;
+      if(companyLevel< uLevel){
+        companyPass = false
+      } else {
+        if(cRels.length >0){
+          companyPass = cRels.some((co) => {
+            console.log({coName: co.name,companyName,found:co.name === companyName})
+            return co.name === companyName 
+          })
+        } else {
+          companyPass = companyLevel > cLevel
+        }
+      }
+      return userPass && companyPass
+    })
+
+    return res.status(200).json(filteredUsers)
+    
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  } 
+
+})
 // @route   PUT api/users/:id/deactivate
 // @desc    Deactivate a user
 // @access  Private

@@ -7,7 +7,7 @@ const UserHistory = ( {login} ) => {
   const mapStyles = {        
     height: "250px",
     width: "250px",
-    "border-radius":"50%"
+    borderRadius:"50%"
   }
   
   const defaultCenter = {
@@ -47,11 +47,11 @@ const UserHistory = ( {login} ) => {
           </LoadScript>
         </div>
         <div>
-          <h2><Moment format="MM/DD/YYYY hh:mm A">{login.date}</Moment></h2>
-          <p>{login.ipaddress}</p>
+          <h2><Moment format="dddd, MM/DD/YYYY hh:mm A">{login.date}</Moment></h2>
           <p>{login.geolocation.name} - {login.geolocation.isp}</p>
           <p>{login.geolocation.address.city}, {login.geolocation.address.state}{' '}{login.geolocation.address.zip}{'  '}{login.geolocation.address.country}</p>
           <p>{login.device}</p>
+          <p>{login.ipaddress}</p>
         </div>
       </div>
   )

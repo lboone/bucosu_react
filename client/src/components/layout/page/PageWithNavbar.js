@@ -9,16 +9,13 @@ const PageWithNavbar = ( { auth , title, footer , children } ) => {
   footer = footer ? footer : 'Bucosu.com'
   return (
     <div className="pagecontainer">
-      <div className="header">
-        <h1>{title}</h1>
-        <hr/>
-      </div>
       <div className="navigation-menu">
         <div className="sidenav">
           <SubMenu />
         </div>
       </div>
       <div className="main-content">
+        <h1 className="page-title">{title}</h1>
         {children}
       </div>
       <div className="footer">
