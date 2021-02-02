@@ -33,6 +33,10 @@ h1.page-title {
   margin-bottom: 1rem;
 }
 
+.alert {
+  margin-left: 3rem !important;
+}
+
 @media screen and (max-width: 1250px) {
   .navigation-menu {
     grid-column: span 3;

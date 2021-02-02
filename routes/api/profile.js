@@ -113,7 +113,7 @@ router.get('/', auth, async (req, res) => {
 // @access  Private
 router.get('/user/:user_id', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }).populate({path: 'user', model: 'user',populate: [{path:'usertype',model:'usertype'},{path: 'company',model:'company', populate: {path: 'companytype',model:'companytype'}}]})
+    const profile = await Profile.findOne({ user: req.params.user_id }).populate({path: 'user', model: 'user',populate: [{path:'usertype',model:'usertype'},{path: 'company',model:'company', populate: {path: 'companytype',model:'companytype'}}]})
 
     if(!profile){
       return res.status(400).json({ errors: [{msg: 'Profile not found'}]})

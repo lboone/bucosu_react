@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const access = require('../../middleware/access')
+const auth = require('../../middleware/auth')
 const { check, validationResult } = require('express-validator')
 const User = require('../../models/User')
 const Company = require('../../models/Company')
@@ -92,6 +93,59 @@ router.post('/company/:company_id/usertype/:usertype_id/', [access(COMPANY.SCHOO
   
 })
 
+// @route   PUT api/users/me
+// @desc    Update a users rep info and profile info
+// @access  Private
+router.put('/me',[auth,[
+  check('username','Username is required').not().isEmpty(),
+  check('email','Please include a valid email').isEmail().normalizeEmail(),
+  check('firstname','First Name is required').not().isEmpty().trim().escape(),
+  check('lastname','Last Name is required').not().isEmpty().trim().escape(),
+  check('phone','A 10 digit Phone Number is required').isLength({min:10, max: 10}),
+]],async (req,res)=> {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors: errors.array() })
+  }
+  const {username, email, firstname, lastname, phone} = req.body 
+  try {
+    // See if user exists
+    let user = await User.findById(req.user.id)
+    if(!user){
+      return res.status(400).json({ errors: [{msg: 'User does not exists'}]})
+    }
+
+    if(username) user.username = username
+    if(email) user.email = email
+    // Save user to database
+    await user.save()
+
+    // Now create the profile record
+
+    let profile = await Profile.findOne({user:req.user.id})
+    if(!profile){
+      return res.status(400).json({errors: [{msg: 'Profile does not exist'}]})
+    }
+
+    if(firstname) profile.firstname = firstname
+    if(lastname) profile.lastname = lastname
+    if(phone) profile.phone = phone    
+    await profile.save()
+
+    res.status(200).json(user._id)
+  } catch(err) {
+    console.error(err.message)
+
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'User or Profile not found'}]})   
+    }
+
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  }
+    
+  
+})
+
 // @route   GET api/users
 // @desc    Get all users
 // @access  Private
@@ -149,7 +203,6 @@ router.get('/mylevel', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,r
         }],
       });
 
-
     if (cLevel === COMPANY.ADMIN && uLevel === USER.SUPERADMIN){
       return res.status(200).json(users)
     }
@@ -165,14 +218,12 @@ router.get('/mylevel', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,r
       } else {
         userPass = userLevel > uLevel
       }
-      console.log({name:item.email,userPass,userLevel,uLevel,cRels})
       let companyPass;
       if(companyLevel< uLevel){
         companyPass = false
       } else {
         if(cRels.length >0){
           companyPass = cRels.some((co) => {
-            console.log({coName: co.name,companyName,found:co.name === companyName})
             return co.name === companyName 
           })
         } else {

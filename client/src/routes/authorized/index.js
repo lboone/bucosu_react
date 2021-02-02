@@ -6,6 +6,7 @@ import PrivateRoute from '../../components/routing/PrivateRoute'
 
 import Authorized from '../../components/authorized/Authorized'
 import Users from '../../components/authorized/Users'
+import EditUser from '../../components/authorized/user/EditUser'
 import Register from '../../components/authorized/Register'
 import { ACCESSTYPES } from '../../utils/constants'
 const { COMPANY, USER } = ACCESSTYPES
@@ -20,6 +21,12 @@ export default function AuthorizedRoutes (){
           component={Authorized} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.ADMIN}
+        />
+        <PrivateRoute 
+          path="/authorized/users/edit" 
+          component={EditUser} 
+          companyLevel={ COMPANY.PUBLIC } 
+          userLevel={ USER.MEMBER }
         />
         <PrivateRoute 
           exact 

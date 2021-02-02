@@ -4,13 +4,15 @@ import auth from './auth'
 import profile from './profile'
 import company  from './company'
 import menu from './menu'
+import user from './user'
 
 const appReducer = combineReducers({
   alert,
   auth,
   profile,
   company,
-  menu
+  menu,
+  user
 })
 
 const rootReducer = (state, action) => {

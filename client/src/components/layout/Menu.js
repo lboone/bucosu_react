@@ -9,8 +9,6 @@ import BarLoader from 'react-spinners/BarLoader'
 
 const override = css`
   display: contents;
-
-
 `
 const Menu = ( {menu, getSubMenus, setSubMenu}) => {
   const loc = useLocation().pathname

@@ -10,6 +10,8 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  PASSWORD_SUCCESS,
+  PASSWORD_FAIL,
   LOGOUT,
 } from '../actions/types'
 
@@ -54,6 +56,12 @@ const reduce = function(state = initialState, action){
       return {
         ...state,
         userRegistered:null,
+        loading: false
+      }
+    case PASSWORD_SUCCESS:
+    case PASSWORD_FAIL:
+      return {
+        ...state,
         loading: false
       }
     case AUTH_ERROR:

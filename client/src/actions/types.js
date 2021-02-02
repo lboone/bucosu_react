@@ -4,6 +4,10 @@ export const REMOVE_ALERT = 'REMOVE_ALERT'
 // Register
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
 export const REGISTER_FAIL = 'REGISTER_FAIL'
+// Password Reset
+export const PASSWORD_SUCCESS = 'PASSWORD_SUCCESS'
+export const PASSWORD_FAIL = 'PASSWORD_FAIL'
+
 //User Auth
 export const USER_LOADED = 'USER_LOADED'
 export const AUTH_ERROR = 'AUTH_ERROR'
@@ -15,6 +19,13 @@ export const LOGOUT = 'LOGOUT'
 export const GET_PROFILE = 'GET_PROFILE'
 export const PROFILE_SUCCESS = 'PROFILE_SUCCESS'
 export const PROFILE_ERROR = 'PROFILE_ERROR'
+
+//User
+export const GET_USERS = 'GET_USERS'
+export const SET_USER_ID = 'SET_USER_ID'
+export const GET_USER = 'GET_USER'
+export const UPDATE_USER = 'UPDATE_USER'
+export const USER_ERROR = 'USER_ERROR'
 
 //Company
 export const GET_COMPANIES = 'GET_COMPANIES'

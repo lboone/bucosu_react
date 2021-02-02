@@ -5,8 +5,8 @@ import {
 import PrivateRoute from '../../components/routing/PrivateRoute'
 
 import User from '../../components/user/User'
-import Profile from '../../components/user/Profile'
-import Password from '../../components/user/Password'
+import Profile from '../../components/user/EditProfile'
+import ResetPassword from '../../components/user/ResetPassword'
 import { ACCESSTYPES } from '../../utils/constants'
 const { COMPANY, USER } = ACCESSTYPES
 
@@ -30,8 +30,8 @@ export default function UserRoutes (){
         />
         <PrivateRoute 
           exact 
-          path="/user/password" 
-          component={Password} 
+          path="/user/reset-password" 
+          component={ResetPassword} 
           companyLevel={ COMPANY.PUBLIC } 
           userLevel={ USER.MEMBER }
         />
