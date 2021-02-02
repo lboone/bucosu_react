@@ -22,6 +22,7 @@ app.get('/',(req, res) => res.send('API Running'))
 // Define Routes
 app.use('/api/users',require('./routes/api/users'))
 app.use('/api/auth',require('./routes/api/auth'))
+app.use('/api/bcsevents',require('./routes/api/bcsevents'))
 app.use('/api/companies',require('./routes/api/companies'))
 app.use('/api/profile',require('./routes/api/profile'))
 app.use('/api/usertypes',require('./routes/api/usertypes'))

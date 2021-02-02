@@ -46,6 +46,7 @@ const ACCESSTYPES = {
       ],
     },
     apis: [
+      "./models/BcsEvent.js",
       "./models/Building.js",
       "./models/Company.js",
       "./models/CompanyType.js",
