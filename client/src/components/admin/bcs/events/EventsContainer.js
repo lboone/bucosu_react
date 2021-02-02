@@ -11,7 +11,7 @@ import { URLContext } from '../../../../URLContext'
 const EventsContainer = ( { event } ) => {
   const {action, id} = useContext(URLContext)
   let finalComponent = null;
-  switch (action) {
+  switch (action) {  
     case 'add':
       finalComponent = (<AddEvent />)
       break;
