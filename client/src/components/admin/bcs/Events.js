@@ -4,15 +4,15 @@ import { connect } from 'react-redux'
 import PageWithNavbar from '../../layout/page/PageWithNavbar'
 
 
-const Agreements = ( { auth } ) => {
+const Events = ( { auth } ) => {
   return (
-    <PageWithNavbar title="Agreements">
-      <h2>Agreements Page</h2>
+    <PageWithNavbar title="Events">
+      <h2>Events Page</h2>
     </PageWithNavbar>
   )
 }
 
-Agreements.propTypes = {
+Events.propTypes = {
   auth: PropTypes.object.isRequired,
 }
 
@@ -20,5 +20,5 @@ const mapStateToProps = state => ({
   auth: state.auth,
 })
   
-export default connect(mapStateToProps, null)(Agreements)
+export default connect(mapStateToProps, null)(Events)
   

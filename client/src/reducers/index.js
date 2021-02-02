@@ -5,6 +5,7 @@ import profile from './profile'
 import company  from './company'
 import menu from './menu'
 import user from './user'
+import event from './event'
 
 const appReducer = combineReducers({
   alert,
@@ -12,7 +13,8 @@ const appReducer = combineReducers({
   profile,
   company,
   menu,
-  user
+  user,
+  event
 })
 
 const rootReducer = (state, action) => {

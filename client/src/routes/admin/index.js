@@ -7,7 +7,7 @@ import PrivateRoute from '../../components/routing/PrivateRoute'
 import Admin from '../../components/admin/Admin'
 import Menus from '../../components/admin/Menus'
 import Bcs from '../../components/admin/bcs/Bcs'
-import Agreements from '../../components/admin/bcs/Agreements'
+import EventsContainer from '../../components/admin/bcs/events/EventsContainer'
 import Companies from '../../components/admin/bcs/Companies'
 import AddCompany from '../../components/admin/bcs/companies/AddCompanyContainer'
 import Buildings from '../../components/admin/bcs/Buildings'
@@ -50,8 +50,8 @@ export default function AdminRoutes (){
       />
       <PrivateRoute 
         exact 
-        path="/admin/bcs/agreements" 
-        component={Agreements} 
+        path="/admin/bcs/events" 
+        component={EventsContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
