@@ -86,7 +86,7 @@ const ResetPassword = ( { resetPassword, setAlert, logout } ) => {
             />
           </div>
           <br />
-          <input type="submit" className="btn btn-primary" value="Change Password" disabled={isDisabled} />
+          <input type="submit" className="btn btn-success" value="Reset Password" disabled={isDisabled} />
         </form>
       </div>
     </PageWithoutNavbar>
