@@ -13,12 +13,7 @@ import Login from './components/auth/Login'
 import Alert from './components/layout/Alert'
 
 // Routes
-import AdminRoutes from './routes/admin'
-import AuthorizedRoutes from './routes/authorized'
-import BcsRoutes from './routes/bcs'
-import DashboardRoutes from './routes/dashboard'
-import ProjectsRoutes from './routes/projects'
-import UserRoutes from './routes/user'
+import AllRoutes from './routes'
 
 // Stylesheet
 import './App.css';
@@ -51,12 +46,7 @@ const App = () => {
                 component={Login} 
               />
             </Switch>
-            <AdminRoutes />
-            <AuthorizedRoutes />
-            <BcsRoutes />
-            <DashboardRoutes />
-            <ProjectsRoutes />
-            <UserRoutes />
+            <AllRoutes />
           </section>
         </Fragment>
       </Router>
