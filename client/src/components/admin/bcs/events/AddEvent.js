@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { createBcsEvent } from '../../../../actions/event'
@@ -14,7 +14,7 @@ const AddEvent = ({ createBcsEvent }) => {
   return (
     <div>
       <Link to="/admin/bcs/events" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link>
-      <h1>New Event</h1>
+      <Link onClick={(e)=>onClick(e)} className="btn btn-primary btn-outline"><i className="fa fa-save"></i> Save Event</Link>
     </div>
   )
 }

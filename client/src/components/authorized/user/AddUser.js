@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setAlert } from '../../actions/alert'
-import { register } from '../../actions/auth'
-import CompanyList from '../company/CompanyList'
-import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import { setAlert } from '../../../actions/alert'
+import { register } from '../../../actions/auth'
+import CompanyList from '../../company/CompanyList'
+import { Link } from 'react-router-dom'
 
-const Register = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {
+const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {
   
   const initialState = {
     username: '',
@@ -47,8 +46,8 @@ const Register = ( { auth:{ userRegistered }, company:{company, usertype }, regi
   }
 
   return (
-    <PageWithoutNavbar title="Add A User">
-      <div className="container-center" style={{marginTop:'5px'}}>
+    
+    <div className="container-center" style={{marginTop:'5px'}}>
         <form className="form"  onSubmit={e => onSubmit(e)}>
           <br />
           <p className="lead">
@@ -138,13 +137,14 @@ const Register = ( { auth:{ userRegistered }, company:{company, usertype }, regi
           <br />
           <Link onClick={(e)=> onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-user-plus"></i> Add User</Link>
           <input type="submit" className="btn btn-primary btn-outline hidden" value="Add User" />
+          <Link to="/authorized" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>  
         </form>
       </div>
-    </PageWithoutNavbar>
+    
   )
 }
 
-Register.propTypes = {
+AddUser.propTypes = {
   register: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
   company: PropTypes.object.isRequired,
@@ -156,5 +156,5 @@ const mapStateToProps = state => ({
   auth: state.auth,
 })
   
-export default connect(mapStateToProps, {register, setAlert})(Register)
+export default connect(mapStateToProps, {register, setAlert})(AddUser)
   

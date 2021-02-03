@@ -1,23 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
+import {getUsers } from '../../../actions/user'
+
 import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
-import { setUserID } from '../../../actions/user'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
 const override = css`
   margin: auto;
   display: block;
 `
 
-const UsersTable = ( { users, loading, setUserID } ) => {
-  const onClick = (userID) => {
-    setUserID(userID)
-  }
+const ListUsers = ( { user:{users}, loading, getUsers} ) => {
 
+  useEffect(()=>{
+    getUsers()
+  },[getUsers])
 
   const confirmFunction = () => {
     console.log('confirm')
@@ -40,6 +40,8 @@ const UsersTable = ( { users, loading, setUserID } ) => {
     closeOnClickOutside : false,
   }
   return (
+    <>
+      <Link to="/authorized?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-user-plus mr-1"></i>New User</Link>
       <table className="table">
         <thead>
           <tr>
@@ -61,7 +63,7 @@ const UsersTable = ( { users, loading, setUserID } ) => {
                     <td className="hide-sm">{u.usertype.name}</td>
                     <td className="hide-sm">{u.company.name}</td>
                     <td className="hide-sm text-center">{u.isactive ? 'Actives' : 'Inavtive'}</td>
-                    <td className="text-center"><Link onClick={(e)=>onClick(u._id)} to={`/authorized/users/edit`} className="btn btn-success btn-outline"><i className="fa fa-pen-nib"></i> Edit</Link> 
+                    <td className="text-center"><Link to={`/authorized?action=edit&id=${u._id}`} className="btn btn-success btn-outline"><i className="fa fa-pen-nib"></i> Edit</Link> 
                     <Link className="btn btn-danger btn-outline" title="Delete" onClick={confirm}><i title="Delete" className="fa fa-trash"></i> Delete</Link>
                     </td>
                   </tr>
@@ -73,16 +75,17 @@ const UsersTable = ( { users, loading, setUserID } ) => {
           }
         </tbody>
       </table>
+    </>
   )
 }
 
-UsersTable.propTypes = {
+ListUsers.propTypes = {
   user: PropTypes.object.isRequired,
-  setUserID: PropTypes.func.isRequired,
+  getUsers: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   user: state.user
 })
   
-export default connect(mapStateToProps, {setUserID})(UsersTable)
+export default connect(mapStateToProps,{getUsers})(ListUsers)

@@ -4,10 +4,7 @@ import {
 } from 'react-router-dom';
 import PrivateRoute from '../../components/routing/PrivateRoute'
 
-import Authorized from '../../components/authorized/Authorized'
-import Users from '../../components/authorized/Users'
-import EditUser from '../../components/authorized/user/EditUser'
-import Register from '../../components/authorized/Register'
+import UsersContainer from '../../components/authorized/user/UsersContainer'
 import { ACCESSTYPES } from '../../utils/constants'
 const { COMPANY, USER } = ACCESSTYPES
 
@@ -18,29 +15,9 @@ export default function AuthorizedRoutes (){
         <PrivateRoute 
           exact 
           path="/authorized" 
-          component={Authorized} 
+          component={UsersContainer} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.ADMIN}
-        />
-        <PrivateRoute 
-          path="/authorized/users/edit" 
-          component={EditUser} 
-          companyLevel={ COMPANY.PUBLIC } 
-          userLevel={ USER.MEMBER }
-        />
-        <PrivateRoute 
-          exact 
-          path="/authorized/users" 
-          component={Users} 
-          companyLevel={COMPANY.SCHOOLDISTRICT}
-          userLevel={USER.ADMIN}
-        />
-        <PrivateRoute 
-          exact 
-          path="/authorized/register" 
-          component={Register} 
-          companyLevel={ COMPANY.SCHOOLDISTRICT } 
-          userLevel={ USER.ADMIN }
         />
       </Switch>
     </Fragment>   

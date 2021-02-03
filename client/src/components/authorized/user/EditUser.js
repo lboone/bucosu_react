@@ -1,9 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import {useHistory} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {getUser } from '../../../actions/user'
-import PageWithoutNavbar from '../../layout/page/PageWithoutNavbar'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
@@ -12,13 +10,15 @@ const override = css`
   display: block;
   margin: 0 auto;
 `
-const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
-  const history = useHistory()
+const EditUser = ( { user:{loading, user}, getUser, id } ) => {
+
+  const [userID, setuserID] = useState(null)
 
   useEffect(()=>{
-      if(loading || !user){
-        getUser(userid)
-      }
+    setuserID(id)
+    if(userID !== null){
+      getUser(userID)
+    }
       
       setFormData({
         username: loading || !user || !user.user ? '' : user.user.username,
@@ -28,7 +28,7 @@ const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
         phone: loading || !user ? '' : user.phone      
       })
     
-  },[getUser, userid, loading, user])
+  },[setuserID,getUser,userID, id, loading, user])
 
   const initialState = {
     username: '',
@@ -49,10 +49,6 @@ const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
     console.log('submit')
   }
 
-  const onCancelClick = (e) =>{
-    history.push('/authorized/users')
-  }
-
   //const userCompanyID = !loading && user && user.user.company ? user.user.company._id : ''
   //const userUserTypeID = !loading && user && user.user.usertype ? user.user.usertype._id : ''
   //console.log({userCompanyID,userUserTypeID})
@@ -60,7 +56,8 @@ const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
   
 
   return (
-    <PageWithoutNavbar title="Edit User">
+    <>
+      <Link to="/authorized" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link>
       {loading || !user ? (
         <ClipLoader color={'#37bc9b'} loading={true} css={override} size={25} />
       ) : (
@@ -130,12 +127,11 @@ const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
             <br />
             <Link onClick={(e)=> onSubmit(e)} className="btn btn-success btn-outline"><i className="fa fa-user-edit"></i> Update User</Link>
             <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" onClick={(e)=> onSubmit(e)}/>
-            <Link onClick={(e)=> onCancelClick()} className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
-            
+            <Link to="/authorized" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>            
           </form>
         </div>
       )}
-      </PageWithoutNavbar>
+      </>
   )
 }
 

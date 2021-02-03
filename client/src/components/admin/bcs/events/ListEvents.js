@@ -6,6 +6,12 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Moment from 'react-moment'
+import BeatLoader from 'react-spinners/BeatLoader'
+import { css } from '@emotion/core'
+const override = css`
+  margin: auto;
+  display: block;
+`
 
 
 const Events = ( { event:{events, loading}, getBcsEvents } ) => {
@@ -36,7 +42,6 @@ const Events = ( { event:{events, loading}, getBcsEvents } ) => {
 
   return (
     <>
-      <h2>List Events</h2>
       <Link to="/admin/bcs/events?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Event</Link>
       <table className="table">
         <thead>
@@ -52,7 +57,9 @@ const Events = ( { event:{events, loading}, getBcsEvents } ) => {
         <tbody>
         {
           !events || loading ? 
-            (<tr><td colSpan={5}><h1>loading...</h1></td></tr>) 
+          (<tr><td colSpan={5} style={{textAlign: 'center'}}>{
+              loading ? (<BeatLoader color={'#37bc9b'} loading={true} css={override} margin={10} size={15} />) : (<h1>No Events Found...</h1>)}</td></tr>
+          )
           : 
             (
                 events.map( (event) => { return (

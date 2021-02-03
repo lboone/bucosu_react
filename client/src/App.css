@@ -135,6 +135,10 @@ hr {
   color: var(--dark-color);
 }
 
+.text-dark-gray {
+  color: rgba(52, 58, 64, 0.85);
+}
+
 /* Padding */
 .p {
   padding: 0.5rem;
