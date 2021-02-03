@@ -3,6 +3,9 @@ import {
   SET_USER_ID,
   GET_USER,
   UPDATE_USER,
+  ACTIVATE_USER,
+  DEACTIVATE_USER,
+  DELETE_USER,
   USER_ERROR
 } from '../actions/types'
 
@@ -36,6 +39,8 @@ const reduce = function(state = initialState, action) {
           error: {}
         }
     case GET_USER:
+    case ACTIVATE_USER:
+    case DEACTIVATE_USER:
       return {
         ...state,
         user: payload,
@@ -45,6 +50,14 @@ const reduce = function(state = initialState, action) {
     case UPDATE_USER:
       return {
         ...state,
+        loading: false,
+        error: {}
+      }
+    case DELETE_USER:
+      return {
+        ...state,
+        userid: null,
+        user: null,
         loading: false,
         error: {}
       }

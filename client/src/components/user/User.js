@@ -2,14 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import UserHistoryList from './components/UserHistoryList'
-import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
+import PageWithNavbar from '../layout/page/PageWithNavbar'
 
 const User = ( { auth } ) => {
   
   return (
-    <PageWithoutNavbar title="User">
+    <PageWithNavbar title="User">
       <UserHistoryList />
-    </PageWithoutNavbar>
+    </PageWithNavbar>
   )
 }
 

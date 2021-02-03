@@ -57,7 +57,6 @@ const EditUser = ( { user:{loading, user}, getUser, id } ) => {
 
   return (
     <>
-      <Link to="/authorized" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link>
       {loading || !user ? (
         <ClipLoader color={'#37bc9b'} loading={true} css={override} size={25} />
       ) : (
@@ -137,7 +136,7 @@ const EditUser = ( { user:{loading, user}, getUser, id } ) => {
 
 EditUser.propTypes = {
   user: PropTypes.object.isRequired,
-  getUser: PropTypes.object.isRequired,
+  getUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state,ownProps) => ({

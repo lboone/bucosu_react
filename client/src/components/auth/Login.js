@@ -49,7 +49,7 @@ const Login = ({ login, isAuthenticated }) => {
             required 
           />
         </div>
-        <Link onClick={e => onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-sign-in-alt"></i> Login</Link>
+        <Link to="#" onClick={e => onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-sign-in-alt"></i> Login</Link>
         <input type="submit" className="btn btn-primary btn-outline hidden" value="Login" />
       </form>
       </div>

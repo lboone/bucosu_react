@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setAlert } from '../../actions/alert'
 import { resetPassword } from '../../actions/auth'
-import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
+import PageWithNavbar from '../layout/page/PageWithNavbar'
 import { logout } from '../../actions/auth'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const ResetPassword = ( { resetPassword, setAlert, logout } ) => {
   
@@ -41,7 +42,7 @@ const ResetPassword = ( { resetPassword, setAlert, logout } ) => {
   }
 
   return (
-    <PageWithoutNavbar title="Reset Your Password">
+    <PageWithNavbar title="Reset Your Password">
       <div className="container-center" style={{marginTop:'5px'}}>
         <form className="form"  onSubmit={e => onSubmit(e)}>
           <br />
@@ -86,10 +87,12 @@ const ResetPassword = ( { resetPassword, setAlert, logout } ) => {
             />
           </div>
           <br />
-          <input type="submit" className="btn btn-success" value="Reset Password" disabled={isDisabled} />
+          <Link to="#" onClick={(e)=>onSubmit(e)} className="btn btn-success btn-outline" disabled={isDisabled}><i className="fa fa-key"></i> Reset Password</Link>
+          <input type="submit" className="btn btn-success hidden" value="Reset Password" disabled={isDisabled} />
+          <Link to="/user" className="btn btn-danger btn-outline" value="Cancel" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
         </form>
       </div>
-    </PageWithoutNavbar>
+    </PageWithNavbar>
   )
 }
 

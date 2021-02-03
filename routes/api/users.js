@@ -286,8 +286,8 @@ router.put('/:id/deactivate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (
   } 
 })
 
-// @route   PUT pi/users/:id/activate
-// @desc    Activate a company
+// @route   PUT api/users/:id/activate
+// @desc    Activate a user
 // @access  Private
 router.put('/:id/activate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try{

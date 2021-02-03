@@ -1,20 +1,19 @@
 import React, {useState, useEffect} from 'react'
-import {useHistory} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {updateUser } from '../../actions/user'
-import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
+import PageWithNavbar from '../layout/page/PageWithNavbar'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
 import { setAlert} from '../../actions/alert'
 import { logout } from '../../actions/auth'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const override = css`
   display: block;
   margin: 0 auto;
 `
 const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert} ) => {
-  const history = useHistory()
 
   useEffect(()=>{
       setFormData({
@@ -45,10 +44,6 @@ const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert
     e.preventDefault();
   }
 
-  const onCancelClick = (e) =>{
-    history.push('/user')
-  }
-
   const onSubmitClick = (e) =>{
       updateUser({
         username, email, firstname, lastname, phone
@@ -71,7 +66,7 @@ const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert
   
 
   return (
-    <PageWithoutNavbar title="Update Your Profile">
+    <PageWithNavbar title="Update Your Profile">
       {loading || !profile ? (
         <ClipLoader color={'#37bc9b'} loading={true} css={override} size={25} />
       ) : (
@@ -139,12 +134,13 @@ const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert
               </small>
             </div>
             <br />
-            <input type="submit" className="btn btn-success" value="Update User" id="updateUser" onClick={(e)=> onSubmitClick()}/>
-            <input type="submit" className="btn btn-danger" value="Cancel" id="cancelUpdateUser" onClick={(e)=>onCancelClick()}/>
+            <Link className="btn btn-success btn-outline" to="#" onClick={(e)=> onSubmitClick()}><i className="fa fa-user-plus"></i> Update User</Link>
+            <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" id="updateUser" onClick={(e)=> onSubmitClick()}/>
+            <Link to="/user" className="btn btn-danger btn-outline" value="Cancel" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
           </form>
         </div>
       )}
-      </PageWithoutNavbar>
+      </PageWithNavbar>
   )
 }
 

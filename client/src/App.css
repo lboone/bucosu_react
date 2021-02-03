@@ -131,12 +131,23 @@ hr {
   color: var(--primary-color);
 }
 
+.text-danger {
+  color: var(--danger-color);
+}
 .text-dark {
   color: var(--dark-color);
 }
 
 .text-dark-gray {
   color: rgba(52, 58, 64, 0.85);
+}
+
+.text-light-gray {
+  color: rgba(52, 58, 64, 0.25);
+}
+
+.text-strike {
+  text-decoration: line-through;
 }
 
 /* Padding */

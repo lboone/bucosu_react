@@ -1,7 +1,7 @@
 import React, { useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getBcsEvents } from '../../../../actions/event'
+import { getBcsEvents, deactivateBcsEvent, activateBcsEvent } from '../../../../actions/event'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -14,7 +14,7 @@ const override = css`
 `
 
 
-const Events = ( { event:{events, loading}, getBcsEvents } ) => {
+const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent } ) => {
   useEffect(()=>{
     getBcsEvents()
   },[getBcsEvents])
@@ -28,6 +28,16 @@ const Events = ( { event:{events, loading}, getBcsEvents } ) => {
   const confirm = () => {
     confirmAlert(options)
   }
+
+  const deactivate = async (id) => {
+    await deactivateBcsEvent(id)
+    await getBcsEvents()
+  }
+  const activate = async (id) => {
+    await activateBcsEvent(id)
+    await getBcsEvents()
+  }
+
 
   const options = {
     title : 'Delete Event?',
@@ -67,7 +77,12 @@ const Events = ( { event:{events, loading}, getBcsEvents } ) => {
                     <td>{event.name}</td>
                     <td className="hide-sm"><Moment format="MM/DD/YYYY">{event.startdate}</Moment></td>
                     <td className="hide-sm"><Moment format="MM/DD/YYYY">{event.enddate}</Moment></td>
-                    <td className="hide-sm text-center">{event.isactive? 'Active' : 'Inactive'}</td>
+                    <td className="hide-sm text-center">{
+                      event.isactive? 
+                      <Link className="text-primary" onClick={(e)=>{deactivate(event._id)}}>Active</Link>
+                      : 
+                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(event._id)}}>Inactive</Link>
+                    }</td>
                     <td className="text-center">
                       {<Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${event._id}`}><i title="Edit" className="fa fa-pen-nib"></i> Edit</Link>}
                       {<Link className="btn btn-danger btn-outline" title="Delete" onClick={confirm}><i title="Delete" className="fa fa-trash"></i> Delete</Link>}
@@ -86,11 +101,13 @@ const Events = ( { event:{events, loading}, getBcsEvents } ) => {
 Events.propTypes = {
   event: PropTypes.object.isRequired,
   getBcsEvents: PropTypes.func.isRequired,
+  deactivateBcsEvent: PropTypes.func.isRequired,
+  activateBcsEvent: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   event: state.event,
 })
   
-export default connect(mapStateToProps, {getBcsEvents})(Events)
+export default connect(mapStateToProps, {getBcsEvents, deactivateBcsEvent, activateBcsEvent})(Events)
   

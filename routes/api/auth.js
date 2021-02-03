@@ -40,7 +40,7 @@ router.post('/', [
   const {email, password} = req.body 
   try {
     // See if user exists
-    let user = await User.findOne({ email }).select("+password")
+    let user = await User.findOne({ email , isactive: true}).select("+password")
     if(!user){
       return res.status(400).json({ errors: [{msg: 'Invalid Credentials'}]})
     }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import {getUsers } from '../../../actions/user'
+import {activateUser, deactivateUser, getUsers } from '../../../actions/user'
 
 import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
@@ -13,7 +13,7 @@ const override = css`
   display: block;
 `
 
-const ListUsers = ( { user:{users}, loading, getUsers} ) => {
+const ListUsers = ( { user:{users}, loading, getUsers, deactivateUser, activateUser} ) => {
 
   useEffect(()=>{
     getUsers()
@@ -27,6 +27,15 @@ const ListUsers = ( { user:{users}, loading, getUsers} ) => {
   }
   const confirm = () => {
     confirmAlert(options)
+  }
+
+  const deactivate = async (id) => {
+    await deactivateUser(id)
+    await getUsers()
+  }
+  const activate = async (id) => {
+    await activateUser(id)
+    await getUsers()
   }
 
   const options = {
@@ -54,7 +63,7 @@ const ListUsers = ( { user:{users}, loading, getUsers} ) => {
           </tr>
         </thead>
         <tbody>
-          { users.length > 0 ? (
+          { users && users.length > 0 ? (
              users.map((u, index) => {
                 return (
                   <tr key={u._id}>
@@ -62,9 +71,14 @@ const ListUsers = ( { user:{users}, loading, getUsers} ) => {
                     <td className="hide-sm">{u.email}</td>
                     <td className="hide-sm">{u.usertype.name}</td>
                     <td className="hide-sm">{u.company.name}</td>
-                    <td className="hide-sm text-center">{u.isactive ? 'Actives' : 'Inavtive'}</td>
+                    <td className="hide-sm text-center">{
+                      u.isactive? 
+                      <Link to="#" className="text-primary" onClick={(e)=>{deactivate(u._id)}}>Active</Link>
+                      : 
+                      <Link to="#" className="text-light-gray text-strike" onClick={(e)=>{activate(u._id)}}>Inactive</Link>
+                    }</td>
                     <td className="text-center"><Link to={`/authorized?action=edit&id=${u._id}`} className="btn btn-success btn-outline"><i className="fa fa-pen-nib"></i> Edit</Link> 
-                    <Link className="btn btn-danger btn-outline" title="Delete" onClick={confirm}><i title="Delete" className="fa fa-trash"></i> Delete</Link>
+                    <Link to="#" className="btn btn-danger btn-outline" title="Delete" onClick={confirm}><i title="Delete" className="fa fa-trash"></i> Delete</Link>
                     </td>
                   </tr>
                 )
@@ -82,10 +96,12 @@ const ListUsers = ( { user:{users}, loading, getUsers} ) => {
 ListUsers.propTypes = {
   user: PropTypes.object.isRequired,
   getUsers: PropTypes.func.isRequired,
+  deactivateUser: PropTypes.func.isRequired,
+  activateUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   user: state.user
 })
   
-export default connect(mapStateToProps,{getUsers})(ListUsers)
+export default connect(mapStateToProps,{getUsers, activateUser, deactivateUser})(ListUsers)

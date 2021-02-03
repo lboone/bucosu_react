@@ -1,11 +1,15 @@
 import axios from 'axios'
+import { setAlert } from './alert'
 
 import {
   GET_USERS,
   SET_USER_ID,
   GET_USER,
   UPDATE_USER,
-  USER_ERROR
+  ACTIVATE_USER,
+  DEACTIVATE_USER,
+  DELETE_USER,
+  USER_ERROR,
 } from './types'
 
 
@@ -67,4 +71,53 @@ try {
     payload: {msg: err.response.statusText, status: err.response.status}
   })
 }
+}
+
+export const activateUser = (bid) => async dispatch => {
+  try {
+    const res = await axios.put(`/api/users/${bid}/activate`)
+    dispatch({
+      type: ACTIVATE_USER,
+      payload: res.data
+    })
+  } catch (err) {
+    dispatch({
+      type: USER_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status}
+    })    
+  }
+}
+
+export const deactivateUser = (bid) => async dispatch => {
+  try {
+    const res = await axios.put(`/api/users/${bid}/deactivate`)
+    dispatch({
+      type: DEACTIVATE_USER,
+      payload: res.data
+    })
+  } catch (err) {
+    dispatch({
+      type: USER_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status}
+    })    
+  }
+}
+
+export const deleteUser = (bid) => async dispatch => {
+  try{
+    const res = await axios.delete(`/api/users/${bid}`)
+    dispatch({
+      type: DELETE_USER,
+      payload: res.data
+    })
+    setAlert('BCS Event deleted successfully','success',3000)
+  } catch (err) {
+    const errors = err.response.data.errors
+    if(errors){
+      errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
+    }
+    dispatch({
+      type: USER_ERROR
+    })
+  }
 }
