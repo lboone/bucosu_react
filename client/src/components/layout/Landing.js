@@ -11,7 +11,7 @@ const Landing = ( { auth: { isAuthenticated, loading } }) => {
         <div className="landing-inner">
           
           <div className="buttons" style={{marginTop: '200px'}}>
-            { !loading && ( <Fragment> { !isAuthenticated &&  ( <Link to="/login" className="btn btn-bucosu">Login</Link> ) } </Fragment> ) }
+            { !loading && ( <Fragment> { !isAuthenticated &&  ( <Link to="/login" className="btn btn-primary btn-outline"><i className="fa fa-sign-in-alt"></i> Login</Link> ) } </Fragment> ) }
           </div>
           
         </div>

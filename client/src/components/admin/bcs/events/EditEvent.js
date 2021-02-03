@@ -18,7 +18,7 @@ const EditEvent = ({event:{event, loading}, getBcsEvent, editBcsEvent, id}) => {
 
   return (
     <div>
-      <Link to="/admin/bcs/events" className="btn btn-dark">Back</Link>
+      <Link to="/admin/bcs/events" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link>
       Editing: {!event || loading  ? (<h3>Loading...</h3>) : event.name }  
     </div>
   )

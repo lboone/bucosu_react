@@ -13,7 +13,7 @@ const AddEvent = ({ createBcsEvent }) => {
 
   return (
     <div>
-      <Link to="/admin/bcs/events" className="btn btn-dark">Back</Link>
+      <Link to="/admin/bcs/events" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link>
       <h1>New Event</h1>
     </div>
   )

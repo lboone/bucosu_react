@@ -20,11 +20,11 @@ const UsersTable = ( { users, loading, setUserID } ) => {
         <thead>
           <tr>
             <th>Username</th>
-            <th>Email</th>
+            <th className="hide-sm">Email</th>
             <th className="hide-sm">Type</th>
             <th className="hide-sm">Company</th>
-            <th className="hide-sm">Active</th>
-            <th></th>
+            <th className="hide-sm text-center">Active</th>
+            <th className="text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -33,11 +33,11 @@ const UsersTable = ( { users, loading, setUserID } ) => {
                 return (
                   <tr key={u._id}>
                     <td>{u.username}</td>
-                    <td>{u.email}</td>
+                    <td className="hide-sm">{u.email}</td>
                     <td className="hide-sm">{u.usertype.name}</td>
                     <td className="hide-sm">{u.company.name}</td>
-                    <td className="hide-sm">{u.isactive ? 'Active' : 'Inavtive'}</td>
-                    <td className="hide-sm"><Link onClick={(e)=>onClick(u._id)} to={`/authorized/users/edit`} className="btn btn-bucosu">Edit</Link> </td>
+                    <td className="hide-sm text-center">{u.isactive ? 'Actives' : 'Inavtive'}</td>
+                    <td className="text-center"><Link onClick={(e)=>onClick(u._id)} to={`/authorized/users/edit`} className="btn btn-success btn-outline"><i className="fa fa-pen-nib"></i> Edit</Link> </td>
                   </tr>
                 )
               })

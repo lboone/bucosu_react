@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { login } from '../../actions/auth'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 
 const Login = ({ login, isAuthenticated }) => {
@@ -48,7 +49,8 @@ const Login = ({ login, isAuthenticated }) => {
             required 
           />
         </div>
-        <input type="submit" className="btn btn-primary" value="Login" />
+        <Link onClick={e => onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-sign-in-alt"></i> Login</Link>
+        <input type="submit" className="btn btn-primary btn-outline hidden" value="Login" />
       </form>
       </div>
     </Fragment>

@@ -6,6 +6,7 @@ import {getUser } from '../../../actions/user'
 import PageWithoutNavbar from '../../layout/page/PageWithoutNavbar'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const override = css`
   display: block;
@@ -45,15 +46,13 @@ const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
   const onChange = e => setFormData({...formData, [e.target.name]: e.target.value })
   const onSubmit = e => {
     e.preventDefault();
+    console.log('submit')
   }
 
   const onCancelClick = (e) =>{
     history.push('/authorized/users')
   }
 
-  const onSubmitClick = (e) =>{
-    console.log('submit')
-  }
   //const userCompanyID = !loading && user && user.user.company ? user.user.company._id : ''
   //const userUserTypeID = !loading && user && user.user.usertype ? user.user.usertype._id : ''
   //console.log({userCompanyID,userUserTypeID})
@@ -129,8 +128,10 @@ const EditUser = ( { user:{loading, user, userid}, getUser } ) => {
               </small>
             </div>
             <br />
-            <input type="submit" className="btn btn-success" value="Update User" id="updateUser" onClick={(e)=> onSubmitClick()}/>
-            <input type="submit" className="btn btn-danger" value="Cancel" id="cancelUpdateUser" onClick={(e)=>onCancelClick()}/>
+            <Link onClick={(e)=> onSubmit(e)} className="btn btn-success btn-outline"><i className="fa fa-user-edit"></i> Update User</Link>
+            <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" onClick={(e)=> onSubmit(e)}/>
+            <Link onClick={(e)=> onCancelClick()} className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
+            
           </form>
         </div>
       )}

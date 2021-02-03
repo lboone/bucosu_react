@@ -5,6 +5,7 @@ import { setAlert } from '../../actions/alert'
 import { register } from '../../actions/auth'
 import CompanyList from '../company/CompanyList'
 import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const Register = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {
   
@@ -135,7 +136,8 @@ const Register = ( { auth:{ userRegistered }, company:{company, usertype }, regi
             </small>
           </div>
           <br />
-          <input type="submit" className="btn btn-primary" value="Add User" />
+          <Link onClick={(e)=> onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-user-plus"></i> Add User</Link>
+          <input type="submit" className="btn btn-primary btn-outline hidden" value="Add User" />
         </form>
       </div>
     </PageWithoutNavbar>
