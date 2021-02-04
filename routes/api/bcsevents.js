@@ -6,14 +6,13 @@ const { check, validationResult } = require('express-validator')
 const BcsEvent = require('../../models/BcsEvent')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
-
 // @route   POST api/bcsevents
 // @desc    Create a BCS Event
 // @access  Private
 router.post('/', [access(COMPANY.ADMIN,USER.SUPERADMIN), [
   check('name','Name is required').not().isEmpty(),
-  check('startdate','Must be a valid start date').isDate(),
-  check('enddate','Must be a valid end date').isDate(),
+  check('startdate','Start Date is required').isDate(),
+  check('enddate','End Date is required').isDate(),
   check('isactive','IsActive is reauired').not().isEmpty(),
 ]], async (req, res) => {
   const errors = validationResult(req);

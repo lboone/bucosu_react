@@ -43,7 +43,7 @@ export const getBcsEvent = (bid) => async dispatch => {
   }
 }
 
-export const createBcsEvent = (name, startdate, enddate, isactive=true) => async dispatch => {
+export const createBcsEvent = ({name, startdate, enddate, isactive}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -65,10 +65,11 @@ export const createBcsEvent = (name, startdate, enddate, isactive=true) => async
     dispatch({
       type: BCSEVENT_ERROR
     })
+    throw err
   }
 }
 
-export const editBcsEvent = (name, startdate, enddate, isactive) => async dispatch => {
+export const editBcsEvent = ({name, startdate, enddate, isactive, id}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -76,7 +77,7 @@ export const editBcsEvent = (name, startdate, enddate, isactive) => async dispat
   }
   const body = JSON.stringify({name, startdate, enddate, isactive})
   try {
-    const res = await axios.put('/api/bcsevents', body, config )
+    const res = await axios.put(`/api/bcsevents/${id}`, body, config )
     dispatch({
       type:   EDIT_BCSEVENT,
       payload: res.data
@@ -90,6 +91,7 @@ export const editBcsEvent = (name, startdate, enddate, isactive) => async dispat
     dispatch({
       type: BCSEVENT_ERROR
     })
+    throw err
   }
 }
 export const activateBcsEvent = (bid) => async dispatch => {
@@ -138,5 +140,6 @@ export const deleteBcsEvent = (bid) => async dispatch => {
     dispatch({
       type: BCSEVENT_ERROR
     })
+    throw err
   }
 }

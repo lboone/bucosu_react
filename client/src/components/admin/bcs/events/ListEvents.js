@@ -1,34 +1,25 @@
 import React, { useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getBcsEvents, deactivateBcsEvent, activateBcsEvent } from '../../../../redux/actions/event'
+import { getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent } from '../../../../redux/actions/event'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-import Moment from 'react-moment'
 import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
+import DisplayDate from '../../../layout/ui/fields/DisplayDate'
+import { setAlert } from '../../../../redux/actions/alert'
+
 const override = css`
   margin: auto;
   display: block;
 `
 
 
-const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent } ) => {
+
+const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
   useEffect(()=>{
     getBcsEvents()
   },[getBcsEvents])
-
-  const confirmFunction = () => {
-    console.log('confirm')
-  }
-  const declineFunction = () => {
-    console.log('decline')
-  }
-  const confirm = () => {
-    confirmAlert(options)
-  }
 
   const deactivate = async (id) => {
     await deactivateBcsEvent(id)
@@ -39,17 +30,17 @@ const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, ac
     await getBcsEvents()
   }
 
-
-  const options = {
-    title : 'Delete Event?',
-    message : 'Are you sure you want to delete this event?',
-    buttons: [
-      { label: 'Yes', onClick: confirmFunction},
-      { label: 'No', onClick: declineFunction}
-    ],
-    closeOnEscape: false,
-    closeOnClickOutside : false,
+  const deleteEvent = async (id) => {
+    await deleteBcsEvent(id)
+    .then(()=> {
+      setAlert('Event deleted.','success',2000)
+      getBcsEvents()
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
   }
+
 
   return (
     <>
@@ -73,11 +64,12 @@ const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, ac
           )
           : 
             (
-                events.map( (event) => { return (
+                events.map( (event) => { 
+                  return (
                   <tr key={event._id}>
                     <td>{event.name}</td>
-                    <td className="hide-sm"><Moment format="MM/DD/YYYY">{event.startdate}</Moment></td>
-                    <td className="hide-sm"><Moment format="MM/DD/YYYY">{event.enddate}</Moment></td>
+                    <td className="hide-sm"><DisplayDate origDate={event.startdate}/></td>
+                    <td className="hide-sm"><DisplayDate origDate={event.enddate}/></td>
                     <td className="hide-sm text-center">{
                       event.isactive? 
                       <Link className="text-primary" onClick={(e)=>{deactivate(event._id)}}>Active</Link>
@@ -86,7 +78,7 @@ const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, ac
                     }</td>
                     <td className="text-center">
                       {<Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${event._id}`}><i title="Edit" className="fa fa-pen-nib"></i> Edit</Link>}
-                      {<DeleteButton confirmDelete={(e)=> console.log('Confirmed')} itemName="Event"/>}
+                      {<DeleteButton confirmDelete={(e)=> deleteEvent(event._id)} itemName="Event"/>}
                     </td>
                   </tr>
                   )})
@@ -104,11 +96,13 @@ Events.propTypes = {
   getBcsEvents: PropTypes.func.isRequired,
   deactivateBcsEvent: PropTypes.func.isRequired,
   activateBcsEvent: PropTypes.func.isRequired,
+  deleteBcsEvent: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   event: state.event,
 })
   
-export default connect(mapStateToProps, {getBcsEvents, deactivateBcsEvent, activateBcsEvent})(Events)
+export default connect(mapStateToProps, {getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent, setAlert})(Events)
   

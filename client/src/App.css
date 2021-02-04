@@ -68,7 +68,7 @@ hr {
 .container-center {
   max-width: 600px;
   margin: auto;
-  overflow: hidden;
+  overflow: visible;
   padding: 0 2rem;
   margin-top: 6rem;
   margin-bottom: 3rem;
@@ -565,6 +565,20 @@ tr:nth-child(even) {
   background: var(--danger-color);
 }
 
+/* Date Picker */
+.datePicker {
+  display: block;
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  /* border: 1px solid #fff; */
+  box-shadow: 0px 1px 0px #ccc !important;
+  -moz-box-shadow: 0px 1px 0px #ccc !important;
+  -webkit-box-shadow: 0px 1px 0px #ccc !important;
+}
+.react-date-picker__wrapper {
+  border: none !important;
+}
 /* Landing Page */
 .landing {
   position: relative;
