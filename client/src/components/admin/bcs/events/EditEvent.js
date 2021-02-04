@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { editBcsEvent, getBcsEvent } from '../../../../redux/actions/event'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 
 const EditEvent = ({event:{event, loading}, getBcsEvent, editBcsEvent, id}) => {
   const [eventID, setEventID] = useState(null)
@@ -18,7 +19,7 @@ const EditEvent = ({event:{event, loading}, getBcsEvent, editBcsEvent, id}) => {
 
   return (
     <div>
-      <Link to="/admin/bcs/events" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link>
+      <Link to="/admin/bcs/events" className="btn btn-dark btn-outline"><i className="fa fa-chevron-left"></i> Back</Link> | <DeleteButton confirmDelete={(e)=> console.log('Confirmed')} itemName="Event" />
       Editing: {!event || loading  ? (<h3>Loading...</h3>) : event.name }  
     </div>
   )

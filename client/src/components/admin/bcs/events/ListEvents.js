@@ -8,6 +8,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Moment from 'react-moment'
 import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
+import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 const override = css`
   margin: auto;
   display: block;
@@ -85,7 +86,7 @@ const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, ac
                     }</td>
                     <td className="text-center">
                       {<Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${event._id}`}><i title="Edit" className="fa fa-pen-nib"></i> Edit</Link>}
-                      {<Link className="btn btn-danger btn-outline" title="Delete" onClick={confirm}><i title="Delete" className="fa fa-trash"></i> Delete</Link>}
+                      {<DeleteButton confirmDelete={(e)=> console.log('Confirmed')} itemName="Event"/>}
                     </td>
                   </tr>
                   )})

@@ -520,6 +520,51 @@ tr:nth-child(even) {
   margin-right: 0.6rem;
 }
 
+/* React Alert Box */
+.react__alert {
+  background-color: #28bae6;
+  text-align: center;
+  width: 500px;
+  padding: 40px;
+  box-shadow: 0 20px 75px rgba(0, 0, 0, 0.23);
+  color: #fff;
+  font-weight: 700;
+}
+
+.react__alert > h1 {
+  text-align: center;
+  margin-top: 0;
+  display: block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+
+.react__alert > p {
+  text-align: center;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+.react__alert > button {
+  width: 160px;
+  padding: 10px;
+  border: 1px solid #fff;
+  margin: 10px;
+  cursor: pointer;
+  background: none;
+  color: #fff;
+  font-size: 14px;
+}
+.react__alert > button.danger {
+  background: var(--danger-color);
+}
+
 /* Landing Page */
 .landing {
   position: relative;
