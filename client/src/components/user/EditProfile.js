@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {updateUser } from '../../actions/user'
+import {updateUser } from '../../redux/actions/user'
 import PageWithNavbar from '../layout/page/PageWithNavbar'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
-import { setAlert} from '../../actions/alert'
-import { logout } from '../../actions/auth'
+import { setAlert} from '../../redux/actions/alert'
+import { logout } from '../../redux/actions/auth'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const override = css`

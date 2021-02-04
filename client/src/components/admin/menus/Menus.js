@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import PageWithoutNavbar from '../layout/page/PageWithoutNavbar'
+import PageWithoutNavbar from '../../layout/page/PageWithoutNavbar'
 
 const Menus = ( { auth } ) => {
   return (

@@ -14,7 +14,7 @@ export default function DashboardRoutes (){
       <Switch>
         <PrivateRoute 
           exact 
-          path="/dashboard" 
+          path="/dashboard/home" 
           component={Dashboard} 
           companyLevel={ COMPANY.SCHOOLDISTRICT } 
           userLevel={ USER.READER }

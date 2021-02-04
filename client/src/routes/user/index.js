@@ -16,21 +16,21 @@ export default function UserRoutes (){
       <Switch>
         <PrivateRoute 
           exact 
-          path="/user" 
+          path="/user/home/login-history" 
           component={User} 
           companyLevel={ COMPANY.PUBLIC } 
           userLevel={ USER.MEMBER }
         />
         <PrivateRoute 
           exact 
-          path="/user/profile" 
+          path="/user/home/profile" 
           component={Profile} 
           companyLevel={ COMPANY.PUBLIC } 
           userLevel={ USER.MEMBER }
         />
         <PrivateRoute 
           exact 
-          path="/user/reset-password" 
+          path="/user/home/reset-password" 
           component={ResetPassword} 
           companyLevel={ COMPANY.PUBLIC } 
           userLevel={ USER.MEMBER }

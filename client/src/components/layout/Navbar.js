@@ -2,9 +2,9 @@ import React, { Fragment, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { logout } from '../../actions/auth'
+import { logout } from '../../redux/actions/auth'
 import { useLocation } from 'react-router-dom'
-import { getMenus, setMenu } from '../../actions/menu'
+import { getMenus, setMenu } from '../../redux/actions/menu'
 import Menu from './Menu'
 
 const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu, getMenus, setMenu}) => {
@@ -17,7 +17,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu
     if(menu.menus && !menu.loading && !menu.menu){
       menu.menus.forEach((menu) => {
         const newLoc = loc.split('/')
-          if ('/'+newLoc[1] === menu.link) {
+          if (newLoc[1] === menu.link.split('/')[1]) {
             setMenu(menu._id) 
           }
       })
@@ -38,7 +38,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu
               <Link 
                 to={menu.link} 
                 onClick={(e)=>onClick(menu._id)}
-                className={`/${loc.split('/')[1]}` === menu.link ? 'selected' : ''}
+                className={loc.split('/')[1] === menu.link.split('/')[1] ? 'selected' : ''}
               >
                 <i 
                   className={`fa ${menu.icon}`}

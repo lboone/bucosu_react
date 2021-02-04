@@ -1,9 +1,9 @@
 import React, {useContext} from 'react'
-import PageWithoutNavbar from '../../layout/page/PageWithoutNavbar'
+import PageWithNavbar from '../../../layout/page/PageWithNavbar'
 import ListUsers from './ListUsers'
 import AddUser from './AddUser'
 import EditUser from './EditUser'
-import { URLContext } from '../../../URLContext'
+import { URLContext } from '../../../../URLContext'
 
 
 const UsersContainer = ( ) => {
@@ -25,9 +25,9 @@ const UsersContainer = ( ) => {
       break;
   }
   return (
-    <PageWithoutNavbar title={title}>
+    <PageWithNavbar title={title}>
       {finalComponent}
-    </PageWithoutNavbar>
+    </PageWithNavbar>
   )
 }
 

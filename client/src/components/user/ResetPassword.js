@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setAlert } from '../../actions/alert'
-import { resetPassword } from '../../actions/auth'
+import { setAlert } from '../../redux/actions/alert'
+import { resetPassword } from '../../redux/actions/auth'
 import PageWithNavbar from '../layout/page/PageWithNavbar'
-import { logout } from '../../actions/auth'
+import { logout } from '../../redux/actions/auth'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const ResetPassword = ( { resetPassword, setAlert, logout } ) => {

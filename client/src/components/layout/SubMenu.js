@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom'
-import { getSubSubMenus, setSubSubMenu } from '../../actions/menu'
+import { getSubSubMenus, setSubSubMenu } from '../../redux/actions/menu'
 import { css } from '@emotion/core'
 import ClipLoader from 'react-spinners/ClipLoader'
 
@@ -20,7 +20,7 @@ const SubMenu = ( {menu, getSubSubMenus, setSubSubMenu}) => {
     }
     if(menu.subsubmenus && !menu.loading && !menu.subsubmenu){
       menu.subsubmenus.forEach((subsubmenu) => {
-          if (loc === subsubmenu.link) {
+          if (loc.split('/')[3] === subsubmenu.link.split('/')[3]) {
             setSubSubMenu(subsubmenu._id) 
           }
       })

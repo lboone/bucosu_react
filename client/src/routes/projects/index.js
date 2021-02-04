@@ -18,35 +18,35 @@ export default function ProjectsRoutes (){
       <Switch>
         <PrivateRoute 
           exact 
-          path="/projects" 
+          path="/projects/home" 
           component={Project} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.READER}
         />
         <PrivateRoute 
           exact 
-          path="/projects/manage" 
+          path="/projects/manage/home" 
           component={Manage} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.EDITOR}
         />
         <PrivateRoute 
           exact 
-          path="/projects/timeline" 
+          path="/projects/timeline/home" 
           component={Timeline} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.READER}
         />
         <PrivateRoute 
           exact 
-          path="/projects/calendar" 
+          path="/projects/calendar/home" 
           component={Calendar} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.READER}
         />
         <PrivateRoute 
           exact 
-          path="/projects/reports" 
+          path="/projects/reports/home" 
           component={Report} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.READER}

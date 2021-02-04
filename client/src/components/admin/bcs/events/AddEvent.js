@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { createBcsEvent } from '../../../../actions/event'
+import { createBcsEvent } from '../../../../redux/actions/event'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const AddEvent = ({ createBcsEvent }) => {

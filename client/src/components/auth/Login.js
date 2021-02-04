@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { login } from '../../actions/auth'
+import { login } from '../../redux/actions/auth'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
@@ -21,7 +21,7 @@ const Login = ({ login, isAuthenticated }) => {
   }
   // Redirect if logged in
   if(isAuthenticated){
-    return <Redirect to="/dashboard" />
+    return <Redirect to="/dashboard/home" />
   }
   return (
     <Fragment>

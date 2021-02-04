@@ -11,10 +11,10 @@ import {
   PASSWORD_FAIL,
   LOGOUT
 } from './types'
-import setAuthToken from '../utils/setAuthToken'
+import setAuthToken from '../../utils/setAuthToken'
 import {
   getItem, 
-} from '../utils/manageLocalStorage'
+} from '../../utils/manageLocalStorage'
 import {getCurrentProfile} from './profile'
 import { getMenus } from './menu'
 

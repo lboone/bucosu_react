@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {getUser } from '../../../actions/user'
+import {getUser } from '../../../../redux/actions/user'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
@@ -126,7 +126,7 @@ const EditUser = ( { user:{loading, user}, getUser, id } ) => {
             <br />
             <Link onClick={(e)=> onSubmit(e)} className="btn btn-success btn-outline"><i className="fa fa-user-edit"></i> Update User</Link>
             <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" onClick={(e)=> onSubmit(e)}/>
-            <Link to="/authorized" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>            
+            <Link to="/admin/user/home" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>            
           </form>
         </div>
       )}

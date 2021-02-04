@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom'
-import { getSubMenus, setSubMenu } from '../../actions/menu'
+import { getSubMenus, setSubMenu } from '../../redux/actions/menu'
 import { css } from '@emotion/core'
 import BarLoader from 'react-spinners/BarLoader'
 

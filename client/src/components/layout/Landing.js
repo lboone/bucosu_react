@@ -2,9 +2,16 @@ import React, { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
+import { ACCESSTYPES } from '../../utils/constants';
 
-const Landing = ( { auth: { isAuthenticated, loading } }) => {
-  
+const Landing = ( { auth: { isAuthenticated, loading, level } }) => {
+  const {COMPANY, USER} = ACCESSTYPES;
+  const {company, user } = level ? level : {}
+
+  if(company <= COMPANY.SCHOOLDISTRICT && user <= USER.READER){
+    return <Redirect to="/dashboard/home" />
+  }
   return (
     <section className="landing">
       <div className="light-overlay">

@@ -4,7 +4,7 @@ import { BrowserRouter  as Router, Route, Switch } from 'react-router-dom'
 // Redux
 import { Provider } from 'react-redux'
 import store from './store'
-import { loadUser } from './actions/auth'
+import { loadUser } from './redux/actions/auth'
 
 // Components
 import Navbar  from './components/layout/Navbar'

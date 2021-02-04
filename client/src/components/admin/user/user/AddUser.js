@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { setAlert } from '../../../actions/alert'
-import { register } from '../../../actions/auth'
-import CompanyList from '../../company/CompanyList'
+import { setAlert } from '../../../../redux/actions/alert'
+import { register } from '../../../../redux/actions/auth'
+import CompanyList from '../../../company/CompanyList'
 import { Link } from 'react-router-dom'
 
 const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {
@@ -137,7 +137,7 @@ const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, regis
           <br />
           <Link onClick={(e)=> onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-user-plus"></i> Add User</Link>
           <input type="submit" className="btn btn-primary btn-outline hidden" value="Add User" />
-          <Link to="/authorized" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>  
+          <Link to="/admin/user/home" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>  
         </form>
       </div>
     

@@ -4,22 +4,32 @@ import {
 } from 'react-router-dom';
 import PrivateRoute from '../../components/routing/PrivateRoute'
 
+// Admin
 import Admin from '../../components/admin/Admin'
-import Menus from '../../components/admin/Menus'
+// Admin | User
+import UsersContainer from '../../components/admin/user/user/UsersContainer'
+import UserTypesContainer from '../../components/admin/user/user-types/UserTypesContainer'
+import LoginHistory from '../../components/admin/user/login-history/LoginHistory'
+import SettingsContainer from '../../components/admin/user/settings/SettingsContainer'
+// Admin | BCS
 import Bcs from '../../components/admin/bcs/Bcs'
 import EventsContainer from '../../components/admin/bcs/events/EventsContainer'
-import Companies from '../../components/admin/bcs/Companies'
-import AddCompany from '../../components/admin/bcs/companies/AddCompanyContainer'
-import Buildings from '../../components/admin/bcs/Buildings'
-import CompanyTypes from '../../components/admin/bcs/CompanyTypes'
-import Headings from '../../components/admin/bcs/Headings'
-import Profiles from '../../components/admin/bcs/Profiles'
-import Questions from '../../components/admin/bcs/Questions'
+import CompaniesContainer from '../../components/admin/bcs/companies/CompaniesContainer'
+import BuildingsContainer from '../../components/admin/bcs/buildings/BuildingsContainer'
+import CompanyTypesContainer from '../../components/admin/bcs/company-types/CompanyTypesContainer'
+import HeadingsContainer from '../../components/admin/bcs/headings/HeadingsContainer'
+import ProfilesContainer from '../../components/admin/bcs/profiles/ProfilesContainer'
+import QuestionsContainer from '../../components/admin/bcs/questions/QuestionsContainer'
+// Admin | Projects
 import Projects from '../../components/admin/projects/Projects'
-import Purposes from '../../components/admin/projects/Purposes'
-import Statuses from '../../components/admin/projects/Statuses'
-import Types from '../../components/admin/projects/Types'
-import UserData from '../../components/admin/UserData'
+import PurposesContainer from '../../components/admin/projects/purposes/PurposesContainer'
+import StatusesContainer from '../../components/admin/projects/statuses/StatusesContainer'
+import TypesContainer from '../../components/admin/projects/types/TypesContainer'
+
+// Admin | Menus
+import Menus from '../../components/admin/menus/Menus'
+
+
 import { ACCESSTYPES } from '../../utils/constants'
 const { COMPANY, USER } = ACCESSTYPES
 
@@ -29,21 +39,44 @@ export default function AdminRoutes (){
       <Switch>
       <PrivateRoute 
         exact 
-        path="/admin" 
+        path="/admin/home" 
         component={Admin} 
-        companyLevel={ COMPANY.ADMIN } 
-        userLevel={ USER.SUPERADMIN }
+        companyLevel={ COMPANY.SCHOOLDISTRICT } 
+        userLevel={ USER.ADMIN }
       />
       <PrivateRoute 
         exact 
-        path="/admin/menus" 
-        component={Menus} 
-        companyLevel={ COMPANY.ADMIN } 
-        userLevel={ USER.SUPERADMIN }
+        path="/admin/user/home" 
+        component={UsersContainer} 
+        companyLevel={ COMPANY.SCHOOLDISTRICT } 
+        userLevel={ USER.ADMIN }
       />
       <PrivateRoute 
         exact 
-        path="/admin/bcs" 
+        path="/admin/user/types" 
+        component={UserTypesContainer} 
+        companyLevel={ COMPANY.SCHOOLDISTRICT } 
+        userLevel={ USER.ADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/user/login-history" 
+        component={LoginHistory} 
+        companyLevel={ COMPANY.SCHOOLDISTRICT } 
+        userLevel={ USER.ADMIN }
+      />
+      <PrivateRoute 
+        exact 
+        path="/admin/user/settings" 
+        component={SettingsContainer} 
+        companyLevel={ COMPANY.SCHOOLDISTRICT } 
+        userLevel={ USER.ADMIN }
+      />
+
+
+      <PrivateRoute 
+        exact 
+        path="/admin/bcs/home" 
         component={Bcs} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
@@ -58,55 +91,51 @@ export default function AdminRoutes (){
       <PrivateRoute 
         exact 
         path="/admin/bcs/companies" 
-        component={Companies} 
-        companyLevel={ COMPANY.ADMIN } 
-        userLevel={ USER.SUPERADMIN }
-      />
-      <PrivateRoute 
-        exact 
-        path="/admin/bcs/companies/addcompany" 
-        component={AddCompany} 
+        component={CompaniesContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
         path="/admin/bcs/buildings" 
-        component={Buildings} 
+        component={BuildingsContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
-        path="/admin/bcs/companytypes" 
-        component={CompanyTypes} 
+        path="/admin/bcs/company-types" 
+        component={CompanyTypesContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
         path="/admin/bcs/headings" 
-        component={Headings} 
+        component={HeadingsContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
         path="/admin/bcs/profiles" 
-        component={Profiles} 
+        component={ProfilesContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
         path="/admin/bcs/questions" 
-        component={Questions} 
+        component={QuestionsContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
+
+
+
       <PrivateRoute 
         exact 
-        path="/admin/projects" 
+        path="/admin/projects/home" 
         component={Projects} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
@@ -114,28 +143,28 @@ export default function AdminRoutes (){
       <PrivateRoute 
         exact 
         path="/admin/projects/purposes" 
-        component={Purposes} 
+        component={PurposesContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
         path="/admin/projects/statuses" 
-        component={Statuses} 
+        component={StatusesContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
         path="/admin/projects/types" 
-        component={Types} 
+        component={TypesContainer} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />
       <PrivateRoute 
         exact 
-        path="/admin/userdata" 
-        component={UserData} 
+        path="/admin/menus/home" 
+        component={Menus} 
         companyLevel={ COMPANY.ADMIN } 
         userLevel={ USER.SUPERADMIN }
       />

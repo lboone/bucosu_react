@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import PageWithNavbar from '../../layout/page/PageWithNavbar'
+import PageWithNavbar from '../../../layout/page/PageWithNavbar'
 
 
-const CompanyTypes = ( { auth } ) => {
+const CompanyTypesContainer = ( { auth } ) => {
   return (
     <PageWithNavbar title="Company Types">
       <h2>Company Types Page</h2>
@@ -12,7 +12,7 @@ const CompanyTypes = ( { auth } ) => {
   )
 }
 
-CompanyTypes.propTypes = {
+CompanyTypesContainer.propTypes = {
   auth: PropTypes.object.isRequired,
 }
 
@@ -20,5 +20,5 @@ const mapStateToProps = state => ({
   auth: state.auth,
 })
   
-export default connect(mapStateToProps, null)(CompanyTypes)
+export default connect(mapStateToProps, null)(CompanyTypesContainer)
   

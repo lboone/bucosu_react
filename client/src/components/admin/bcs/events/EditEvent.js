@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { editBcsEvent, getBcsEvent } from '../../../../actions/event'
+import { editBcsEvent, getBcsEvent } from '../../../../redux/actions/event'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const EditEvent = ({event:{event, loading}, getBcsEvent, editBcsEvent, id}) => {

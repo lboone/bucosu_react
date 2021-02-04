@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import {activateUser, deactivateUser, getUsers } from '../../../actions/user'
+import {activateUser, deactivateUser, getUsers } from '../../../../redux/actions/user'
 
 import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
@@ -50,7 +50,7 @@ const ListUsers = ( { user:{users}, loading, getUsers, deactivateUser, activateU
   }
   return (
     <>
-      <Link to="/authorized?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-user-plus mr-1"></i>New User</Link>
+      <Link to="/admin/user/home?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-user-plus mr-1"></i>New User</Link>
       <table className="table">
         <thead>
           <tr>
@@ -77,7 +77,7 @@ const ListUsers = ( { user:{users}, loading, getUsers, deactivateUser, activateU
                       : 
                       <Link to="#" className="text-light-gray text-strike" onClick={(e)=>{activate(u._id)}}>Inactive</Link>
                     }</td>
-                    <td className="text-center"><Link to={`/authorized?action=edit&id=${u._id}`} className="btn btn-success btn-outline"><i className="fa fa-pen-nib"></i> Edit</Link> 
+                    <td className="text-center"><Link to={`/admin/user/home?action=edit&id=${u._id}`} className="btn btn-success btn-outline"><i className="fa fa-pen-nib"></i> Edit</Link> 
                     <Link to="#" className="btn btn-danger btn-outline" title="Delete" onClick={confirm}><i title="Delete" className="fa fa-trash"></i> Delete</Link>
                     </td>
                   </tr>

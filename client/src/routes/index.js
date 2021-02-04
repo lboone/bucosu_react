@@ -5,7 +5,6 @@ import {
 import queryString from 'query-string'
 
 import AdminRoutes from './admin'
-import AuthorizedRoutes from './authorized'
 import BcsRoutes from './bcs'
 import DashboardRoutes from './dashboard'
 import ProjectsRoutes from './projects'
@@ -25,7 +24,6 @@ export default function AllRoutes (){
   return (
     <URLContext.Provider value={{action, id, params}}>
       <AdminRoutes />
-      <AuthorizedRoutes />
       <BcsRoutes />
       <DashboardRoutes />
       <ProjectsRoutes />

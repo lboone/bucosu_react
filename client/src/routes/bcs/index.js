@@ -17,28 +17,28 @@ export default function BcsRoutes (){
       <Switch>
         <PrivateRoute 
           exact 
-          path="/bcs" 
+          path="/bcs/home" 
           component={Bcs} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.READER}
         />
         <PrivateRoute 
           exact 
-          path="/bcs/events" 
+          path="/bcs/events/home" 
           component={Events} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.AUTHOR}
         />
         <PrivateRoute 
           exact 
-          path="/bcs/reports" 
+          path="/bcs/reports/home" 
           component={Reports} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.READER}
         />
         <PrivateRoute 
           exact 
-          path="/bcs/help" 
+          path="/bcs/help/home" 
           component={Help} 
           companyLevel={COMPANY.SCHOOLDISTRICT}
           userLevel={USER.AUTHOR}

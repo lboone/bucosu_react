@@ -2,7 +2,7 @@ import {
   getItem, 
   setItem, 
   removeItem,
-} from '../utils/manageLocalStorage'
+} from '../../utils/manageLocalStorage'
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
