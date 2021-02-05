@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
-import DisplayDate from '../../../layout/ui/fields/DisplayDate'
 import { setAlert } from '../../../../redux/actions/alert'
 
 const override = css`
