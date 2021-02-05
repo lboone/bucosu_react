@@ -7,19 +7,18 @@ const Company = require('../../models/Company')
 const User = require('../../models/User')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 
-
 // @route   POST api/companies/companytype/:companytype_id
 // @desc    Create a company
 // @access  Private
 router.post('/companytype/:companytype_id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
   check('name','Name is required').not().isEmpty(),
   check('address','Address is required').not().isEmpty(),
-  check('city','city is required').not().isEmpty(),
-  check('state','state is required').not().isEmpty(),
-  check('zip','zip is required').not().isEmpty().isPostalCode(),
-  check('phone','phone is required').not().isEmpty(),
-  check('website','website is required').not().isEmpty(),
-  check('logo','logo is required').not().isEmpty(),
+  check('city','City is required').not().isEmpty(),
+  check('state','State is required').not().isEmpty(),
+  check('zip','Zip is required').not().isEmpty(),
+  check('phone','Phone is required').not().isEmpty(),
+  check('website','A valid URL is required').not().isEmpty().isURL(),
+  check('logo','A valid Logo is required').not().isEmpty().isURL(),
 ]], async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){
@@ -125,7 +124,7 @@ router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
 // @access  Private
 router.get('/',access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) => {
   try{
-    const companies = await Company.find( { isactive: true } ).populate({
+    const companies = await Company.find( ).populate({
       path: "companytype",
       model:"companytype",
       populate: 
@@ -204,7 +203,6 @@ router.get('/:id', access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) =
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   } 
 })
-
 
 // @route   GET api/companies/:id/usertypes
 // @desc    Get companies user types by id

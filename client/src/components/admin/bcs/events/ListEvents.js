@@ -16,7 +16,7 @@ const override = css`
 
 
 
-const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
+const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
   useEffect(()=>{
     getBcsEvents()
   },[getBcsEvents])
@@ -91,7 +91,7 @@ const Events = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, ac
   )
 }
 
-Events.propTypes = {
+ListEvents.propTypes = {
   event: PropTypes.object.isRequired,
   getBcsEvents: PropTypes.func.isRequired,
   deactivateBcsEvent: PropTypes.func.isRequired,
@@ -104,5 +104,5 @@ const mapStateToProps = state => ({
   event: state.event,
 })
   
-export default connect(mapStateToProps, {getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent, setAlert})(Events)
+export default connect(mapStateToProps, {getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent, setAlert})(ListEvents)
   

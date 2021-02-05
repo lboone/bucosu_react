@@ -2,11 +2,12 @@ import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { createBcsEvent } from '../../../../redux/actions/event'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import moment from 'moment'
 
 const AddEvent = ({ createBcsEvent, setAlert }) => {  
+  const history = useHistory
   const initialState = {
     name: "",
     startdate: "",
@@ -31,6 +32,9 @@ const AddEvent = ({ createBcsEvent, setAlert }) => {
     .then(()=>{
       setFormData({...initialState})
       setAlert('Event has been added','success',3000)
+      setTimeout(()=>{
+        history.push('./')
+      },2500)
     })
     .catch((e)=> {
       console.log({error: e})

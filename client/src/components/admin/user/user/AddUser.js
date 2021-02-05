@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setAlert } from '../../../../redux/actions/alert'
 import { register } from '../../../../redux/actions/auth'
-import CompanyList from '../../../company/CompanyList'
+import CompanyList from '../../../layout/ui/fields/CompanyList'
 import { Link } from 'react-router-dom'
 
 const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {

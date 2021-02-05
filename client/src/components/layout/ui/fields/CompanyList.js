@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCompanies, setCompany, getCompanyUserTypes, setCompanyUserType } from '../../redux/actions/company'
+import { getCompanies, setCompany, getCompanyUserTypes, setCompanyUserType } from '../../../../redux/actions/company'
 
 const CompanyList = ( { auth, company:{companies,company, usertypes, usertype }, getCompanies, setCompany, getCompanyUserTypes, setCompanyUserType } ) => {
   useEffect(() => {

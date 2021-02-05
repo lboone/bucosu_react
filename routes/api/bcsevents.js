@@ -21,7 +21,6 @@ router.post('/', [access(COMPANY.ADMIN,USER.SUPERADMIN), [
   }
 
   try {
-
     const {name, startdate, enddate, isactive} = req.body
 
     const newbcsevent = {
@@ -55,6 +54,7 @@ router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN), [
   }
   
   try {
+
     const bcsevent = await BcsEvent.findById(req.params.id)
     
     if(!bcsevent){

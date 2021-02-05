@@ -7,7 +7,7 @@ import { setAlert } from '../../../../redux/actions/alert'
 import moment from 'moment'
 import {formatDate} from '../../../../utils/globalFunctions'
 
-const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcsEvent}) => {  
+const EditCompany = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcsEvent}) => {  
   const [eventID, seteventID] = useState(null)
   const history = useHistory()
 
@@ -113,7 +113,7 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
   )
 }
 
-EditEvent.propTypes = {
+EditCompany.propTypes = {
   editBcsEvent: PropTypes.func.isRequired,
   getBcsEvent: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
@@ -124,4 +124,4 @@ const mapStateToProps = (state)=> ({
   event: state.event
 })
 
-export default connect(mapStateToProps,{editBcsEvent, setAlert, getBcsEvent})(EditEvent)
+export default connect(mapStateToProps,{editBcsEvent, setAlert, getBcsEvent})(EditCompany)

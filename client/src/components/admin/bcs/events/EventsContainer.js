@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import PageWithNavbar from '../../../layout/page/PageWithNavbar'
-import ListEvent from './ListEvents'
+import ListEvents from './ListEvents'
 import AddEvent from './AddEvent'
 import EditEvent from './EditEvent'
 import { URLContext } from '../../../../URLContext'
@@ -20,7 +20,7 @@ const EventsContainer = () => {
       title = 'Edit Event'
       break;
     default:
-      finalComponent = (<ListEvent/>)
+      finalComponent = (<ListEvents/>)
       title = 'List Events'
       break;
   }

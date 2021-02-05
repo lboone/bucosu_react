@@ -69,7 +69,7 @@ const ListUsers = ( { user:{users}, loading, getUsers, deactivateUser, activateU
                   <tr key={u._id}>
                     <td>{u.username}</td>
                     <td className="hide-sm">{u.email}</td>
-                    <td className="hide-sm">{u.usertype.name}</td>
+                    <td className="hide-sm"><span className="a-type">{u.usertype.name}<span>[{u.usertype.level}]</span></span></td>
                     <td className="hide-sm">{u.company.name}</td>
                     <td className="hide-sm text-center">{
                       u.isactive? 

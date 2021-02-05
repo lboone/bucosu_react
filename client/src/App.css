@@ -296,6 +296,13 @@ hr {
   color: #333;
   border: #ccc solid 1px;
 }
+.btn-light.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--light-color);
+  color: var(--light-color);
+  padding: 0.25rem 0.5rem;
+  font-weight: 500;
+}
 
 .btn-dark.btn-outline {
   background-color: transparent;
@@ -303,6 +310,7 @@ hr {
   color: var(--dark-color);
   padding: 0.25rem 0.5rem;
   font-weight: 500;
+  cursor: default !important;
 }
 .btn-dark.btn-plain {
   background-color: transparent;
@@ -430,6 +438,9 @@ button {
   font: inherit;
 }
 
+.form input[type='date'] {
+  font-size: 19px;
+}
 .form .social-input {
   display: flex;
 }
@@ -477,6 +488,21 @@ tr:nth-child(even) {
   background-color: var(--light-color);
 }
 
+span.a-type {
+  display: block;
+  padding: 4px;
+  border: 1px solid rgba(52, 58, 64, 0.65);
+  background-color: var(--light-color);
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: rgba(52, 58, 64, 0.65);
+}
+span.a-type > span {
+  margin-left: 5px;
+  color: rgba(52, 58, 64, 0.5);
+}
 /* Navbar */
 .navbar {
   display: flex;

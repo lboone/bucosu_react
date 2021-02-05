@@ -1,13 +1,19 @@
 import {
   GET_COMPANIES,
+  GET_COMPANY,
+  CREATE_COMPANY,
   SET_COMPANY,
   GET_COMPANY_USERTYPES,
   SET_COMPANY_USERTYPE,
+  DEACTIVATE_COMPANY,
+  ACTIVATE_COMPANY,
+  DELETE_COMPANY,
   COMPANY_ERROR,
 } from '../actions/types'
 
 const initialState = {
   companies: [],
+  companyObject: null,
   company: null,
   usertypes: [],
   usertype: null,
@@ -23,8 +29,22 @@ const reduce = function(state = initialState, action) {
       return {
         ...state,
         companies: payload,
+        companyObject: null,
         company: null,
         usertypes: [],
+        usertype: null,
+        loading: false,
+        error: {}
+      }
+    case GET_COMPANY:
+    case CREATE_COMPANY:
+    case DEACTIVATE_COMPANY:
+    case ACTIVATE_COMPANY:
+      return {
+        ...state,
+        companyObject: payload,
+        company: null,
+        usertypes: null,
         usertype: null,
         loading: false,
         error: {}
@@ -50,6 +70,13 @@ const reduce = function(state = initialState, action) {
       return {
         ...state,
         usertype: payload,
+        loading: false,
+        error: {}
+      }
+    case DELETE_COMPANY:
+      return {
+        ...state,
+        companyObject: null,
         loading: false,
         error: {}
       }
