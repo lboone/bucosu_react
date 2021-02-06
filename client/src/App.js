@@ -10,7 +10,6 @@ import { loadUser } from './redux/actions/auth'
 import Navbar  from './components/layout/Navbar'
 import Landing from './components/layout/Landing'
 import Login from './components/auth/Login'
-import Alert from './components/layout/Alert'
 
 // Routes
 import AllRoutes from './routes'
@@ -39,7 +38,6 @@ const App = () => {
           <Navbar/>
           <Route exact path="/" component={ Landing }/>
           <section className="container-full">
-            <Alert />
             <Switch>
               <Route 
                 exact 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import UserHistory from './UserHistroy.js'
+import SkeletonList from '../../layout/feedback/SkeletonList.js'
 
 
 const UserHistoryList = ( { profile } ) => {
@@ -14,7 +15,7 @@ const UserHistoryList = ( { profile } ) => {
           <i className="fab fa-connectdevelop"></i> {!profile.loading && profile.profile && profile.profile.firstname} {!profile.loading && profile.profile && profile.profile.lastname} Last {userLogins && userLogins.length > 5 ? 5 : userLogins.length} Login Events
         </p>
         <div className="profiles">
-        {userLogins &&
+        {userLogins ?
               userLogins.map((login, index) => {
                 if(index < 5){
                   return (
@@ -24,6 +25,8 @@ const UserHistoryList = ( { profile } ) => {
                   return ''
                 }
               })
+              :
+              ( <SkeletonList  rows={4} paragraphs={5} /> )
             }
         </div>
       </div>

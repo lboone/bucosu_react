@@ -5,6 +5,7 @@ import './Page.css'
 import './SideNav.css'
 import SubMenu from '../SubMenu'
 import { Divider } from 'antd'
+import Alerts from '../feedback/Alerts'
 
 const PageWithNavbar = ( { auth , title, footer , children } ) => {
 
@@ -17,6 +18,7 @@ const PageWithNavbar = ( { auth , title, footer , children } ) => {
         </div>
       </div>
       <div className="main-content">
+        <Alerts />
         <Divider>
           {title}
         </Divider>

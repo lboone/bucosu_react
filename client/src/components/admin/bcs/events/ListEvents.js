@@ -3,18 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent } from '../../../../redux/actions/event'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
-import BeatLoader from 'react-spinners/BeatLoader'
-import { css } from '@emotion/core'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import DisplayDate from '../../../layout/ui/fields/DisplayDate'
 import { setAlert } from '../../../../redux/actions/alert'
 import {Table } from 'antd'
-
-
-const override = css`
-  margin: auto;
-  display: block;
-`
+import SkeletonList from '../../../layout/feedback/SkeletonList'
 
 const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
   useEffect(()=>{
@@ -70,11 +63,11 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
       dataIndex: 'isactive',
       key: 'isactive',
       className:'hide-sm text-center',
-      render: ({isactive, id}) => (
-        isactive? 
-                      <Link className="text-primary" onClick={(e)=>{deactivate(id)}}>Active</Link>
+      render: (text, record) => (
+        record.isactive? 
+                      <Link className="text-primary" onClick={(e)=>{deactivate(record.id)}}>Active</Link>
                       : 
-                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(id)}}>Inactive</Link>
+                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(record.id)}}>Inactive</Link>
       )
     },
     {
@@ -97,9 +90,10 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
       name: event.name,
       startdate: event.startdate,
       enddate: event.enddate,
-      isactive: {isactive: event.isactive, id: event._id},
+      isactive: event.isactive,
       actions: event._id,
       eventid: event._id,
+      id: event._id,
     }
   }) 
     
@@ -107,15 +101,7 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
     <>
       {
         !events || loading ? 
-        (<div className="text-center">
-          <BeatLoader 
-            color={'#37bc9b'} 
-            loading={true} 
-            css={override} 
-            margin={10} 
-            size={15} 
-          />
-        </div>)
+        ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
         (<Table 
           columns={columns} 

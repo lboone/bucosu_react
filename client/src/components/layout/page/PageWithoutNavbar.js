@@ -4,12 +4,14 @@ import PropTypes from 'prop-types';
 import './Page.css'
 import './NoNav.css'
 import { Divider } from 'antd'
+import Alerts from '../feedback/Alerts'
 
 const PageWithNavbar = ( { auth , title, footer, children } ) => {
   footer = footer ? footer : 'Bucosu.com'
   return (
     <div className="pagecontainer">
       <div className="main-content-no-nav">
+        <Alerts />
       <Divider>{title}</Divider>
         {children}
       </div>

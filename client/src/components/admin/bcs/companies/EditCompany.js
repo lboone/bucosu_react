@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { getCompany, updateCompany } from '../../../../redux/actions/company'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
-import { Skeleton } from 'antd'
+import SkeletonList from '../../../layout/feedback/SkeletonList'
 
 const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany, setAlert }) => {  
   const history = useHistory()
@@ -171,11 +171,7 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
         <Link to="/admin/bcs/companies"  className="btn btn-danger btn-outline"><i className="fa fa-times"></i> Cancel</Link>
       </form>
       ) : (
-        <>
-        <Skeleton avatar active paragraph={{ rows: 6 }} /> 
-        <Skeleton avatar active paragraph={{ rows: 6 }} />
-        <Skeleton avatar active paragraph={{ rows: 6 }} />
-        </>
+         <SkeletonList /> 
       )
       }      
     </div>

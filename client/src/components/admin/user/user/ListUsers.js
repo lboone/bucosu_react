@@ -6,16 +6,10 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import {activateUser, deactivateUser, deleteUser, getUsers } from '../../../../redux/actions/user'
 import {Table, Tag } from 'antd'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
-
-import BeatLoader from 'react-spinners/BeatLoader'
-import { css } from '@emotion/core'
 import { setAlert } from '../../../../redux/actions/alert'
-const override = css`
-  margin: auto;
-  display: block;
-`
+import SkeletonList from '../../../layout/feedback/SkeletonList'
 
-const ListUsers = ( { user:{users}, loading, getUsers, deactivateUser, activateUser, deleteUser} ) => {
+const ListUsers = ( { user:{users, loading}, getUsers, deactivateUser, activateUser, deleteUser} ) => {
   
   useEffect(()=>{
     getUsers()
@@ -98,30 +92,22 @@ const ListUsers = ( { user:{users}, loading, getUsers, deactivateUser, activateU
   ]
 
   const data = users && !loading && users.map((user)=>{
-    return {
-      key: user._id,
-      username: user.username,
-      email: user.email,
-      typename: user.usertype.name, 
-      typelevel:user.usertype.level,
-      companyname: user.company.name,
-      isactive: {isactive: user.isactive, id: user._id},
-      userid: user._id      
-    }
+      return {
+        key: user._id,
+        username: user.username,
+        email: user.email,
+        typename: user.usertype.name, 
+        typelevel:user.usertype.level,
+        companyname: user.company.name,
+        isactive: {isactive: user.isactive, id: user._id},
+        userid: user._id      
+      }
   })
   return (
       <>
       {
         !users || loading ? 
-        (<div className="text-center">
-          <BeatLoader 
-            color={'#37bc9b'} 
-            loading={true} 
-            css={override} 
-            margin={10} 
-            size={15} 
-          />
-        </div>)
+        ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
         (<Table 
           columns={columns} 

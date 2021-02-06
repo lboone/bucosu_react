@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { login } from '../../redux/actions/auth'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
-
+import Alerts from '../layout/feedback/Alerts'
 
 const Login = ({ login, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -26,6 +26,7 @@ const Login = ({ login, isAuthenticated }) => {
   return (
     <Fragment>
       <div className="container-center">
+        <Alerts />
         <h1 className="large text-primary">Sign In</h1>
         <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
         <form className="form" onSubmit={e => onSubmit(e)}>
