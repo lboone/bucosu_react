@@ -8,13 +8,13 @@ import { css } from '@emotion/core'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import DisplayDate from '../../../layout/ui/fields/DisplayDate'
 import { setAlert } from '../../../../redux/actions/alert'
+import {Table } from 'antd'
+
 
 const override = css`
   margin: auto;
   display: block;
 `
-
-
 
 const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
   useEffect(()=>{
@@ -41,52 +41,89 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
     })
   }
 
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'From Data',
+      dataIndex: 'startdate',
+      key: 'startdate',
+      className:'hide-sm',
+      render: (startdate) => (
+        <DisplayDate origDate={startdate}/>
+      )
+    },
+    {
+      title: 'To Data',
+      dataIndex: 'enddate',
+      key: 'enddate',
+      className:'hide-sm',
+      render: (enddate) => (
+        <DisplayDate origDate={enddate}/>
+      )
+    },
+    {
+      title: 'Active',
+      dataIndex: 'isactive',
+      key: 'isactive',
+      className:'hide-sm text-center',
+      render: ({isactive, id}) => (
+        isactive? 
+                      <Link className="text-primary" onClick={(e)=>{deactivate(id)}}>Active</Link>
+                      : 
+                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(id)}}>Inactive</Link>
+      )
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      className: 'text-center',
+      render: (text, record) => (
+        <>
+          <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${record.eventid}`}><i className="fa fa-pen-nib"></i> Edit</Link>
 
+          <DeleteButton confirmDelete={(e)=> deleteEvent(record.eventid)} itemName="Event"/>
+        </>
+      )
+    }
+  ]
+
+  const data = events && !loading && events.map((event)=>{
+    return {
+      key: event._id,
+      name: event.name,
+      startdate: event.startdate,
+      enddate: event.enddate,
+      isactive: {isactive: event.isactive, id: event._id},
+      actions: event._id,
+      eventid: event._id,
+    }
+  }) 
+  console.log(data)
+  
   return (
     <>
-      <Link to="/admin/bcs/events?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Event</Link>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th className="hide-sm">From Date</th>
-            <th className="hide-sm">To Date</th>
-            <th className="hide-sm text-center">Active</th>
-            <th className="text-center">Actions</th>
-
-          </tr>
-        </thead>
-        <tbody>
-        {
-          !events || loading ? 
-          (<tr><td colSpan={5} style={{textAlign: 'center'}}>{
-              loading ? (<BeatLoader color={'#37bc9b'} loading={true} css={override} margin={10} size={15} />) : (<h1>No Events Found...</h1>)}</td></tr>
-          )
-          : 
-            (
-                events.map( (event) => { 
-                  return (
-                  <tr key={event._id}>
-                    <td>{event.name}</td>
-                    <td className="hide-sm"><DisplayDate origDate={event.startdate}/></td>
-                    <td className="hide-sm"><DisplayDate origDate={event.enddate}/></td>
-                    <td className="hide-sm text-center">{
-                      event.isactive? 
-                      <Link className="text-primary" onClick={(e)=>{deactivate(event._id)}}>Active</Link>
-                      : 
-                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(event._id)}}>Inactive</Link>
-                    }</td>
-                    <td className="text-center">
-                      {<Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${event._id}`}><i title="Edit" className="fa fa-pen-nib"></i> Edit</Link>}
-                      {<DeleteButton confirmDelete={(e)=> deleteEvent(event._id)} itemName="Event"/>}
-                    </td>
-                  </tr>
-                  )})
-              
-            )
-        }
-        </tbody>
-      </table>
+      {
+        !events || loading ? 
+        (<div className="text-center">
+          <BeatLoader 
+            color={'#37bc9b'} 
+            loading={true} 
+            css={override} 
+            margin={10} 
+            size={15} 
+          />
+        </div>)
+        :
+        (<Table 
+          columns={columns} 
+          dataSource={data} 
+          title={()=>(<Link to="/admin/bcs/events?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Event</Link>)}
+        />)
+      }
     </>
   )
 }

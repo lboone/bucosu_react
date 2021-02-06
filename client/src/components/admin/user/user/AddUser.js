@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setAlert } from '../../../../redux/actions/alert'
 import { register } from '../../../../redux/actions/auth'
-import CompanyList from '../../../layout/ui/fields/CompanyList'
+import CompaniesList from '../../../layout/ui/fields/CompaniesList'
+import CompanyUserTypesList from '../../../layout/ui/fields/CompanyUserTypesList'
 import { Link } from 'react-router-dom'
 
-const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, register, setAlert } ) => {
+const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
   
   const initialState = {
     username: '',
@@ -22,6 +23,9 @@ const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, regis
   const { username, email, password, password2, firstname, lastname, phone } = formData
 
   const onChange = e => setFormData({...formData, [e.target.name]: e.target.value })
+  const [company, setCompany] = useState("")
+  const [usertype, setCompanyUserType] = useState("")
+
   const onSubmit = e => {
     e.preventDefault();
     if(password !== password2) {
@@ -45,6 +49,13 @@ const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, regis
     }
   }
 
+  const companyChanged = async (e) => {
+    await setCompany(e.target.value)
+  }
+
+  const companyUserTypeChanged = (e) => {
+    setCompanyUserType(e.target.value)
+  }
   return (
     
     <div className="container-center" style={{marginTop:'5px'}}>
@@ -53,7 +64,8 @@ const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, regis
           <p className="lead">
             <i className="fas fa-user"></i> User Information.
           </p>
-          <CompanyList></CompanyList>
+          <CompaniesList onChange={companyChanged} value={company} />
+          <CompanyUserTypesList value={usertype} onChange={companyUserTypeChanged} companyID={company} />
           <div className="form-group">
             <input 
               type="text" 
@@ -135,7 +147,7 @@ const AddUser = ( { auth:{ userRegistered }, company:{company, usertype }, regis
             </small>
           </div>
           <br />
-          <Link onClick={(e)=> onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-user-plus"></i> Add User</Link>
+          <Link to="#" onClick={(e)=> onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-user-plus"></i> Add User</Link>
           <input type="submit" className="btn btn-primary btn-outline hidden" value="Add User" />
           <Link to="/admin/user/home" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>  
         </form>

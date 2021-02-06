@@ -17,6 +17,7 @@ import AllRoutes from './routes'
 
 // Stylesheet
 import './App.css';
+import '../node_modules/antd/dist/antd.css';
 
 // Manage local storage & Auth Token
 import {

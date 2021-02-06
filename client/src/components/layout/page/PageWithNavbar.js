@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import './Page.css'
 import './SideNav.css'
 import SubMenu from '../SubMenu'
+import { Divider } from 'antd'
 
 const PageWithNavbar = ( { auth , title, footer , children } ) => {
+
   footer = footer ? footer : 'Bucosu.com'
   return (
     <div className="pagecontainer">
@@ -15,7 +17,9 @@ const PageWithNavbar = ( { auth , title, footer , children } ) => {
         </div>
       </div>
       <div className="main-content">
-        <h1 className="page-title">{title}</h1>
+        <Divider>
+          {title}
+        </Divider>
         {children}
       </div>
       <div className="footer">

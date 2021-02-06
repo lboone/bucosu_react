@@ -4,6 +4,7 @@ import { setAlert } from './alert'
 
 import {
   GET_COMPANIES,
+  GET_COMPANY_RELATIONSHIPS,
   GET_COMPANY,
   CREATE_COMPANY,
   SET_COMPANY,
@@ -48,6 +49,21 @@ export const getCompany = (id) => async dispatch => {
   }
 }
 
+export const getCompanyRelationships = () => async dispatch => {
+  try {
+    const res = await axios.get(`/api/companies/relationships`)
+    dispatch({
+      type: GET_COMPANY_RELATIONSHIPS,
+      payload: res.data
+    })
+  } catch (err) {
+    dispatch({
+      type: COMPANY_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status}
+    })
+    throw err
+  }
+}
 export const createCompany = ({companyTypeID, name, address, city, state, zip, phone, website, logo}) => async dispatch => {
   const config = {
     headers: {

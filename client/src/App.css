@@ -19,9 +19,9 @@
 
 body {
   font-family: 'Raleway', sans-serif;
-  font-size: 1rem;
+  font-size: 1rem !important;
   line-height: 1.6;
-  background-color: #eee;
+  background-color: #eee !important;
   color: #333;
 }
 
@@ -518,12 +518,13 @@ span.a-type > span {
 }
 
 .menubar {
-  top: 45px;
+  top: 55px;
   padding: 0.5rem 2rem;
 }
 
 .navbar ul {
   display: flex;
+  margin-bottom: inherit !important;
 }
 
 .navbar a {
@@ -808,7 +809,7 @@ span.a-type > span {
   }
 
   .menubar {
-    top: 86px;
+    top: 84px;
   }
   .navbar ul {
     text-align: center;

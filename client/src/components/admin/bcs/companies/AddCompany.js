@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { createCompany } from '../../../../redux/actions/company'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
-import CompanyTypeList from '../../../layout/ui/fields/CompanyTypeList'
+import CompanyTypesList from '../../../layout/ui/fields/CompanyTypesList'
 
 
 const AddCompany = ({ createCompany, setAlert }) => {  
@@ -66,7 +66,7 @@ const AddCompany = ({ createCompany, setAlert }) => {
         <p className="lead">
           <i className="fa fa-briefcase"></i> Company Information.
         </p>
-        <CompanyTypeList onChange={onChange} />
+        <CompanyTypesList onChange={onChange} value={companyTypeID}/>
         <div className="form-group">
           <input 
             type="text"

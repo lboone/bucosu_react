@@ -6,6 +6,7 @@ const CompanyType = require('../../models/CompanyType')
 const Company = require('../../models/Company')
 const User = require('../../models/User')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
+const Profile = require('../../models/Profile')
 
 // @route   POST api/companies/companytype/:companytype_id
 // @desc    Create a company
@@ -267,11 +268,17 @@ router.delete('/:id',access(COMPANY.ADMIN,USER.SUPERADMIN), async (req,res) => {
       return res.status(404).json({errors: [{msg: 'Company not found'}]})
     }
 
-    const user = await User.findById(req.user.id).populate('usertype',['name','level'])
-
     // Make sure company is not Admin Company
-    if(company.companytype.level === 0){
+    if(company.companytype.level === COMPANY.ADMIN){
       return res.status(401).json({ errors: [{msg: 'You are not authorized'}]})  
+    }
+    // Delete all the users first.
+    const users = await User.find({company: company._id})
+    if(users && users.length>0){
+      users.forEach(async (user)=>{
+        await Profile.findOneAndRemove({user: user._id})
+        await User.findOneAndRemove({_id: user._id})
+      })     
     }
 
     await company.remove()
@@ -296,6 +303,11 @@ router.put('/:id/deactivate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (
     if(!company){
       return res.status(404).json({errors: [{msg: 'Company not found'}]})
     }
+
+    // Deactivate all company users.
+    await User.updateMany({company:company._id},{isactive:false})
+
+    //deactivate the company
     company.isactive = false
     await company.save()
     res.status(200).json(company)

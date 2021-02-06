@@ -106,7 +106,7 @@ const EditCompany = ({ event:{loading, event}, editBcsEvent, setAlert, id , getB
         
         <br />
         <Link to="#" onClick={(e)=>onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-save"></i> Save Event</Link>
-        <Link to="/admin/bcs/events" className="btn btn-danger btn-outline"><i className="fa fa-times"></i> Cancel</Link>
+        <Link to="/admin/bcs/companies" className="btn btn-danger btn-outline"><i className="fa fa-times"></i> Cancel</Link>
       </form>
       
     </div>

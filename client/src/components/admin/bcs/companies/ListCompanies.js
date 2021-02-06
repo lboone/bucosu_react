@@ -7,6 +7,7 @@ import BeatLoader from 'react-spinners/BeatLoader'
 import { css } from '@emotion/core'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import { setAlert } from '../../../../redux/actions/alert'
+import {Table, Tag } from 'antd'
 
 const override = css`
   margin: auto;
@@ -40,54 +41,102 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
     })
   }
 
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Address',
+      key: 'address',
+      className:'hide-sm',
+      render: (text, record) => (
+        <> {record.address} <br/> {`${record.city}, ${record.state} ${record.zip}`}</>
+      )
+    },
+    {
+      title: 'Phone',
+      key: 'phone',
+      className:'hide-sm',
+      render: (text, record) => (
+        <>{record.phonenumber}</>
+      )
+    },
+    {
+      title: 'Type',
+      key: 'type',
+      className: 'hide-sm',
+      render: (text, record)=> (
+        <>
+          <Tag color="blue">{record.typename}</Tag>
+          <Tag>{record.typelevel}</Tag>
+        </>
+      )
+    },  
+    {
+      title: 'Active',
+      dataIndex: 'isactive',
+      key: 'isactive',
+      className:'hide-sm text-center',
+      render: ({isactive, id}) => (
+        isactive? 
+                      <Link to="#" className="text-primary" onClick={(e)=>{deactivate(id)}}>Active</Link>
+                      : 
+                      <Link to="#" className="text-light-gray text-strike" onClick={(e)=>{activate(id)}}>Inactive</Link>
+      )
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      className: 'text-center',
+      render: (text, record) => (
+        <>
+          <Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${record.companyid}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+          <DeleteButton confirmDelete={(e)=> clickDeleteCompany(record.companyid)} itemName="Event"/>
+        </>
+      )
+    }
+  ]
+
+  const data = companies && !loading && companies.map((company)=>{
+    return {
+      key: company._id,
+      name: company.name,
+      address: company.companyaddress.address,
+      city: company.companyaddress.city,
+      state: company.companyaddress.state,
+      zip: company.companyaddress.zip,
+      phonenumber: company.contact.phone,
+      typename: company.companytype.name, 
+      typelevel:company.companytype.level,
+      isactive: {isactive: company.isactive, id: company._id},
+      actions: company._id,
+      companyid: company._id
+    }
+  })
+  console.log(data) 
 
   return (
     <>
-      <Link to="/admin/bcs/companies?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Company</Link>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th className="hide-sm">Address</th>
-            <th className="hide-sm">Phone</th>
-            <th className="hide-sm">Type</th>
-            <th className="hide-sm text-center">Active</th>
-            <th className="text-center">Actions</th>
-
-          </tr>
-        </thead>
-        <tbody>
-        {
-          !companies || loading ? 
-          (<tr><td colSpan={5} style={{textAlign: 'center'}}>{
-              loading ? (<BeatLoader color={'#37bc9b'} loading={true} css={override} margin={10} size={15} />) : (<h1>No Companies Found...</h1>)}</td></tr>
-          )
-          : 
-            (
-                companies.map( (company) => { 
-                  return (
-                  <tr key={company._id}>
-                    <td>{company.name}</td>
-                    <td className="hide-sm">{`${company.companyaddress.address} ${company.companyaddress.city}, ${company.companyaddress.state}  ${company.companyaddress.zip}`}</td>
-                    <td className="hide-sm">{company.contact.phone}</td>
-                    <td className="hide-sm"><span className="a-type">{company.companytype.name}<span></span>{`[${company.companytype.level}]`}</span></td>
-                    <td className="hide-sm text-center">{
-                      company.isactive? 
-                      <Link className="text-primary" onClick={(e)=>{deactivate(company._id)}}>Active</Link>
-                      : 
-                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(company._id)}}>Inactive</Link>
-                    }</td>
-                    <td className="text-center">
-                      {<Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${company._id}`}><i title="Edit" className="fa fa-pen-nib"></i> Edit</Link>}
-                      {<DeleteButton confirmDelete={(e)=> clickDeleteCompany(company._id)} itemName="Company"/>}
-                    </td>
-                  </tr>
-                  )})
-              
-            )
-        }
-        </tbody>
-      </table>
+      {
+        !companies || loading ? 
+        (<div className="text-center">
+          <BeatLoader 
+            color={'#37bc9b'} 
+            loading={true} 
+            css={override} 
+            margin={10} 
+            size={15} 
+          />
+        </div>)
+        :
+        (<Table 
+          columns={columns} 
+          dataSource={data} 
+          title={()=>(<Link to="/admin/bcs/companies?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Company</Link>)}
+        />)
+      }
     </>
   )
 }

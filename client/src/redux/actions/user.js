@@ -67,15 +67,38 @@ try {
   })
 } catch (err) {
   dispatch({
-    type: UPDATE_USER,
+    type: USER_ERROR,
     payload: {msg: err.response.statusText, status: err.response.status}
   })
+  throw err
 }
 }
 
-export const activateUser = (bid) => async dispatch => {
+export const updateUserByID = ({username, email, firstname, lastname, phone, usertypeid, uid}) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  const body = JSON.stringify({username, email, firstname, lastname, phone, usertypeid})
+try {
+  const res = await axios.put(`/api/users/${uid}`, body, config)
+  dispatch({
+    type: UPDATE_USER,
+    payload: res.data
+  })
+} catch (err) {
+  dispatch({
+    type: USER_ERROR,
+    payload: {msg: err.response.statusText, status: err.response.status}
+  })
+  throw err
+}
+}
+
+export const activateUser = (uid) => async dispatch => {
   try {
-    const res = await axios.put(`/api/users/${bid}/activate`)
+    const res = await axios.put(`/api/users/${uid}/activate`)
     dispatch({
       type: ACTIVATE_USER,
       payload: res.data
@@ -88,9 +111,9 @@ export const activateUser = (bid) => async dispatch => {
   }
 }
 
-export const deactivateUser = (bid) => async dispatch => {
+export const deactivateUser = (uid) => async dispatch => {
   try {
-    const res = await axios.put(`/api/users/${bid}/deactivate`)
+    const res = await axios.put(`/api/users/${uid}/deactivate`)
     dispatch({
       type: DEACTIVATE_USER,
       payload: res.data
@@ -103,9 +126,9 @@ export const deactivateUser = (bid) => async dispatch => {
   }
 }
 
-export const deleteUser = (bid) => async dispatch => {
+export const deleteUser = (uid) => async dispatch => {
   try{
-    const res = await axios.delete(`/api/users/${bid}`)
+    const res = await axios.delete(`/api/users/${uid}`)
     dispatch({
       type: DELETE_USER,
       payload: res.data

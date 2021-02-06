@@ -13,15 +13,15 @@ const CompaniesContainer = () => {
   switch (action) {  
     case 'add':
       finalComponent = (<AddCompany />)
-      title = 'New Event'
+      title = 'New Company'
       break;
     case 'edit':
       finalComponent = (<EditCompany id={id}/>)
-      title = 'Edit Event'
+      title = 'Edit Company'
       break;
     default:
       finalComponent = (<ListCompanies/>)
-      title = 'List Events'
+      title = 'List Companies'
       break;
   }
   return (

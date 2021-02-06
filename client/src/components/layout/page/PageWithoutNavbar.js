@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import './Page.css'
 import './NoNav.css'
+import { Divider } from 'antd'
 
 const PageWithNavbar = ( { auth , title, footer, children } ) => {
   footer = footer ? footer : 'Bucosu.com'
   return (
     <div className="pagecontainer">
       <div className="main-content-no-nav">
-        <h1 className="page-title">{title}</h1>
+      <Divider>{title}</Divider>
         {children}
       </div>
       <div className="footer">

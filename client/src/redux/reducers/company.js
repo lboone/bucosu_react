@@ -1,5 +1,6 @@
 import {
   GET_COMPANIES,
+  GET_COMPANY_RELATIONSHIPS,
   GET_COMPANY,
   CREATE_COMPANY,
   SET_COMPANY,
@@ -26,6 +27,7 @@ const reduce = function(state = initialState, action) {
   
   switch (type) {
     case GET_COMPANIES:
+    case GET_COMPANY_RELATIONSHIPS:
       return {
         ...state,
         companies: payload,

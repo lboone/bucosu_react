@@ -7,11 +7,12 @@ const access = require('../../middleware/access')
 const auth = require('../../middleware/auth')
 const { check, validationResult } = require('express-validator')
 const User = require('../../models/User')
+const Profile = require('../../models/Profile')
 const Company = require('../../models/Company')
 const UserType = require('../../models/UserType')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
-
 const EXP = process.env.EXP || '365d'
+const TESTING = process.env.TESTING || true
 
 // @route   POST api/users
 // @desc    Register user
@@ -94,7 +95,7 @@ router.post('/company/:company_id/usertype/:usertype_id/', [access(COMPANY.SCHOO
 })
 
 // @route   PUT api/users/me
-// @desc    Update a users rep info and profile info
+// @desc    Update my rep info and profile info
 // @access  Private
 router.put('/me',[auth,[
   check('username','Username is required').not().isEmpty(),
@@ -133,6 +134,89 @@ router.put('/me',[auth,[
     await profile.save()
 
     res.status(200).json(user._id)
+  } catch(err) {
+    console.error(err.message)
+
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'User or Profile not found'}]})   
+    }
+
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  }
+    
+  
+})
+
+// @route   PUT api/users/:id
+// @desc    Update a users rep info and profile info
+// @access  Private
+router.put('/:id',[auth,[
+  check('username','Username is required').not().isEmpty(),
+  check('email','Please include a valid email').isEmail().normalizeEmail(),
+  check('firstname','First Name is required').not().isEmpty().trim().escape(),
+  check('lastname','Last Name is required').not().isEmpty().trim().escape(),
+  check('phone','A 10 digit Phone Number is required').isLength({min:10, max: 10}),
+  check('usertypeid','A user type id is required').isMongoId()
+]],async (req,res)=> {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({errors: errors.array() })
+  }
+  const {username, email, firstname, lastname, phone, usertypeid} = req.body 
+  try {
+    // See if user exists
+    let user = await User.findById(req.params.id)
+    if(!user){
+      return res.status(400).json({ errors: [{msg: 'User does not exists'}]})
+    }
+
+    if(username) user.username = username
+    if(email) user.email = email
+
+    if(usertypeid !== user.usertype._id){
+      user.usertype = usertypeid
+    }
+
+    // Save user to database
+    await user.save()
+
+    // Now update the profile record
+
+    let profile = await Profile.findOne({user:req.params.id})
+    if(!profile){
+      return res.status(400).json({errors: [{msg: 'Profile does not exist'}]})
+    }
+
+    if(firstname) profile.firstname = firstname
+    if(lastname) profile.lastname = lastname
+    if(phone) profile.phone = phone    
+    await profile.save()
+
+    // Delete after test
+
+    const profileNew = await Profile.findOne({ user: req.params.id })
+    .populate({
+      path: 'user', 
+      model: 'user',
+      populate: [{
+        path:'usertype',
+        model:'usertype'
+      },{
+        path: 'company',
+        model:'company', 
+        populate: {
+          path: 'companytype',
+          model:'companytype'
+        }
+      }]
+    })
+    .populate({
+      path: 'logins.geolocation',
+      model: 'ipgeolocation',
+      select: ['-logins']
+    })
+
+    res.status(200).json(profileNew)
   } catch(err) {
     console.error(err.message)
 
@@ -185,7 +269,6 @@ router.get('/mylevel', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,r
     const uLevel = user.usertype.level
     const cLevel = user.company.companytype.level
     const cRels =  user.company.relationships
-    
     const users = await User.find({_id:{$ne:user._id}})
       .populate({
         path: 'usertype', 
@@ -207,31 +290,50 @@ router.get('/mylevel', access(COMPANY.SCHOOLDISTRICT,USER.READER) , async (req,r
       return res.status(200).json(users)
     }
 
+    let allDetails = []
+    
     
     const filteredUsers = users.filter((item) => {
       const userLevel = item.usertype.level
       const companyLevel = item.company.companytype.level
       const companyName = item.company.name
-      let userPass;
+      let userPass, userPassOn;
       if(uLevel === USER.ARCHITECT){
         userPass = userLevel >= uLevel
+        userPassOn = 1
       } else {
         userPass = userLevel > uLevel
+        userPassOn = 2
       }
-      let companyPass;
-      if(companyLevel< uLevel){
+
+      let companyPass, companyPassOn;
+      if(companyLevel< cLevel){
         companyPass = false
+        companyPassOn = 1
       } else {
         if(cRels.length >0){
           companyPass = cRels.some((co) => {
             return co.name === companyName 
           })
+          companyPassOn = 2
         } else {
           companyPass = companyLevel > cLevel
+          companyPassOn = 3
         }
       }
+      
+      allDetails.push({
+        overall:userPass && companyPass,
+        [user.username]:{userLevel:uLevel,companyLevel:cLevel},
+        [item.username]:{userLevel:userLevel,companyLevel: companyLevel},
+        ["U"]:{userPassOn:userPassOn, userPass: userPass},
+        ["C"]:{companyPassOn:companyPassOn, companyPass: companyPass},
+      })
+        
+        
       return userPass && companyPass
     })
+    if (TESTING) console.log(allDetails)
 
     return res.status(200).json(filteredUsers)
     
@@ -329,5 +431,26 @@ router.put('/:id/activate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (re
     }
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   } 
+})
+
+
+// @route   DELETE api/users/:id
+// @desc    Delete user and  profile
+// @access  Private
+router.delete('/:id',access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
+  try {
+    // Remove Profile
+    await Profile.findOneAndRemove({user: req.params.id})
+
+    // Remove User
+    await User.findOneAndRemove({_id: req.params.id})
+    res.status(200).json({msg: 'User deleted'})
+  } catch (err) {
+    console.error(err.message)
+    if(err.kind == 'ObjectId'){
+      return res.status(400).json({ errors: [{msg: 'Profile not found'}]})
+    }
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  }
 })
 module.exports = router
