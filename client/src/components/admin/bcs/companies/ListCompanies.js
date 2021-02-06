@@ -115,7 +115,6 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
       companyid: company._id
     }
   })
-  console.log(data) 
 
   return (
     <>

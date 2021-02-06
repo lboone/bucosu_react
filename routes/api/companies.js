@@ -76,8 +76,8 @@ router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
   check('state','state is required').not().isEmpty(),
   check('zip','zip is required').not().isEmpty(),
   check('phone','phone is required').not().isEmpty(),
-  check('website','website is required').not().isEmpty(),
-  check('logo','logo is required').not().isEmpty(),
+  check('website','A valid website URL is required').not().isEmpty().isURL(),
+  check('logo','A valid logo URL is required').not().isEmpty().isURL(),
 ]], async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){

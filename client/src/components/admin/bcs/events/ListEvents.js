@@ -102,8 +102,7 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
       eventid: event._id,
     }
   }) 
-  console.log(data)
-  
+    
   return (
     <>
       {

@@ -2,38 +2,35 @@ import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {getUser, updateUserByID } from '../../../../redux/actions/user'
-import ClipLoader from 'react-spinners/ClipLoader'
-import { css } from '@emotion/core'
 import { Link, useHistory } from 'react-router-dom'
-import { getCompanyUserTypes, setCompanyUserType } from '../../../../redux/actions/company'
+import { getCompanyUserTypes } from '../../../../redux/actions/company'
 import { setAlert } from '../../../../redux/actions/alert'
 import CompanyUserTypesList from '../../../layout/ui/fields/CompanyUserTypesList'
+import { Skeleton } from 'antd'
 
-const override = css`
-  display: block;
-  margin: 0 auto;
-`
-const EditUser = ( { user:{loading, user}, company: { company, usertype, usertypes}, getUser, id, getCompanyUserTypes, setCompanyUserType, updateUserByID, setAlert } ) => {
+
+const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, updateUserByID, setAlert } ) => {
   const history = useHistory()
   const [userID, setuserID] = useState(null)
   const [updateEnabled, setUpdateEnabled] = useState(true)
   const [companyID, setCompanyID] = useState("")
+  const [companyUserType, setCompanyUserType] = useState("")
   
   useEffect(()=> id && setuserID(id), [id])
   useEffect(()=>{ (userID !== null && !user) && getUser(userID) }, [ userID, user, getUser ])
+  useEffect(()=>{ (user && user.user && user.user.usertype && !loading ) && setCompanyUserType(user.user.usertype._id) }, [ user, loading ])
   useEffect(()=>{ (user && user.user && !loading && user.user.company) && setCompanyID(user.user.company._id) }, [ user, loading ])
 
   useEffect(()=>{
     const getData = async () => {
       try {
-          await getCompanyUserTypes(user.user.company._id)
-          await setCompanyUserType(user.user.usertype._id)      
+          await getCompanyUserTypes(user.user.company._id)    
       } catch (error) {
         console.log('nope')
       } 
     }
     getData()
-  },[ user, getCompanyUserTypes, setCompanyUserType ])
+  },[ user, getCompanyUserTypes ])
   
 
 
@@ -57,6 +54,7 @@ const EditUser = ( { user:{loading, user}, company: { company, usertype, usertyp
     })
   }, [ user, loading ])
 
+
   const { username, email, firstname, lastname, phone } = formData
 
 
@@ -70,7 +68,7 @@ const EditUser = ( { user:{loading, user}, company: { company, usertype, usertyp
       firstname,
       lastname,
       phone,
-      usertypeid: usertype,
+      usertypeid: companyUserType,
       uid: userID
     }).then(()=>{
       setAlert('User has been updated.','success',2000)
@@ -85,6 +83,8 @@ const EditUser = ( { user:{loading, user}, company: { company, usertype, usertyp
 
   }
 
+
+
   const onChangeUserTypes = (e) => {
     setCompanyUserType(e.target.value)
   }  
@@ -92,7 +92,11 @@ const EditUser = ( { user:{loading, user}, company: { company, usertype, usertyp
   return (
     <>
       {loading || !user ? (
-        <ClipLoader color={'#37bc9b'} loading={true} css={override} size={25} />
+        <div className="container-center" style={{marginTop:'5px'}}>
+        <Skeleton avatar active paragraph={{ rows: 5 }} /> 
+        <Skeleton avatar active paragraph={{ rows: 5 }} />
+        <Skeleton avatar active paragraph={{ rows: 5 }} />
+        </div>
       ) : (
         <div className="container-center" style={{marginTop:'5px'}}>
           <form className="form"  onSubmit={e => onSubmit(e)}>
@@ -100,7 +104,7 @@ const EditUser = ( { user:{loading, user}, company: { company, usertype, usertyp
             <p className="lead">
               <i className="fas fa-user"></i> User Information.
             </p>
-            <CompanyUserTypesList onChange={onChangeUserTypes} value={usertype} companyID={companyID}/>
+            <CompanyUserTypesList onChange={onChangeUserTypes} value={companyUserType} companyID={companyID}/>
             <div className="form-group">
               <input 
                 type="text" 
@@ -173,16 +177,13 @@ EditUser.propTypes = {
   user: PropTypes.object.isRequired,
   getUser: PropTypes.func.isRequired,
   getCompanyUserTypes: PropTypes.func.isRequired,
-  setCompanyUserType: PropTypes.func.isRequired,
-  company: PropTypes.object.isRequired,
   updateUserByID: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state,ownProps) => ({
-  user: state.user,
-  company: state.company
+  user: state.user
 })
   
-export default connect(mapStateToProps, {getUser, getCompanyUserTypes, setCompanyUserType, updateUserByID, setAlert} )(EditUser)
+export default connect(mapStateToProps, {getUser, getCompanyUserTypes, updateUserByID, setAlert} )(EditUser)
   

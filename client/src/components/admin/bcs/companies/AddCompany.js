@@ -58,7 +58,6 @@ const AddCompany = ({ createCompany, setAlert }) => {
     })
   }
 
-  console.log(formData)
   return (
     <div className="container-center" style={{marginTop: '5px'}}>
       <form className="form" onSubmit= {e => onSubmit(e)}>

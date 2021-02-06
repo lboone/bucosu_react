@@ -7,9 +7,8 @@ import {
   GET_COMPANY_RELATIONSHIPS,
   GET_COMPANY,
   CREATE_COMPANY,
-  SET_COMPANY,
+  UPDATE_COMPANY,
   GET_COMPANY_USERTYPES,
-  SET_COMPANY_USERTYPE,
   DEACTIVATE_COMPANY,
   ACTIVATE_COMPANY,
   DELETE_COMPANY,
@@ -90,11 +89,30 @@ export const createCompany = ({companyTypeID, name, address, city, state, zip, p
   }
 }
 
-export const setCompany = (coId) => dispatch => {
-  dispatch({
-    type: SET_COMPANY,
-    payload: coId
-  })
+export const updateCompany = ({companyTypeID, name, address, city, state, zip, phone, website, logo, id}) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  const body = JSON.stringify({name, address, city, state, zip, phone, website, logo})
+  try {
+    const res = await axios.put(`/api/companies/${id}`, body, config )
+    dispatch({
+      type:   UPDATE_COMPANY,
+      payload: res.data
+    })
+    setAlert('Company updated successfully','success',3000)
+  } catch (err) {
+    const errors = err.response.data.errors
+    if(errors){
+      errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
+    }
+    dispatch({
+      type: COMPANY_ERROR
+    })
+    throw err
+  }
 }
 
 export const getCompanyUserTypes = (coId) => async dispatch => {
@@ -110,13 +128,6 @@ export const getCompanyUserTypes = (coId) => async dispatch => {
       payload: {msg: err.response.statusText, status: err.response.status}
     })    
   }
-}
-
-export const setCompanyUserType = (utId) => dispatch => {
-  dispatch({
-    type: SET_COMPANY_USERTYPE,
-    payload: utId
-  })
 }
 
 export const deactivateCompany = (cid) => async dispatch => {

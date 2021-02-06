@@ -6,37 +6,31 @@ import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import moment from 'moment'
 import {formatDate} from '../../../../utils/globalFunctions'
+import { Skeleton } from 'antd'
 
 const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcsEvent}) => {  
-  const [eventID, seteventID] = useState(null)
   const history = useHistory()
 
-  useEffect(()=>{
-    seteventID(id)
-    if(eventID !== null && !event){
-      getBcsEvent(eventID)
-    }
-      
-    setFormData({
-      name: loading || !event  ? '' : event.name,
-      startdate: loading || !event  ? '' : formatDate(event.startdate,'YYYY-MM-DD'),
-      enddate: loading || !event ? '' : formatDate(event.enddate,'YYYY-MM-DD'),
-      isactive: loading || !event ? '' : event.isactive,
-    })
-    
-  },[seteventID,getBcsEvent,eventID, id, loading, event])
-
+  useEffect(()=>{ id && getBcsEvent(id) } , [ id , getBcsEvent ] )
+  
   const initialState = {
     name: "",
     startdate: "",
     enddate: "",
     isactive: true,
   }
-
   const [formData, setFormData] = useState(initialState)
+
+  useEffect(()=>{
+    setFormData({
+      name: loading || !event  ? '' : event.name,
+      startdate: loading || !event  ? '' : formatDate(event.startdate,'YYYY-MM-DD'),
+      enddate: loading || !event ? '' : formatDate(event.enddate,'YYYY-MM-DD'),
+      isactive: loading || !event ? '' : event.isactive,
+    })
+  }, [ event, loading ])
+  
   const { name, startdate, enddate, isactive } = formData
-
-
   
   const onChange = e => setFormData({...formData, [e.target.name]: e.target.value})
 
@@ -47,7 +41,7 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
       startdate: moment(startdate).format('YYYY-MM-DD'), 
       enddate: moment(enddate).format('YYYY-MM-DD'), 
       isactive,
-      id: eventID
+      id
     })
     .then(()=>{
       setFormData({...initialState})
@@ -62,6 +56,7 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
   }
   return (
     <div className="container-center" style={{marginTop: '5px'}}>
+      {event && !loading ? (
       <form className="form" onSubmit= {e => onSubmit(e)}>
         <br />
         <p className="lead">
@@ -108,7 +103,12 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
         <Link to="#" onClick={(e)=>onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-save"></i> Save Event</Link>
         <Link to="/admin/bcs/events" className="btn btn-danger btn-outline"><i className="fa fa-times"></i> Cancel</Link>
       </form>
-      
+      )  : (
+        <>
+        <Skeleton avatar active paragraph={{ rows: 4 }} /> 
+        <Skeleton avatar active paragraph={{ rows: 4 }} />
+        </>
+      )}
     </div>
   )
 }
