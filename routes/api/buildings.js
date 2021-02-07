@@ -123,7 +123,7 @@ router.put('/:id', [access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), [
 // @access  Private
 router.get('/',access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) => {
   try{
-    const buildings = await Building.find({isactive: true}).populate({
+    const buildings = await Building.find().populate({
       path: "company",
       model:"company"
     })

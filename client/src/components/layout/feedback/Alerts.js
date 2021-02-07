@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Alert } from 'antd'
 
 const Alerts = ({ alerts }) =>{
-  let type = ""
+  let type = "", msg = ""
  return (
    <>
    {alerts !== null && 
@@ -13,17 +13,20 @@ const Alerts = ({ alerts }) =>{
     switch (alert.alertType) {
     case 'danger':
       type="error"
+      msg="Error"
       break;
     case 'success':
       type="success"
+      msg="Success"
       break
     default:
       type="info"
+      msg="Info"
       break;
     }
     return (
     <Alert
-      message="Error"
+      message={msg}
       description={alert.msg}
       type={type}
       showIcon

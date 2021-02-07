@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getCompanyRelationships } from '../../../../redux/actions/company'
 
-const CompaniesList = ( { company:{companies,loading }, getCompanyRelationships , value, onChange, isDisabled} ) => {
+const CompaniesList = ( { company:{companies,loading }, getCompanyRelationships , value, name="company", onChange, isDisabled} ) => {
   const [dataLoaded, setDataLoaded] = useState(false)
   const [defaultValue, setDefaultValue] = useState("")
   const [disabled, setDisabled] = useState(false)
@@ -15,7 +15,7 @@ const CompaniesList = ( { company:{companies,loading }, getCompanyRelationships 
   
   return (
     <div className="form-group">
-      <select  disabled={disabled} value={ defaultValue } onChange={onChange} required>
+      <select  disabled={disabled} name={name} value={ defaultValue } onChange={onChange} required>
         <option key={'56548655'} value={''}>{'Select a Company'}</option>
       {   dataLoaded &&
           companies.map((company) => {

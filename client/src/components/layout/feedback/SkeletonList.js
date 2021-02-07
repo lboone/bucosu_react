@@ -8,6 +8,7 @@ const SkeletonList = ( {active = true, avatar=true, loading=true, round=false, t
   for (let index = 0; index < paragraphs; index++) {
     pars.push( 
       <Skeleton
+        key={index}
         active = {active}
         loading = {loading}
         avatar = {avatar}
