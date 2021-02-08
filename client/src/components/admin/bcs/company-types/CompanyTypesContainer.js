@@ -1,24 +1,35 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React, {useContext} from 'react'
 import PageWithNavbar from '../../../layout/page/PageWithNavbar'
+import ListCompanyTypes from './ListCompanyTypes'
+import AddCompanyType from './AddCompanyType'
+import EditCompanyType from './EditCompanyType'
+import { URLContext } from '../../../../URLContext'
 
 
-const CompanyTypesContainer = ( { auth } ) => {
+const CompanyTypesContainer = () => {
+  const {action, id} = useContext(URLContext)
+  let finalComponent = null;
+  let title = null;
+  switch (action) {  
+    case 'add':
+      finalComponent = (<AddCompanyType />)
+      title = 'New Company Type'
+      break;
+    case 'edit':
+      finalComponent = (<EditCompanyType id={id}/>)
+      title = 'Edit Company Type'
+      break;
+    default:
+      finalComponent = (<ListCompanyTypes/>)
+      title = 'List Company Types'
+      break;
+  }
   return (
-    <PageWithNavbar title="Company Types">
-      <h2>Company Types Page</h2>
+    <PageWithNavbar title={title}>
+      {finalComponent}
     </PageWithNavbar>
   )
 }
 
-CompanyTypesContainer.propTypes = {
-  auth: PropTypes.object.isRequired,
-}
-
-const mapStateToProps = state => ({
-  auth: state.auth,
-})
   
-export default connect(mapStateToProps, null)(CompanyTypesContainer)
-  
+export default CompanyTypesContainer  

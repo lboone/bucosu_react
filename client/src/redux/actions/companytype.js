@@ -4,6 +4,7 @@ import { setAlert } from './alert'
 import {
   GET_COMPANYTYPES,
   GET_COMPANYTYPE,
+  EDIT_COMPANYTYPE,
   CREATE_COMPANYTYPE,
   DELETE_COMPANYTYPE,
   COMPANYTYPE_ERROR
@@ -42,7 +43,33 @@ export const getCompanyType = (ctid) => async dispatch => {
   }
 }
 
-export const createCompany = ({name, description, level}) => async dispatch => {
+export const editCompanyType = ({name, description, level, id}) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  const body = JSON.stringify({name, description, level})
+  try {
+    const res = await axios.put(`/api/companytypes/${id}`, body, config )
+    dispatch({
+      type:   EDIT_COMPANYTYPE,
+      payload: res.data
+    })
+    setAlert('Company Type successfully edited','success',3000)
+  } catch (err) {
+    const errors = err.response.data.errors
+    if(errors){
+      errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
+    }
+    dispatch({
+      type: COMPANYTYPE_ERROR
+    })
+    throw err
+  }
+}
+
+export const createCompanyType = ({name, description, level}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'

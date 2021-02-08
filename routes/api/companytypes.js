@@ -25,6 +25,28 @@ router.get('/', access(COMPANY.ADMIN,USER.SUPERADMIN), async (req, res) => {
   }
 })
 
+// @route   POST api/companytypes/:id
+// @desc    Get a Company Type by ID
+// @access  Private - ADMIN / SUPERADMIN
+router.get('/:id', access(COMPANY.ADMIN,USER.SUPERADMIN), async (req, res) => {
+  
+  try{
+    let companytype = await CompanyType.findById(req.params.id).populate({path:"usertypes",model:"usertype"})
+    if(!companytype){
+      return res.status(404).json({ errors: [{msg: 'Company Type not found.'}]})
+    }
+    res.status(200).json(companytype)
+
+  } catch (err) {
+    console.error(err.message)
+    if(err.kind === 'ObjectId'){
+      return res.status(404).json({ errors: [{msg: 'Company Type not found'}]})   
+    }
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  }
+})
+
+
 // @route   POST api/companytypes
 // @desc    Create a Company Type
 // @access  Private - ADMIN / SUPERADMIN
@@ -81,7 +103,7 @@ router.put('/:id', [access(COMPANY.ADMIN,USER.SUPERADMIN), [
   }
 
   try{
-    const companytype = await CompanyType.findById(req.params.id)
+    const companytype = await CompanyType.findById(req.params.id).populate({path:"usertypes",model:"usertype"})
 
   if(!companytype){
     return res.status(400).json({ errors: [{msg: 'Company Type does not exists.'}]})

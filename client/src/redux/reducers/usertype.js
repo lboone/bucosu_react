@@ -1,15 +1,14 @@
 import {
-  GET_COMPANYTYPES,
-  GET_COMPANYTYPE,
-  EDIT_COMPANYTYPE,
-  CREATE_COMPANYTYPE,
-  DELETE_COMPANYTYPE,
-  COMPANYTYPE_ERROR,
+  GET_USERTYPES,
+  GET_USERTYPE,
+  CREATE_USERTYPE,
+  DELETE_USERTYPE,
+  USERTYPE_ERROR,
 } from '../actions/types'
 
 const initialState = {
-  companytypes: [],
-  companytype: null,
+  usertypes: [],
+  usertype: null,
   loading: true,
   error: {}
 }
@@ -18,31 +17,30 @@ const reduce = function(state = initialState, action) {
   const {type, payload} = action
   
   switch (type) {
-    case GET_COMPANYTYPES:
+    case GET_USERTYPES:
       return {
         ...state,
-        companytypes: payload,
-        companytype: null,
+        usertypes: payload,
+        usertype: null,
         loading: false,
         error: {}
       }
-    case GET_COMPANYTYPE:
-    case CREATE_COMPANYTYPE:
-    case EDIT_COMPANYTYPE:
+    case GET_USERTYPE:
+    case CREATE_USERTYPE:
       return {
         ...state,
-        companytype: payload,
+        usertype: payload,
         loading: false,
         error: {}
       }
-    case DELETE_COMPANYTYPE:
+    case DELETE_USERTYPE:
       return {
         ...state,
-        companytype: null,
+        usertype: null,
         loading: false,
         error: {}
       }
-    case COMPANYTYPE_ERROR:
+    case USERTYPE_ERROR:
       return {
         ...state,
         error: payload,

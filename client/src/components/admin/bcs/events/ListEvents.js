@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import DisplayDate from '../../../layout/ui/fields/DisplayDate'
 import { setAlert } from '../../../../redux/actions/alert'
-import {Table } from 'antd'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
 const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
