@@ -5,7 +5,7 @@ import { getCompanies, deactivateCompany, activateCompany, deleteCompany } from 
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import { setAlert } from '../../../../redux/actions/alert'
-import {Table, Tag } from 'antd'
+import {Tag } from 'antd'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
 
@@ -33,85 +33,7 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
       console.log(err)
     })
   }
-  const [columns, setColumns] = useState("")
-  const [data, setData] = useState('')
-
- if (!columns) setColumns([
-      {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name'
-      },
-      {
-        title: 'Address',
-        key: 'address',
-        className:'hide-sm',
-        render: ( record) => (
-          <> {record.address} <br/> {`${record.city}, ${record.state} ${record.zip}`}</>
-        )
-      },
-      {
-        title: 'Phone',
-        key: 'phone',
-        className:'hide-sm',
-        render: ( record) => (
-          <>{record.phonenumber}</>
-        )
-      },
-      {
-        title: 'Type',
-        key: 'type',
-        className: 'hide-sm',
-        render: ( record)=> (
-          <>
-            <Tag color="blue">{record.typename}</Tag>
-            <Tag>{record.typelevel}</Tag>
-          </>
-        )
-      }, 
-      {
-        title: 'Active',
-        key: 'isactive',
-        className:'hide-sm text-center',
-        render: (record) => (
-          record.isactive ? 
-                        <Link to="#" className="text-primary" onClick={(e)=>{deactivate(record.id)}}>Active</Link>
-                        : 
-                        <Link to="#" className="text-light-gray text-strike" onClick={(e)=>{activate(record.id)}}>Inactive</Link>
-        )
-      },
-      {
-        title: 'Actions',
-        key: 'actions',
-        className: 'text-center',
-        render: ( record) => (
-          <>
-            <Link className="btn btn-success btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${record.companyid}`}><i className="fa fa-pen-nib"></i> Edit</Link>
-            <DeleteButton confirmDelete={(e)=> clickDeleteCompany(record.companyid)} itemName="Event"/>
-          </>
-        )
-      }
-    ])
-
-  useEffect(()=>{
-    setData(companies.map((company)=>{
-      return {
-        key: company._id,
-        name: company.name,
-        address: company.companyaddress.address,
-        city: company.companyaddress.city,
-        state: company.companyaddress.state,
-        zip: company.companyaddress.zip,
-        phonenumber: company.contact.phone,
-        typename: company.companytype.name, 
-        typelevel:company.companytype.level,
-        isactive: company.isactive,
-        actions: company._id,
-        companyid: company._id,
-        id: company._id,
-      }
-  }))
-  },[companies, loading])
+  
 
  
 
@@ -119,14 +41,67 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
   return (
     <>
       {
-        !companies.length > 0 || loading || !data ? 
+        (    <>
+      {
+        !companies || loading ? 
         ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
-        (<Table 
-          columns={columns} 
-          dataSource={data} 
-          title={()=>(<Link to="/admin/bcs/companies?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Company</Link>)}
-        />)
+        (
+          <>
+            <Link to="/admin/bcs/companies?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Building</Link>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th className="hide-md">Address</th>
+                  <th className="hide-md">Phone</th>
+                  <th className="hide-md">Type</th>
+                  <th className="hide-md text-center">Active</th>
+                  <th className="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {companies && !loading && companies.map((company)=>{
+                  return (
+                    <tr key={company._id}>
+                      <td>{company.name}</td>
+                      <td className="hide-md">{(
+                          <> 
+                            {company && company.companyaddress && company.companyaddress.address && company.companyaddress.address} <br/> 
+                            {`${company && company.companyaddress && company.companyaddress.city &&company.companyaddress.city}, ${company && company.companyaddress && company.companyaddress.state && company.companyaddress.state} ${company && company.companyaddress && company.companyaddress.zip && company.companyaddress.zip}`}
+                          </>
+                        )}
+                      </td>
+                      <td className="hide-md">{company.contact.phone}</td>
+                      <td className="hide-md">{
+                        <>
+                          <Tag color="blue">{company.companytype.name}</Tag>
+                          <Tag>{company.companytype.level}</Tag>
+                        </>}
+                      </td>
+                      <td className="hide-md text-center">{(
+                          company.isactive? 
+                            <Link className="text-primary" onClick={(e)=>{deactivate(company._id)}}>Active</Link>
+                            : 
+                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(company._id)}}>Inactive</Link>
+                        )}
+                      </td>
+                      <td className="text-center">{(
+                          <>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${company._id}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <DeleteButton confirmDelete={(e)=> clickDeleteCompany(company._id)} itemName="Event"/>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </>
+        )
+      }
+    </>)
       }
     </>
   )

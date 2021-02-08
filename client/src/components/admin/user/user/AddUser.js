@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setAlert } from '../../../../redux/actions/alert'
 import { register } from '../../../../redux/actions/auth'
-import CompaniesList from '../../../layout/ui/fields/CompaniesList'
-import CompanyUserTypesList from '../../../layout/ui/fields/CompanyUserTypesList'
+import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
+import CompanyUserTypesSelect from '../../../layout/ui/fields/CompanyUserTypesSelect'
 import { Link } from 'react-router-dom'
 
 const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
@@ -64,8 +64,8 @@ const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
           <p className="lead">
             <i className="fas fa-user"></i> User Information.
           </p>
-          <CompaniesList onChange={companyChanged} value={company} />
-          <CompanyUserTypesList value={usertype} onChange={companyUserTypeChanged} companyID={company} />
+          <CompaniesSelect onChange={companyChanged} value={company} />
+          <CompanyUserTypesSelect value={usertype} onChange={companyUserTypeChanged} companyID={company} />
           <div className="form-group">
             <input 
               type="text" 

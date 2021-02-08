@@ -5,16 +5,15 @@ import { getBuildings, deactivateBuilding, activateBuilding, deleteBuilding } fr
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import { setAlert } from '../../../../redux/actions/alert'
-import {Table } from 'antd'
+import { Tag } from 'antd'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
 const ListBuildings = ( { building:{buildings, loading}, getBuildings, deactivateBuilding, activateBuilding, deleteBuilding , setAlert} ) => {
   useEffect(()=>{
     getBuildings()
-  },[getBuildings])
+  },[])
 
   const deactivate = async (id) => {
-    console.log({id}  )
     await deactivateBuilding(id)
     await getBuildings()
   }
@@ -23,7 +22,7 @@ const ListBuildings = ( { building:{buildings, loading}, getBuildings, deactivat
     await getBuildings()
   }
 
-  const deleteTheBuilding = async (id) => {
+  const clickDeleteBuilding = async (id) => {
     await deleteBuilding(id)
     .then(()=> {
       setAlert('Building deleted.','success',2000)
@@ -33,66 +32,6 @@ const ListBuildings = ( { building:{buildings, loading}, getBuildings, deactivat
       console.log(err)
     })
   }
-
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Company',
-      dataIndex: 'company',
-      key: 'company',
-      className:'hide-sm'
-    },
-    {
-      title: 'Type',
-      dataIndex: 'buildingtype',
-      key: 'buildingtype',
-      className:'hide-sm',
-      render: (buildingtype) => (
-        <>{buildingtype.toUpperCase()}</>
-      )
-    },
-    {
-      title: 'Active',
-      dataIndex: 'isactive',
-      key: 'isactive',
-      className:'hide-sm text-center',
-      render: ({isactive, id}) => (
-        isactive? 
-                      <Link className="text-primary" onClick={(e)=>{deactivate(id)}}>Active</Link>
-                      : 
-                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(id)}}>Inactive</Link>
-      )
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      className: 'text-center',
-      render: (text, record) => (
-        <>
-          <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/buildings/?action=edit&id=${record.buildingid}`}><i className="fa fa-pen-nib"></i> Edit</Link>
-
-          <DeleteButton confirmDelete={(e)=> deleteTheBuilding(record.buildingid)} itemName="Event"/>
-        </>
-      )
-    }
-  ]
-
-  const data = buildings && !loading && buildings.map((building)=>{
-    return {
-      key: building._id,
-      name: building.name,
-      company: building.company.name,
-      buildingtype: building.buildingtype,
-      isactive: {isactive: building.isactive, id: building._id},
-      actions: building._id,
-      buildingid: building._id,
-      id: building._id,
-    }
-  }) 
     
   return (
     <>
@@ -100,11 +39,58 @@ const ListBuildings = ( { building:{buildings, loading}, getBuildings, deactivat
         !buildings || loading ? 
         ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
-        (<Table 
-          columns={columns} 
-          dataSource={data} 
-          title={()=>(<Link to="/admin/bcs/buildings?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Building</Link>)}
-        />)
+        (
+          <>
+            <Link to="/admin/bcs/buildings?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Building</Link>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th className="hide-md">Address</th>
+                  <th className="hide-md">Company</th>
+                  <th className="hide-md text-center">Type</th>
+                  <th className="hide-md text-center">Active</th>
+                  <th className="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {buildings && !loading && buildings.map((building)=>{
+                  return (
+                    <tr key={building._id}>
+                      <td>{building.name}</td>
+                      <td className="hide-md">{(
+                        <> 
+                          {building.buildingaddress.address} <br/> 
+                          {`${building.buildingaddress.city}, ${building.buildingaddress.state} ${building.buildingaddress.zip}`}
+                        </>
+                      )}
+                      </td>
+                      <td className="hide-md">{building.company.name}</td>
+                      <td className="hide-md text-center">{(
+                          <Tag color="blue">{building.buildingtype.toUpperCase()}</Tag>
+                        )}
+                      </td>
+                      <td className="hide-md text-center">{(
+                          building.isactive? 
+                            <Link className="text-primary" onClick={(e)=>{deactivate(building._id)}}>Active</Link>
+                            : 
+                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(building._id)}}>Inactive</Link>
+                        )}
+                      </td>
+                      <td className="text-center">{(
+                          <>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/buildings/?action=edit&id=${building._id}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <DeleteButton confirmDelete={(e)=> clickDeleteBuilding(building._id)} itemName="Event"/>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </>
+        )
       }
     </>
   )

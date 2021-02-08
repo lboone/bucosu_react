@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getCompanyUserTypes } from '../../../../redux/actions/company'
 
-const CompanyUserTypesList = ( { company:{usertypes, loading }, getCompanyUserTypes, value, name="companyUserType", onChange, isDisabled, companyID } ) => {
+const CompanyUserTypesSelect = ( { company:{usertypes, loading }, getCompanyUserTypes, value, name="companyUserType", onChange, isDisabled, companyID } ) => {
   const [dataLoaded, setDataLoaded] = useState(false)
   const [defaultValue, setDefaultValue] = useState("")
   const [disabled, setDisabled] = useState(false)
@@ -35,7 +35,7 @@ const CompanyUserTypesList = ( { company:{usertypes, loading }, getCompanyUserTy
   )
 }
 
-CompanyUserTypesList.propTypes = {
+CompanyUserTypesSelect.propTypes = {
   getCompanyUserTypes: PropTypes.func.isRequired,
   company: PropTypes.object.isRequired,
 }
@@ -44,5 +44,5 @@ const mapStateToProps = state => ({
   company: state.company
 })
   
-export default connect(mapStateToProps, {getCompanyUserTypes})(CompanyUserTypesList)
+export default connect(mapStateToProps, {getCompanyUserTypes})(CompanyUserTypesSelect)
   

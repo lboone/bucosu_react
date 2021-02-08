@@ -5,7 +5,7 @@ import {getUser, updateUserByID } from '../../../../redux/actions/user'
 import { Link, useHistory } from 'react-router-dom'
 import { getCompanyUserTypes } from '../../../../redux/actions/company'
 import { setAlert } from '../../../../redux/actions/alert'
-import CompanyUserTypesList from '../../../layout/ui/fields/CompanyUserTypesList'
+import CompanyUserTypesSelect from '../../../layout/ui/fields/CompanyUserTypesSelect'
 import { Skeleton } from 'antd'
 
 
@@ -104,7 +104,7 @@ const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, upd
             <p className="lead">
               <i className="fas fa-user"></i> User Information.
             </p>
-            <CompanyUserTypesList onChange={onChangeUserTypes} value={companyUserType} companyID={companyID}/>
+            <CompanyUserTypesSelect onChange={onChangeUserTypes} value={companyUserType} companyID={companyID}/>
             <div className="form-group">
               <input 
                 type="text" 

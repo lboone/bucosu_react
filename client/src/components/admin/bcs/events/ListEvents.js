@@ -23,7 +23,7 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
     await getBcsEvents()
   }
 
-  const deleteEvent = async (id) => {
+  const clickDeleteEvent = async (id) => {
     await deleteBcsEvent(id)
     .then(()=> {
       setAlert('Event deleted.','success',2000)
@@ -33,69 +33,6 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
       console.log(err)
     })
   }
-
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'From Data',
-      dataIndex: 'startdate',
-      key: 'startdate',
-      className:'hide-sm',
-      render: (startdate) => (
-        <DisplayDate origDate={startdate}/>
-      )
-    },
-    {
-      title: 'To Data',
-      dataIndex: 'enddate',
-      key: 'enddate',
-      className:'hide-sm',
-      render: (enddate) => (
-        <DisplayDate origDate={enddate}/>
-      )
-    },
-    {
-      title: 'Active',
-      dataIndex: 'isactive',
-      key: 'isactive',
-      className:'hide-sm text-center',
-      render: (text, record) => (
-        record.isactive? 
-                      <Link className="text-primary" onClick={(e)=>{deactivate(record.id)}}>Active</Link>
-                      : 
-                      <Link className="text-light-gray text-strike" onClick={(e)=>{activate(record.id)}}>Inactive</Link>
-      )
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      className: 'text-center',
-      render: (text, record) => (
-        <>
-          <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${record.eventid}`}><i className="fa fa-pen-nib"></i> Edit</Link>
-
-          <DeleteButton confirmDelete={(e)=> deleteEvent(record.eventid)} itemName="Event"/>
-        </>
-      )
-    }
-  ]
-
-  const data = events && !loading && events.map((event)=>{
-    return {
-      key: event._id,
-      name: event.name,
-      startdate: event.startdate,
-      enddate: event.enddate,
-      isactive: event.isactive,
-      actions: event._id,
-      eventid: event._id,
-      id: event._id,
-    }
-  }) 
     
   return (
     <>
@@ -103,11 +40,47 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
         !events || loading ? 
         ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
-        (<Table 
-          columns={columns} 
-          dataSource={data} 
-          title={()=>(<Link to="/admin/bcs/events?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Event</Link>)}
-        />)
+        (
+          <>
+            <Link to="/admin/bcs/events?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Event</Link>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th className="hide-md">From</th>
+                  <th className="hide-md">To</th>
+                  <th className="hide-md text-center">Active</th>
+                  <th className="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {events && !loading && events.map((event)=>{
+                  return (
+                    <tr key={event._id}>
+                      <td>{event.name}</td>
+                      <td className="hide-md">{(<DisplayDate origDate={event.startdate}/>)}</td>
+                      <td className="hide-md">{(<DisplayDate origDate={event.enddate}/>)}</td>
+                      <td className="hide-md text-center">{(
+                          event.isactive? 
+                            <Link className="text-primary" onClick={(e)=>{deactivate(event._id)}}>Active</Link>
+                            : 
+                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(event._id)}}>Inactive</Link>
+                        )}
+                      </td>
+                      <td className="text-center">{(
+                          <>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${event._id}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <DeleteButton confirmDelete={(e)=> clickDeleteEvent(event._id)} itemName="Event"/>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </>
+        )
       }
     </>
   )

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { setAlert } from '../../../../redux/actions/alert'
 import { Link, useHistory } from 'react-router-dom'
 import { createBuilding } from '../../../../redux/actions/building'
-import CompaniesList from '../../../layout/ui/fields/CompaniesList'
+import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
 
 const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert } ) => {
   const history = useHistory()
@@ -25,6 +25,11 @@ const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert
   const { name, address, buildingtype, city, state, zip, lng, lat , company } = formData
 
   const onChange = e => setFormData({...formData, [e.target.name]: e.target.value })
+
+  const [isDisabled, setIsDisabled] = useState(true)
+  if(formData && formData.company !== "" && isDisabled){
+    setIsDisabled(false)
+  }
 
   const onSubmit = e => {
     e.preventDefault();
@@ -57,7 +62,7 @@ const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert
           <p className="lead">
             <i className="fas fa-building"></i> Building Information.
           </p>
-          <CompaniesList onChange={onChange} name="company" value={company} />
+          <CompaniesSelect onChange={onChange} name="company" value={company} />
           <div className="form-group">
             <input 
               type="text" 
@@ -131,7 +136,11 @@ const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert
             />
           </div>
           <br />
-          <Link to="#" onClick={(e)=> onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-user-plus"></i> Add Building</Link>
+          {
+            isDisabled ? 
+              (<Link to="#" onClick={(e)=>e.preventDefault()} className="btn btn-light btn-outline"><i className="fa fa-save"></i> Save Building</Link>) :
+              (<Link  to="#" onClick={(e)=>onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-save"></i> Save Building</Link>)
+          }
           <input type="submit" className="btn btn-primary btn-outline hidden" value="Add Building" />
           <Link to="/admin/bcs/buildings" className="btn btn-danger btn-outline" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>  
         </form>

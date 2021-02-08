@@ -870,11 +870,17 @@ span.a-type > span {
   }
 }
 
+@media (max-width: 800px) {
+  .hide-sm {
+    display: none;
+  }
+}
+
 @media (max-width: 700px) {
   .content-center {
     max-width: 100%;
   }
-  .hide-sm {
+  .hide-xsm {
     display: none;
   }
 }

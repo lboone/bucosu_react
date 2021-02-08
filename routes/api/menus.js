@@ -274,7 +274,7 @@ router.get('/', auth, async (req,res) => {
       model:"menu",
       options: {sort: {sort:1}},
       match: {
-        isactive: true
+        isactive: true,
       },
       populate: [{
         path: "companytype",
@@ -282,7 +282,23 @@ router.get('/', auth, async (req,res) => {
       },{
         path: "usertype",
         select: ["level","name"],
-      }]
+      },
+      {
+        path: "submenus",
+        model: "menu",
+        options: {sort: {sort:1}},
+        match: {
+          isactive: true,
+        },
+        populate: [{
+          path: "companytype",
+          select: ["level","name"],
+        },{
+          path: "usertype",
+          select: ["level","name"],
+        }]
+      }
+      ]
     })
     .populate({
       path: "companytype",
@@ -293,9 +309,37 @@ router.get('/', auth, async (req,res) => {
       select: ["level","name"],
     })
 
+    const checkMenu = (menu)=> {
+      return menu.companytype.level >= user.company.companytype.level && menu.usertype.level >= user.usertype.level
+    }
+        
+    const filterMenus = (menus) => {
+      return menus.filter( menu =>checkMenu(menu))
+    }
     
-    const newMenus = menus.filter(menu => menu.companytype.level >= user.company.companytype.level && menu.usertype.level >= user.usertype.level )
+    
+    let newMenus = filterMenus(menus)
 
+
+    newMenus.forEach((menu)=> {
+      if(menu.submenus.length > 0){
+        menu.submenus = filterMenus(menu.submenus)
+      }
+    })
+
+    newMenus.forEach((menu)=> {
+      if(menu.submenus.length > 0){
+        menu.submenus.forEach((subMenu)=>{
+          if(subMenu.submenus.length > 0){
+            subMenu.submenus = filterMenus(subMenu.submenus)
+          }
+        })
+      }
+    })
+
+
+
+    
     res.status(200).json(newMenus)
   } catch (err) {
     console.error(err.message)

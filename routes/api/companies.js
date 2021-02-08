@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator')
 const CompanyType = require('../../models/CompanyType')
 const Company = require('../../models/Company')
 const User = require('../../models/User')
+const Building = require('../../models/Building')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
 const Profile = require('../../models/Profile')
 
@@ -307,6 +308,7 @@ router.put('/:id/deactivate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (
     // Deactivate all company users.
     await User.updateMany({company:company._id},{isactive:false})
 
+    await Building.updateMany({company:company._id},{isactive: false})
     //deactivate the company
     company.isactive = false
     await company.save()
@@ -331,6 +333,9 @@ router.put('/:id/activate', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (re
     if(!company){
       return res.status(404).json({errors: [{msg: 'Company not found'}]})
     }
+
+    await Building.updateMany({company:company._id},{isactive: true})
+
     company.isactive = true
     await company.save()
     res.status(200).json(company)
