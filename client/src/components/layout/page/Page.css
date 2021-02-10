@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
 }
+
 .header {
   grid-column: span 12;
   border-bottom: 1px solid var(--primary-color);
@@ -24,6 +25,31 @@
   border-top: 1px solid var(--primary-color);
   padding-top: 1rem;
 }
+
+.column-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+.column-container > div {
+  padding-left: 0.5rem;
+}
+
+.column-2 {
+  grid-column: span 2;
+}
+.column-4 {
+  grid-column: span 4;
+}
+.column-6 {
+  grid-column: span 6;
+}
+.column-8 {
+  grid-column: span 8;
+}
+.column-10 {
+  grid-column: span 10;
+}
+
 h1 {
   text-align: left;
 }

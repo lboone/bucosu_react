@@ -135,6 +135,11 @@ router.get('/',access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) => {
         model: 'usertype'
       }
     })
+    .populate({
+      path: 'relationships',
+      model: 'company'
+    })
+
     res.status(200).json(companies)
   } catch (err) {
     console.error(err.message)
@@ -190,6 +195,15 @@ router.get('/:id', access(COMPANY.SCHOOLDISTRICT,USER.READER), async (req,res) =
       {
         path: 'usertypes',
         model: 'usertype'
+      }
+    })
+    .populate({
+      path: 'relationships',
+      model: 'company',
+      populate:
+      {
+        path: 'companytype',
+        model: 'companytype'
       }
     })
     if(!company){

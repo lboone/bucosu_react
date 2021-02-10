@@ -11,7 +11,7 @@ import SkeletonList from '../../../layout/feedback/SkeletonList'
 const ListBuildings = ( { building:{buildings, loading}, getBuildings, deactivateBuilding, activateBuilding, deleteBuilding , setAlert} ) => {
   useEffect(()=>{
     getBuildings()
-  },[])
+  },[getBuildings])
 
   const deactivate = async (id) => {
     await deactivateBuilding(id)

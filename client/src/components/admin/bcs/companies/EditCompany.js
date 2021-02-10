@@ -5,6 +5,10 @@ import { getCompany, updateCompany } from '../../../../redux/actions/company'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
+import {Col, Divider, Row, Tabs } from 'antd'
+import Relationships from './Relationships'
+import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
+const {TabPane} = Tabs
 
 const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany, setAlert }) => {  
   const history = useHistory()
@@ -19,14 +23,17 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
     zip: "",
     phone: "",
     website: "",
+    cmpny: "",
     logo: "",
     isactive: true,
   }
-
   const [formData, setFormData] = useState(initialState)
+  const { name, address, city, state, zip, phone, website, logo, isactive, cmpny} = formData
+  
 
   useEffect(()=>{
     setFormData({
+      ...formData,
       name: loading || !company  ? '' : company.name,
       address: loading || !company  ? '' : company.companyaddress.address,
       city: loading || !company  ? '' : company.companyaddress.city,
@@ -38,7 +45,7 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
       isactive: loading || !company ? '' : company.isactive,
     })
   }, [ company, loading ])
-  const { name, address, city, state, zip, phone, website, logo, isactive } = formData
+  
 
   
 
@@ -69,11 +76,17 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
     })
   }
 
+  const addCmpny = (e) => {
+    e.preventDefault()
+    console.log({e})
+  }
   return (
-    <div className="container-center" style={{marginTop: '5px'}}>
+    <div className="content-center" style={{marginTop: '5px'}}>
+  <Tabs tabPosition={"left"}>
+    <TabPane tab="Edit Company" key="1">
+      <>
       {company && !loading ? 
       (<form className="form" onSubmit= {e => onSubmit(e)}>
-        <br />
         <p className="lead">
           <i className="fa fa-briefcase"></i> Company Information.
         </p>
@@ -173,8 +186,46 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
       ) : (
          <SkeletonList /> 
       )
-      }      
-    </div>
+      }
+      </>  
+    </TabPane>
+    <TabPane tab="Manage Relationships" key="2">
+      
+        { company && company.relationships ? 
+          (
+            <form onChange={(e)=>e.preventDefault()} className="form">
+              <p className="lead">
+                <i className="fa fa-briefcase"></i> {`Manage Relationships for ${company.name}.`}
+              </p>
+              <br />
+              <Row justify="end" align="middle">    
+              <Col flex="auto">
+                      <CompaniesSelect 
+                        value={cmpny} 
+                        name={"cmpny"} 
+                        onChange={ e =>onChange(e)}
+                        filter={company.relationships}
+                      />
+                    </Col>
+                    <Col className="text-center" flex="100px">
+                      {cmpny ? (<Link onClick={e => addCmpny(e)} to="#" s className="btn btn-primary btn-outline"><i className="fa fa-briefcase"></i>Add</Link>) : (<Link onClick={e => e.preventDefault()} to="#" s className="btn btn-light btn-outline"><i className="fa fa-plus"></i>Add</Link>)}
+                      
+                    </Col>
+                  </Row>
+              <Relationships companies={company.relationships}/>
+            </form>
+          )
+           : 
+          (<h2>No Relationships</h2>)
+        }
+      
+      
+    </TabPane>
+    <TabPane tab="All Buildings" key="3">
+      <Divider>All Buildings</Divider>
+    </TabPane>
+  </Tabs>
+</div>
   )
 }
 

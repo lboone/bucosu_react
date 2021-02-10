@@ -10,9 +10,9 @@ import {
 } from './types'
 
 
-export const getCompanyTypes = () => async dispatch => {
+export const getUserTypes = () => async dispatch => {
   try {
-    const res = await axios.get('/api/companytypes')
+    const res = await axios.get('/api/usertypes')
     dispatch({
       type: GET_USERTYPES,
       payload: res.data

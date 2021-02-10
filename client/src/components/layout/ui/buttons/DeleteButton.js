@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 // import React from 'react'
 import { Link } from 'react-router-dom'
 import { confirmAlert } from 'react-confirm-alert'
@@ -10,8 +10,10 @@ const override = css`
 `
 
 
-const DeleteButton = ( {confirmDelete, itemName='item' } ) => {
+const DeleteButton = ( {confirmDelete, itemName='item', title="Delete" } ) => {
   const [isDeleting, setIsDeleting] = useState(false)
+  const [buttonTitle, setButtonTitle] = useState("")
+  useEffect(() => {setButtonTitle(title) }, [title])
   
 
   const confirmFunction = async () => {
@@ -35,8 +37,8 @@ const DeleteButton = ( {confirmDelete, itemName='item' } ) => {
     customUI: ({ onClose }) => {
       return (
         <div className="react__alert">
-          <h1 className="react__alert__title">Delete {itemName.toLowerCase().charAt(0).toUpperCase() + itemName.slice(1)}?</h1>
-          <p className="react__alert__body">Are you sure you want to delete this {itemName.toLowerCase()}?</p>
+          <h1 className="react__alert__title">{buttonTitle} {itemName.toLowerCase().charAt(0).toUpperCase() + itemName.slice(1)}?</h1>
+          <p className="react__alert__body">Are you sure you want to {buttonTitle.toLowerCase()} this {itemName.toLowerCase()}?</p>
           <button onClick={onClose} className="btn btn-primary">Cancel</button>
           <button
             onClick={() => {
@@ -45,7 +47,7 @@ const DeleteButton = ( {confirmDelete, itemName='item' } ) => {
             }}
             className="danger"
           >
-            Yes, Delete it!
+            Yes, {buttonTitle} it!
           </button>
         </div>
       );
@@ -59,13 +61,13 @@ const DeleteButton = ( {confirmDelete, itemName='item' } ) => {
     <Link 
       to="#"
       className="btn btn-danger btn-outline" 
-      title="Delete" 
+      title={buttonTitle} 
       onClick={(e)=> activateFunc(e)}
     >
       <i 
-        title="Delete" 
+        title={buttonTitle} 
         className="fa fa-trash"
-      ></i> Delete
+      ></i> {buttonTitle}
     </Link>
   )
 }

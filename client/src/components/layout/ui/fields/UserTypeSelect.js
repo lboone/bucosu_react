@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { getUserTypes } from '../../../../redux/actions/usertype'
 
-const UserTypesSelect = ( {usertype:{usertypes, loading}, getUserTypes, value, name="userTypeID", onChange, isDisabled} ) => {
+const UserTypesSelect = ( {usertype:{usertypes, loading}, getUserTypes, value, style, name="userTypeID", onChange, isDisabled, filter} ) => {
   const [dataLoaded, setDataLoaded] = useState(false)
   const [defaultValue, setDefaultValue] = useState("")
   const [disabled, setDisabled] = useState(false)
@@ -13,12 +13,28 @@ const UserTypesSelect = ( {usertype:{usertypes, loading}, getUserTypes, value, n
   useEffect(()=>{ (value) && setDefaultValue(value) }, [ value ])
   useEffect(()=>{ (isDisabled) && setDisabled(isDisabled) }, [ isDisabled ])
   
+  let uTypes = [];
+  if (filter && dataLoaded ){
+    uTypes = usertypes.filter((uType)=>{
+      let ok = true
+
+      filter.forEach((item)=> {
+        if(item._id === uType._id){
+          ok = false
+        }
+      })
+      return ok
+    })
+  } else if (dataLoaded) {
+    uTypes = usertypes
+  }
+
   return (
-      <div className="form-group">
+      <div style={style} className="form-group">
         <select disabled={disabled} value={defaultValue} onChange={onChange} name={name} required>
           <option key={'4156436865'} value={''}>{'Select a User Type'}</option>
         {
-            dataLoaded && usertypes.map((usertype) => {
+            dataLoaded && uTypes.map((usertype) => {
             return <option key={usertype._id} value={usertype._id}>{usertype.name.toUpperCase()}</option>
             })
           }
@@ -29,11 +45,11 @@ const UserTypesSelect = ( {usertype:{usertypes, loading}, getUserTypes, value, n
 
 UserTypesSelect.propTypes = {
   getUserTypes: PropTypes.func.isRequired,
-  companytype: PropTypes.object.isRequired,
+  usertype: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  companytype: state.companytype,
+  usertype: state.usertype,
 })
   
 export default connect(mapStateToProps, {getUserTypes})(UserTypesSelect)

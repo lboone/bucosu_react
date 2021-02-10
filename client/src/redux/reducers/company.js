@@ -24,11 +24,18 @@ const reduce = function(state = initialState, action) {
   
   switch (type) {
     case GET_COMPANIES:
-    case GET_COMPANY_RELATIONSHIPS:
       return {
         ...state,
         companies: payload,
         company: null,
+        usertypes: [],
+        loading: false,
+        error: {}
+      }
+    case GET_COMPANY_RELATIONSHIPS:
+      return {
+        ...state,
+        companies: payload,
         usertypes: [],
         loading: false,
         error: {}

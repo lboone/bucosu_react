@@ -72,18 +72,18 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
                           </>
                         )}
                       </td>
-                      <td className="hide-md">{company.contact.phone}</td>
+                      <td className="hide-md">{company && company.contact && company.contact.phone && company.contact.phone}</td>
                       <td className="hide-md">{
                         <>
-                          <Tag color="blue">{company.companytype.name}</Tag>
-                          <Tag>{company.companytype.level}</Tag>
+                          <Tag color="blue">{company && company.companytype && company.companytype.name && company.companytype.name}</Tag>
+                          <Tag>{company && company.companytype && company.companytype.level && company.companytype.level}</Tag>
                         </>}
                       </td>
                       <td className="hide-md text-center">{(
                           company.isactive? 
-                            <Link className="text-primary" onClick={(e)=>{deactivate(company._id)}}>Active</Link>
+                            <Link className="text-primary" onClick={(e)=>{deactivate(company && company._id)}}>Active</Link>
                             : 
-                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(company._id)}}>Inactive</Link>
+                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(company && company._id)}}>Inactive</Link>
                         )}
                       </td>
                       <td className="text-center">{(
