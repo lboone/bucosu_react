@@ -2,21 +2,17 @@ import axios from 'axios'
 //import {setAlert} from './alert'
 
 import {
-  GET_MENUS,
-  SET_MENU,
-  GET_SUBMENUS,
-  SET_SUBMENU,
-  GET_SUBSUBMENUS,
-  SET_SUBSUBMENU,
+  FETCH_NAV_MENUS,
+  SET_SUBNAV_MENUS,
+  SET_SIDENAV_MENUS,
   MENU_ERROR
 } from './types'
 
-
-export const getMenus = () => async dispatch => {
+export const fetchNavMenus = () => async dispatch => {
   try {
     const res = await axios.get('/api/menus')
     dispatch({
-      type: GET_MENUS,
+      type: FETCH_NAV_MENUS,
       payload: res.data
     })
   } catch (err) {
@@ -27,53 +23,16 @@ export const getMenus = () => async dispatch => {
   }
 }
 
-export const setMenu = (menu) => dispatch => {
+export const setSubNavMenus = (subNavMenus) => dispatch => {
   dispatch({
-    type: SET_MENU,
-    payload: menu
+    type: SET_SUBNAV_MENUS,
+    payload: subNavMenus
   })
 }
 
-export const getSubMenus = (menId) => async dispatch => {
-  try {
-    const res = await axios.get(`/api/menus/${menId}/submenus`)
-    dispatch({
-      type: GET_SUBMENUS,
-      payload: res.data
-    })
-  } catch (err) {
-    dispatch({
-      type: MENU_ERROR,
-      payload: {msg: err.response.statusText, status: err.response.status}
-    })    
-  }
-}
-
-export const setSubMenu = (menu) => dispatch => {
+export const setSideNavMenus = (sideNavMenus) => dispatch => {
   dispatch({
-    type: SET_SUBMENU,
-    payload: menu
-  })
-}
-
-export const getSubSubMenus = (menId) => async dispatch => {
-  try {
-    const res = await axios.get(`/api/menus/${menId}/submenus`)
-    dispatch({
-      type: GET_SUBSUBMENUS,
-      payload: res.data
-    })
-  } catch (err) {
-    dispatch({
-      type: MENU_ERROR,
-      payload: {msg: err.response.statusText, status: err.response.status}
-    })    
-  }
-}
-
-export const setSubSubMenu = (menu) => dispatch => {
-  dispatch({
-    type: SET_SUBSUBMENU,
-    payload: menu
+    type: SET_SIDENAV_MENUS,
+    payload: sideNavMenus
   })
 }

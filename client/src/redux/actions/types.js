@@ -30,6 +30,19 @@ export const DEACTIVATE_USER = 'DEACTIVATE_USER'
 export const DELETE_USER = 'DELETE_USER'
 export const USER_ERROR = 'USER_ERROR'
 
+//Menu
+export const FETCH_NAV_MENUS = "FETCH_NAV_MENUS"
+export const SET_SUBNAV_MENUS = "SET_SUBNAV_MENUS"
+export const SET_SIDENAV_MENUS = "SET_SIDENAV_MENUS"
+
+export const GET_MENUS = 'GET_MENUS'
+export const SET_MENU = 'SET_MENU'
+export const GET_SUBMENUS = 'GET_SUBMENUS'
+export const SET_SUBMENU = 'SET_SUBMENU'
+export const GET_SUBSUBMENUS = 'GET_SUBSUBMENUS'
+export const SET_SUBSUBMENU = 'SET_SUBSUBMENU'
+export const MENU_ERROR = 'MENU_ERROR'
+
 //Company
 export const GET_COMPANIES = 'GET_COMPANIES'
 export const GET_COMPANY = 'GET_COMPANY'
@@ -42,14 +55,7 @@ export const ACTIVATE_COMPANY = 'ACTIVATE_COMPANY'
 export const DELETE_COMPANY = 'DELETE_COMPANY'
 export const COMPANY_ERROR = 'COMPANY_ERROR'
 
-//Menu
-export const GET_MENUS = 'GET_MENUS'
-export const SET_MENU = 'SET_MENU'
-export const GET_SUBMENUS = 'GET_SUBMENUS'
-export const SET_SUBMENU = 'SET_SUBMENU'
-export const GET_SUBSUBMENUS = 'GET_SUBSUBMENUS'
-export const SET_SUBSUBMENU = 'SET_SUBSUBMENU'
-export const MENU_ERROR = 'MENU_ERROR'
+
 
 //BCS Events
 export const GET_BCSEVENTS = 'GET_BCSEVENTS'

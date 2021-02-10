@@ -1,85 +1,45 @@
 import {
-  GET_MENUS,
-  SET_MENU,
-  GET_SUBMENUS,
-  SET_SUBMENU,
-  GET_SUBSUBMENUS,
-  SET_SUBSUBMENU,
+  FETCH_NAV_MENUS,
+  SET_SUBNAV_MENUS,
+  SET_SIDENAV_MENUS,
   MENU_ERROR,
 } from '../actions/types'
 
 const initialState = {
-  menus: [],
-  menu: null,
-  submenus: [],
-  submenu: null,
-  subsubmenus: [],
-  subsubmenu: null,
+  navmenus: [],
+  subnavmenus: [],
+  sidenavmenus: [],
   loading: true,
   error: {}
 }
 
 const reduce = function(state = initialState, action) {
   const {type, payload} = action
-  
   switch (type) {
-    case GET_MENUS:
+    case FETCH_NAV_MENUS:
       return {
         ...state,
-        menus: payload,
-        menu: null,
-        submenus: [],
-        submenu: null,
-        subsubmenus: [],
-        subsubmenu: null,
+        navmenus: payload,
+        subnavmenus: [],
+        sidenavmenus: [],
         loading: false,
         error: {}
       }
-    case SET_MENU:
+    case SET_SUBNAV_MENUS:
       return {
         ...state,
-        menu: payload,
-        submenus: null,
-        submenu: null,
-        subsubmenus: [],
-        subsubmenu: null,
+        subnavmenus: payload,
+        sidenavmenus: [],
         loading: false,
         error: {}
       }
-    case GET_SUBMENUS:
+    case SET_SIDENAV_MENUS:
       return {
         ...state,
-        submenus: payload,
-        submenu: null,
-        subsubmenus: [],
-        subsubmenu: null,
+        sidenavmenus: payload,
         loading: false,
         error: {}
-      }
-    case SET_SUBMENU:
-      return {
-        ...state,
-        submenu: payload,
-        subsubmenus: [],
-        subsubmenu: null,
-        loading: false,
-        error: {}
-      }
-    case GET_SUBSUBMENUS:
-      return {
-        ...state,
-        subsubmenus: payload,
-        subsubmenu: null,
-        loading: false,
-        error: {}
-      }
-    case SET_SUBSUBMENU:
-      return {
-        ...state,
-        subsubmenu: payload,
-        loading: false,
-        error: {}
-      }      
+      }     
     case MENU_ERROR:
       return {
         ...state,

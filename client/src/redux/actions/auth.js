@@ -16,7 +16,6 @@ import {
   getItem, 
 } from '../../utils/manageLocalStorage'
 import {getCurrentProfile} from './profile'
-import { getMenus } from './menu'
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -39,7 +38,6 @@ export const loadUser = () => async dispatch => {
       payload
     })
     dispatch(getCurrentProfile())
-    dispatch(getMenus())
     
   } catch (err) {
     dispatch({

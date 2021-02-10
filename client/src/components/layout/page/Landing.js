@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { ACCESSTYPES } from '../../utils/constants';
+import { ACCESSTYPES } from '../../../utils/constants';
 
 const Landing = ( { auth: { isAuthenticated, loading, level } }) => {
   const {COMPANY, USER} = ACCESSTYPES;

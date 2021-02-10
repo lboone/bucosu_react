@@ -7,8 +7,8 @@ import store from './store'
 import { loadUser } from './redux/actions/auth'
 
 // Components
-import Navbar  from './components/layout/Navbar'
-import Landing from './components/layout/Landing'
+import Navbar  from './components/layout/display/navigation/Navbar'
+import Landing from './components/layout/page/Landing'
 import Login from './components/auth/Login'
 
 // Routes

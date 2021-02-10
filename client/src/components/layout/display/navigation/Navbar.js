@@ -2,49 +2,51 @@ import React, { Fragment, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { logout } from '../../redux/actions/auth'
+import { logout } from '../../../../redux/actions/auth'
 import { useLocation } from 'react-router-dom'
-import { getMenus, setMenu } from '../../redux/actions/menu'
-import Menu from './Menu'
+import { fetchNavMenus, setSubNavMenus } from '../../../../redux/actions/menu'
+import SubNavbar from './SubNavbar'
 
-const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu, getMenus, setMenu}) => {
-  const loc = useLocation().pathname
-  
+const Navbar = ({ auth: { isAuthenticated, loading, user }, logout,  menu,  fetchNavMenus, setSubNavMenus}) => {
+  const location = useLocation().pathname.split('/')[1]
   useEffect(() => {
-    if(menu && !menu.loading && !menu.menus){
-      getMenus()
+    if(menu && !menu.navmenus.length > 0 && isAuthenticated){
+      fetchNavMenus()
     }
-    if(menu.menus && !menu.loading && !menu.menu){
-      menu.menus.forEach((menu) => {
-        const newLoc = loc.split('/')
-          if (newLoc[1] === menu.link.split('/')[1]) {
-            setMenu(menu._id) 
+  },[menu, fetchNavMenus, isAuthenticated])
+
+  useEffect(()=>{
+    if(menu && !menu.loading && menu.navmenus && !menu.subnavmenus.length > 0){
+      menu.navmenus.forEach((navmenu) => {
+        const menuLoc = navmenu.link.split('/')[1]
+          if (location === menuLoc) {
+            setSubNavMenus(navmenu.submenus) 
           }
       })
     }
-  }, [getMenus, menu, setMenu, loc])
+  },[menu, setSubNavMenus, location])
   
-  const onClick = (menuId)=> {
-    setMenu(menuId)
+  const onClick = (index)=> {
+    if(menu && menu.navmenus && menu.navmenus[index] && menu.navmenus[index].submenus.length > 0)
+    setSubNavMenus(menu.navmenus[index].submenus)
   }
   
   const authLinks = (
     <ul>
-      {menu.menus &&
-        menu.menus.map((menu) => {
-          //console.log({navbar:{'loc.split': loc.split('/')[1], link: menu.link}})
+      {menu.navmenus &&
+        menu.navmenus.map((navmenu, index) => {
           return (
-            <li key={menu._id}>
+            <li key={navmenu._id}>
               <Link 
-                to={menu.link} 
-                onClick={(e)=>onClick(menu._id)}
-                className={loc.split('/')[1] === menu.link.split('/')[1] ? 'selected' : ''}
+                to={navmenu.link} 
+                onClick={(e)=>onClick(index)}
+                className={location === navmenu.link.split('/')[1] ? 'selected' : ''}
               >
                 <i 
-                  className={`fa ${menu.icon}`}
-                  title={menu.label}
+                  className={`fa ${navmenu.icon}`}
+                  title={navmenu.label}
                 ></i>{' '}
-                <span className="hide-md">{menu.label}</span>
+                <span className="hide-md">{navmenu.label}</span>
               </Link>
             </li>
           )
@@ -72,20 +74,20 @@ const Navbar = ({ auth: { isAuthenticated, loading, level, user }, logout,  menu
     <Fragment>
       <nav className="navbar bg-dark">
         <h1>
-          <Link onClick={getMenus} to="/">
+          <Link to="/" onClick={(e)=>onClick(0)}>
             <span><strong>BUCOSU</strong><span style={{color: 'lightgray', fontWeight: '100'}}>.com</span></span>
           </Link>
         </h1>
         { !loading && (<Fragment>{ isAuthenticated ? authLinks : guestLinks }</Fragment>) }
       </nav>
-      <Menu/>
+      <SubNavbar/>
     </Fragment>
   )
 }
 
 Navbar.propTypes = {
-  getMenus: PropTypes.func.isRequired,
-  setMenu: PropTypes.func.isRequired,
+  fetchNavMenus: PropTypes.func.isRequired,
+  setSubNavMenus: PropTypes.func.isRequired,
   menu: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
@@ -97,4 +99,4 @@ const mapStateToProps = state => ({
 
 })
 
-export default connect(mapStateToProps, { logout, getMenus, setMenu })(Navbar)
+export default connect(mapStateToProps, { logout, fetchNavMenus, setSubNavMenus })(Navbar)
