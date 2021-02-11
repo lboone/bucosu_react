@@ -7,7 +7,7 @@ import { URLContext } from '../../../../URLContext'
 
 
 const UsersContainer = ( ) => {
-  const {action, id} = useContext(URLContext)
+  const {action, id, index} = useContext(URLContext)
   let finalComponent = null;
   let title = null;
   switch (action) {  
@@ -16,7 +16,7 @@ const UsersContainer = ( ) => {
       title = 'New Building'
       break;
     case 'edit':
-      finalComponent = (<EditBuilding id={id}/>)
+      finalComponent = (<EditBuilding id={id} index={index}/>)
       title = 'Edit Building'
       break;
     default:

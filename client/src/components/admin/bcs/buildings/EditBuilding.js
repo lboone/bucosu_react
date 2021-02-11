@@ -1,15 +1,19 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getBuilding, updateBuilding } from '../../../../redux/actions/building'
+import { adminGetBuildings, adminUpdateBuilding } from '../../../../redux/actions/admin/building'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
-const EditBuilding = ({ building:{building, loading}, id, getBuilding, updateBuilding, setAlert }) => {  
-  const history = useHistory()
 
-  useEffect(()=>{ id && getBuilding(id) } , [ id , getBuilding ] )
+const EditBuilding = ({ adminBuilding:{buildings}, adminGetBuildings, adminUpdateBuilding, setAlert, index }) => {  
+  const history = useHistory()
+  const [building, setBuilding] = useState(null)
+  const [buildingIndex, setBuildingIndex] = useState(null)
+
+  useEffect(()=> index && setBuildingIndex(index), [ index ])
+  useEffect(() => buildingIndex && !building && buildings && buildings.length > 0 && setBuilding(buildings[buildingIndex]), [ buildingIndex,building, buildings ])
 
   const initialState = {
     name: "",
@@ -26,16 +30,17 @@ const EditBuilding = ({ building:{building, loading}, id, getBuilding, updateBui
 
   useEffect(()=>{
     setFormData({
-      name: loading || !building  ? '' : building.name,
-      buildingtype: loading || !building ? '' : building.buildingtype,
-      address: loading || !building  ? '' : building.buildingaddress.address,
-      city: loading || !building  ? '' : building.buildingaddress.city,
-      state: loading || !building  ? '' : building.buildingaddress.state,
-      zip: loading || !building  ? '' : building.buildingaddress.zip,
-      lng: loading || !building ? '' : building.buildingaddress.location.coordinates[0],
-      lat: loading || !building ? '' : building.buildingaddress.location.coordinates[1],
+      ...formData,
+      name: !building  ? '' : building.name,
+      buildingtype: !building ? '' : building.buildingtype,
+      address: !building  ? '' : building.buildingaddress.address,
+      city: !building  ? '' : building.buildingaddress.city,
+      state: !building  ? '' : building.buildingaddress.state,
+      zip: !building  ? '' : building.buildingaddress.zip,
+      lng: !building ? '' : building.buildingaddress.location.coordinates[0],
+      lat: !building ? '' : building.buildingaddress.location.coordinates[1],
     })
-  }, [ building, loading ])
+  }, [ building ])
   const { name, buildingtype, address, city, state, zip, lng, lat } = formData
 
   
@@ -44,7 +49,7 @@ const EditBuilding = ({ building:{building, loading}, id, getBuilding, updateBui
 
   const onSubmit = e => {
     e.preventDefault()
-    updateBuilding({
+    adminUpdateBuilding({
       name, 
       buildingtype,
       address,
@@ -53,10 +58,11 @@ const EditBuilding = ({ building:{building, loading}, id, getBuilding, updateBui
       zip,
       lng,
       lat,
-      id
+      id: building._id
     })
     .then(()=>{
-      setAlert('Building has been updated','success',3000)
+      setAlert('Building has been updated','success',2000)
+      adminGetBuildings()
       setTimeout(()=>{
         history.push('./')
       },2500)
@@ -68,7 +74,7 @@ const EditBuilding = ({ building:{building, loading}, id, getBuilding, updateBui
 
   return (
       <div className="container-center" style={{marginTop:'5px'}}>
-      {building && !loading ? (  <form className="form"  onSubmit={e => onSubmit(e)}>
+      {building ? (  <form className="form"  onSubmit={e => onSubmit(e)}>
           <br />
           <p className="lead">
             <i className="fas fa-building"></i> Building Information.
@@ -156,13 +162,14 @@ const EditBuilding = ({ building:{building, loading}, id, getBuilding, updateBui
 }
 
 EditBuilding.propTypes = {
-  getBuilding: PropTypes.func.isRequired,
-  updateBuilding: PropTypes.func.isRequired,
+  adminGetBuildings: PropTypes.func.isRequired,
+  adminUpdateBuilding: PropTypes.func.isRequired,
+  adminBuilding: PropTypes.object.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state)=> ({
-  building: state.building
+  adminBuilding: state.adminBuilding
 })
 
-export default connect(mapStateToProps,{getBuilding, setAlert, updateBuilding})(EditBuilding)
+export default connect(mapStateToProps,{adminGetBuildings, setAlert, adminUpdateBuilding})(EditBuilding)

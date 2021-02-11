@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { setAlert } from '../../../../redux/actions/alert'
 import { Link, useHistory } from 'react-router-dom'
-import { createBuilding } from '../../../../redux/actions/building'
+import { adminCreateBuilding, adminGetBuildings} from '../../../../redux/actions/admin/building'
 import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
 
-const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert } ) => {
+const AddBuilding = ( { adminBuilding:{ buildings, loading }, adminCreateBuilding, adminGetBuildings, setAlert } ) => {
   const history = useHistory()
- 
+
   const initialState = {
     name: '',
     address: '',
@@ -34,15 +34,16 @@ const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert
   const onSubmit = e => {
     e.preventDefault();
     if(company ){
-      createBuilding({
+      adminCreateBuilding({
         name, address, buildingtype, city, state, zip, lng, lat, company
       })
       .then(()=>{
         setFormData({ ...initialState });
+        adminGetBuildings()
         setAlert('Building has been created.','success',2000)
         setTimeout(() => {
           history.push('/admin/bcs/buildings')
-        }, 2000);
+        }, 3000);
       })
       .catch((e)=>{
         console.log({error: e})
@@ -51,8 +52,6 @@ const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert
       setAlert('You must select a Company!','danger',3000)
     }
   }
-
-  console.log({formData})
 
   return (
     
@@ -150,14 +149,15 @@ const AddBuilding = ( { building:{ building, loading }, createBuilding, setAlert
 }
 
 AddBuilding.propTypes = {
-  createBuilding: PropTypes.func.isRequired,
+  adminCreateBuilding: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
-  building: PropTypes.object.isRequired,
+  adminGetBuildings: PropTypes.func.isRequired,
+  adminBuilding: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  building: state.building,
+  adminBuilding: state.adminBuilding,
 })
   
-export default connect(mapStateToProps, {createBuilding, setAlert})(AddBuilding)
+export default connect(mapStateToProps, {adminCreateBuilding, adminGetBuildings, setAlert})(AddBuilding)
   
