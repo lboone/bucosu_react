@@ -1,15 +1,14 @@
 import {
-  GET_COMPANYTYPES,
-  GET_COMPANYTYPE,
-  EDIT_COMPANYTYPE,
-  CREATE_COMPANYTYPE,
-  DELETE_COMPANYTYPE,
-  COMPANYTYPE_ERROR,
-} from '../actions/types'
+  ADMIN_GET_COMPANYTYPES,
+  ADMIN_UPDATE_COMPANYTYPES,
+  ADMIN_EDIT_COMPANYTYPE,
+  ADMIN_CREATE_COMPANYTYPE,
+  ADMIN_DELETE_COMPANYTYPE,
+  ADMIN_COMPANYTYPE_ERROR,
+} from '../../actions/types'
 
 const initialState = {
   companytypes: [],
-  companytype: null,
   loading: true,
   error: {}
 }
@@ -18,31 +17,23 @@ const reduce = function(state = initialState, action) {
   const {type, payload} = action
   
   switch (type) {
-    case GET_COMPANYTYPES:
+    case ADMIN_GET_COMPANYTYPES:
+    case ADMIN_UPDATE_COMPANYTYPES:
       return {
         ...state,
         companytypes: payload,
-        companytype: null,
         loading: false,
         error: {}
       }
-    case GET_COMPANYTYPE:
-    case CREATE_COMPANYTYPE:
-    case EDIT_COMPANYTYPE:
+    case ADMIN_CREATE_COMPANYTYPE:
+    case ADMIN_EDIT_COMPANYTYPE:
+    case ADMIN_DELETE_COMPANYTYPE:
       return {
         ...state,
-        companytype: payload,
         loading: false,
         error: {}
       }
-    case DELETE_COMPANYTYPE:
-      return {
-        ...state,
-        companytype: null,
-        loading: false,
-        error: {}
-      }
-    case COMPANYTYPE_ERROR:
+    case ADMIN_COMPANYTYPE_ERROR:
       return {
         ...state,
         error: payload,

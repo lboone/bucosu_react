@@ -4,13 +4,13 @@ import auth from './auth'
 import profile from './profile'
 import company  from './company'
 import menu from './menu'
-import companytype from './companytype'
 import building from './building'
 import usertype from './usertype'
 import adminUser from './admin/user'
 import adminBcsEvent from './admin/bcsevent'
 import adminCompany from './admin/company'
 import adminBuilding from './admin/building'
+import adminCompanyType from './admin/companytype'
 
 const appReducer = combineReducers({
   alert,
@@ -18,13 +18,13 @@ const appReducer = combineReducers({
   profile,
   company,
   menu,
-  companytype,
   building,
   usertype,
   adminUser,
   adminBcsEvent,
   adminCompany,
-  adminBuilding
+  adminBuilding,
+  adminCompanyType
 })
 
 const rootReducer = (state, action) => {

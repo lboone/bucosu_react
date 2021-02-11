@@ -1,23 +1,23 @@
 import React, { useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCompanyTypes, deleteCompanyType } from '../../../../redux/actions/companytype'
+import { adminGetCompanyTypes, adminDeleteCompanyType, adminUpdateCompanyTypes} from '../../../../redux/actions/admin/companytype'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
-const ListCompanyTypes = ( { companytype:{companytypes, loading}, getCompanyTypes,deleteCompanyType , setAlert} ) => {
-  useEffect(()=>{
-    getCompanyTypes()
-  },[getCompanyTypes])
+const ListCompanyTypes = ( { adminCompanyType:{companytypes, loading}, adminGetCompanyTypes,adminDeleteCompanyType, adminUpdateCompanyTypes,  setAlert} ) => {
+  useEffect(()=> loading && companytypes && !companytypes.length > 0 && adminGetCompanyTypes(), [loading, companytypes, adminGetCompanyTypes])
 
 
-  const clickDeleteEvent = async (id) => {
-    await deleteCompanyType(id)
+  const clickDeleteEvent = async ({id, index}) => {
+    await adminDeleteCompanyType(id)
     .then(()=> {
+      const newCompanyTypes = [...companytypes]
+      newCompanyTypes.splice(index,1)
+      adminUpdateCompanyTypes(newCompanyTypes)
       setAlert('Company Type deleted.','success',2000)
-      getCompanyTypes()
     })
     .catch((err)=>{
       console.log(err)
@@ -43,7 +43,7 @@ const ListCompanyTypes = ( { companytype:{companytypes, loading}, getCompanyType
                 </tr>
               </thead>
               <tbody>
-                {companytypes && !loading && companytypes.map((companytype)=>{
+                {companytypes && !loading && companytypes.map((companytype, index)=>{
                   return (
                     <tr key={companytype._id}>
                       <td>{companytype.name}</td>
@@ -51,8 +51,8 @@ const ListCompanyTypes = ( { companytype:{companytypes, loading}, getCompanyType
                       <td className="hide-md">{companytype.level}</td>
                       <td className="text-center">{(
                           <>
-                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/company-types/?action=edit&id=${companytype._id}`}><i className="fa fa-pen-nib"></i> Edit</Link>
-                            <DeleteButton confirmDelete={(e)=> clickDeleteEvent(companytype._id)} itemName="Company Type"/>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/company-types/?action=edit&index=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <DeleteButton confirmDelete={(e)=> clickDeleteEvent({id:companytype._id,index})} itemName="Company Type"/>
                           </>
                         )}
                       </td>
@@ -69,15 +69,16 @@ const ListCompanyTypes = ( { companytype:{companytypes, loading}, getCompanyType
 }
 
 ListCompanyTypes.propTypes = {
-  companytype: PropTypes.object.isRequired,
-  getCompanyTypes: PropTypes.func.isRequired,
-  deleteCompanyType: PropTypes.func.isRequired,
+  adminCompanyType: PropTypes.object.isRequired,
+  adminGetCompanyTypes: PropTypes.func.isRequired,
+  adminDeleteCompanyType: PropTypes.func.isRequired,
+  adminUpdateCompanyTypes: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  companytype: state.companytype,
+  adminCompanyType: state.adminCompanyType,
 })
   
-export default connect(mapStateToProps, {getCompanyTypes, deleteCompanyType, setAlert})(ListCompanyTypes)
+export default connect(mapStateToProps, {adminGetCompanyTypes, adminDeleteCompanyType, adminUpdateCompanyTypes, setAlert})(ListCompanyTypes)
   

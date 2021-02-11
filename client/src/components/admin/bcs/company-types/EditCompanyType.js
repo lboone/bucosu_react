@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { editCompanyType, getCompanyType } from '../../../../redux/actions/companytype'
+import { adminEditCompanyType, adminGetCompanyTypes  } from '../../../../redux/actions/admin/companytype'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
@@ -10,10 +10,13 @@ import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import {Row, Col, Tabs } from 'antd'
 const { TabPane } = Tabs
 
-const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, setAlert, id , getCompanyType}) => {  
+const EditCompanyType = ({ adminCompanyType:{companytypes}, adminEditCompanyType, adminGetCompanyTypes, setAlert, index  }) => {  
   const history = useHistory()
+  const [companyType, setCompanyType] = useState(null)
+  const [companyTypeIndex, setCompanyTypeIndex] = useState(null)
 
-  useEffect(()=>{ id && getCompanyType(id) } , [ id , getCompanyType ] )
+  useEffect(()=> index && setCompanyTypeIndex(index), [index])
+  useEffect(()=> companyTypeIndex && !companyType && companytypes && companytypes.length > 0 && setCompanyType(companytypes[companyTypeIndex]),[companyTypeIndex, companyType, companytypes])
   
   const initialState = {
     name: "",
@@ -26,11 +29,11 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
   useEffect(()=>{
     setFormData({
       ...formData,
-      name: loading || !companytype  ? '' : companytype.name,
-      description: loading || !companytype  ? '' : companytype.description,
-      level: loading || !companytype ? '' : companytype.level,
+      name: !companyType  ? '' : companyType.name,
+      description: !companyType  ? '' : companyType.description,
+      level: !companyType ? '' : companyType.level,
     })
-  }, [ companytype, loading ])
+  }, [ companyType ])
   
   const { name, description, level, usertype } = formData
   
@@ -46,15 +49,15 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
   }
   const onSubmit = e => {
     e.preventDefault()
-    editCompanyType({
+    adminEditCompanyType({
       name, 
       description, 
       level, 
-      id
+      id:companyType._id
     })
     .then(()=>{
-      setFormData({...initialState})
       setAlert('Company Type has been saved','success',2000)
+      adminGetCompanyTypes()
       setTimeout(()=>{
         history.push('/admin/bcs/company-types')
       },2500)
@@ -68,7 +71,7 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
       <Tabs tabPosition={"left"}>
         <TabPane tab="Edit Company Type" key="1">
         <>
-          {companytype && !loading ? (
+          {companyType ? (
           <form className="form" onSubmit= {e => onSubmit(e)}>
             <p className="lead">
               <i className="fa fa-business-time"></i> Company Type Information.
@@ -117,7 +120,7 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
         <TabPane tab="Manage User Types" key="2">
         <>
           {
-            !companytype || !companytype.usertypes || loading ? 
+            !companyType || !companyType.usertypes ? 
             ( <SkeletonList  rows={4} paragraphs={4} /> )
             :
             (
@@ -133,7 +136,7 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
                         value={usertype} 
                         name={"usertype"} 
                         onChange={ e =>onChange(e)}
-                        filter={companytype.usertypes}
+                        filter={companyType.usertypes}
                       />
                     </Col>
                     <Col className="text-center" flex="100px">
@@ -152,7 +155,7 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
                     </tr>
                   </thead>
                   <tbody>
-                    {companytype && companytype.usertypes && companytype.usertypes.map((usertype, index)=>{
+                    {companyType && companyType.usertypes && companyType.usertypes.map((usertype, index)=>{
                       return (
                         <tr key={usertype._id}>
                           <td>{usertype.name}</td>
@@ -180,14 +183,14 @@ const EditCompanyType = ({ companytype:{loading, companytype}, editCompanyType, 
 }
 
 EditCompanyType.propTypes = {
-  editCompanyType: PropTypes.func.isRequired,
-  getCompanyType: PropTypes.func.isRequired,
+  adminEditCompanyType: PropTypes.func.isRequired,
+  adminGetCompanyTypes: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
-  companytype: PropTypes.object.isRequired,
+  adminCompanyType: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state)=> ({
-  companytype: state.companytype
+  adminCompanyType: state.adminCompanyType
 })
 
-export default connect(mapStateToProps,{editCompanyType, setAlert, getCompanyType})(EditCompanyType)
+export default connect(mapStateToProps,{adminEditCompanyType, adminGetCompanyTypes, setAlert, })(EditCompanyType)

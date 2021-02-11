@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCompanyTypes } from '../../../../redux/actions/companytype'
+import { adminGetCompanyTypes } from '../../../../redux/actions/admin/companytype'
 
-const CompanyTypesSelect = ( {companytype:{companytypes, loading}, getCompanyTypes, value, name="companyTypeID", onChange, isDisabled} ) => {
+const CompanyTypesSelect = ( {adminCompanyType:{companytypes, loading}, adminGetCompanyTypes, value, name="companyTypeID", onChange, isDisabled} ) => {
   const [dataLoaded, setDataLoaded] = useState(false)
   const [defaultValue, setDefaultValue] = useState("")
   const [disabled, setDisabled] = useState(false)
 
-  useEffect(() => { !dataLoaded && getCompanyTypes() }, [ dataLoaded, getCompanyTypes ])
+  useEffect(() => { !dataLoaded && adminGetCompanyTypes() }, [ dataLoaded, adminGetCompanyTypes ])
   useEffect(()=>{ (companytypes && companytypes.length > 0 && !loading) && setDataLoaded(true) }, [companytypes, loading])
   useEffect(()=>{ (value) && setDefaultValue(value) }, [ value ])
   useEffect(()=>{ (isDisabled) && setDisabled(isDisabled) }, [ isDisabled ])
@@ -28,13 +28,13 @@ const CompanyTypesSelect = ( {companytype:{companytypes, loading}, getCompanyTyp
 }
 
 CompanyTypesSelect.propTypes = {
-  getCompanyTypes: PropTypes.func.isRequired,
-  companytype: PropTypes.object.isRequired,
+  adminGetCompanyTypes: PropTypes.func.isRequired,
+  adminCompanyType: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  companytype: state.companytype,
+  adminCompanyType: state.adminCompanyType,
 })
   
-export default connect(mapStateToProps, {getCompanyTypes})(CompanyTypesSelect)
+export default connect(mapStateToProps, {adminGetCompanyTypes})(CompanyTypesSelect)
   

@@ -1,49 +1,40 @@
 import axios from 'axios'
-import { setAlert } from './alert'
+import { setAlert } from '../alert'
 
 import {
-  GET_COMPANYTYPES,
-  GET_COMPANYTYPE,
-  EDIT_COMPANYTYPE,
-  CREATE_COMPANYTYPE,
-  DELETE_COMPANYTYPE,
-  COMPANYTYPE_ERROR
-} from './types'
+  ADMIN_GET_COMPANYTYPES,
+  ADMIN_UPDATE_COMPANYTYPES,
+  ADMIN_EDIT_COMPANYTYPE,
+  ADMIN_CREATE_COMPANYTYPE,
+  ADMIN_DELETE_COMPANYTYPE,
+  ADMIN_COMPANYTYPE_ERROR,
+} from '../types'
 
 
-export const getCompanyTypes = () => async dispatch => {
+export const adminGetCompanyTypes = () => async dispatch => {
   try {
     const res = await axios.get('/api/companytypes')
     dispatch({
-      type: GET_COMPANYTYPES,
+      type: ADMIN_GET_COMPANYTYPES,
       payload: res.data
     })
   } catch (err) {
     dispatch({
-      type: COMPANYTYPE_ERROR,
+      type: ADMIN_COMPANYTYPE_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
     })    
     throw err
   }
 }
 
-export const getCompanyType = (ctid) => async dispatch => {
-  try {
-    const res = await axios.get(`/api/companytypes/${ctid}`)
+export const adminUpdateCompanyTypes = (companyTypes) => async dispatch => {
     dispatch({
-      type: GET_COMPANYTYPE,
-      payload: res.data
+      type: ADMIN_UPDATE_COMPANYTYPES,
+      payload: companyTypes
     })
-  } catch (err) {
-    dispatch({
-      type: COMPANYTYPE_ERROR,
-      payload: {msg: err.response.statusText, status: err.response.status}
-    })
-    throw err
-  }
 }
 
-export const editCompanyType = ({name, description, level, id}) => async dispatch => {
+export const adminEditCompanyType = ({name, description, level, id}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -53,7 +44,7 @@ export const editCompanyType = ({name, description, level, id}) => async dispatc
   try {
     const res = await axios.put(`/api/companytypes/${id}`, body, config )
     dispatch({
-      type:   EDIT_COMPANYTYPE,
+      type:   ADMIN_EDIT_COMPANYTYPE,
       payload: res.data
     })
     setAlert('Company Type successfully edited','success',3000)
@@ -63,13 +54,14 @@ export const editCompanyType = ({name, description, level, id}) => async dispatc
       errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
     }
     dispatch({
-      type: COMPANYTYPE_ERROR
+      type: ADMIN_COMPANYTYPE_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status}
     })
     throw err
   }
 }
 
-export const createCompanyType = ({name, description, level}) => async dispatch => {
+export const adminCreateCompanyType = ({name, description, level}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -79,7 +71,7 @@ export const createCompanyType = ({name, description, level}) => async dispatch 
   try {
     const res = await axios.post(`/api/companytypes`, body, config )
     dispatch({
-      type:   CREATE_COMPANYTYPE,
+      type:   ADMIN_CREATE_COMPANYTYPE,
       payload: res.data
     })
     setAlert('Company Type added successfully','success',3000)
@@ -89,18 +81,19 @@ export const createCompanyType = ({name, description, level}) => async dispatch 
       errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
     }
     dispatch({
-      type: COMPANYTYPE_ERROR
+      type: ADMIN_COMPANYTYPE_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status}
     })
     throw err
   }
 }
 
-export const deleteCompanyType = (ctid) => async dispatch => {
+export const adminDeleteCompanyType = (ctid) => async dispatch => {
   try{
     const res = await axios.delete(`/api/companytypes/${ctid}`)
     dispatch({
-      type: DELETE_COMPANYTYPE,
-      payload: res.data
+      type: ADMIN_DELETE_COMPANYTYPE,
+      ADMIN_payload: res.data
     })
     setAlert('Company Type deleted successfully','success',3000)
   } catch (err) {
@@ -109,7 +102,8 @@ export const deleteCompanyType = (ctid) => async dispatch => {
       errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
     }
     dispatch({
-      type: COMPANYTYPE_ERROR
+      type: ADMIN_COMPANYTYPE_ERROR,
+      payload: {msg: err.response.statusText, status: err.response.status}
     })
     throw err
   }
