@@ -7,7 +7,7 @@ import { URLContext } from '../../../../URLContext'
 
 
 const CompaniesContainer = () => {
-  const {action, id} = useContext(URLContext)
+  const {action, id, index} = useContext(URLContext)
   let finalComponent = null;
   let title = null;
   switch (action) {  
@@ -16,7 +16,7 @@ const CompaniesContainer = () => {
       title = 'New Company'
       break;
     case 'edit':
-      finalComponent = (<EditCompany id={id}/>)
+      finalComponent = (<EditCompany index={index} id={id} />)      
       title = 'Edit Company'
       break;
     default:

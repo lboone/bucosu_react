@@ -7,7 +7,7 @@ import { URLContext } from '../../../../URLContext'
 
 
 const EventsContainer = () => {
-  const {action, id} = useContext(URLContext)
+  const {action, id, index} = useContext(URLContext)
   let finalComponent = null;
   let title = null;
   switch (action) {  
@@ -16,7 +16,7 @@ const EventsContainer = () => {
       title = 'New Event'
       break;
     case 'edit':
-      finalComponent = (<EditEvent id={id}/>)
+      finalComponent = (<EditEvent id={id} index={index}/>)
       title = 'Edit Event'
       break;
     default:

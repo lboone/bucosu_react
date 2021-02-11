@@ -10,13 +10,12 @@ import Relationships from './Relationships'
 import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
 const {TabPane} = Tabs
 
-const EditCompany = ({ adminCompany:{companies, loading}, id, adminGetCompanies, adminUpdateCompany, setAlert }) => {  
+const EditCompany = ({ adminCompany:{companies, loading}, index, adminGetCompanies, adminUpdateCompany, setAlert }) => {  
   const history = useHistory()
   const [company, setCompany] = useState(null)
   const [companyIndex, setCompanyIndex] = useState(null)
 
-
-  useEffect(()=> id && setCompanyIndex(id), [ id ])
+  useEffect(()=> index && setCompanyIndex(index), [ index ])
   useEffect(() => companyIndex && !company && companies && companies.length > 0 && setCompany(companies[companyIndex]), [ companyIndex,company, companies ])
 
   const initialState = {

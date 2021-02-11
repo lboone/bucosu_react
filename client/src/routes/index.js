@@ -21,8 +21,9 @@ export default function AllRoutes (){
   
   const action = params && params.action ? params.action : null
   const id = params && params.id ? params.id : null 
+  const index = params && params.index ? params.index : null
   return (
-    <URLContext.Provider value={{action, id, params}}>
+    <URLContext.Provider value={{action, id, index, params}}>
       <AdminRoutes />
       <BcsRoutes />
       <DashboardRoutes />

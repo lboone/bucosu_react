@@ -89,7 +89,7 @@ const ListCompanies = ( { adminCompany:{companies, loading}, adminGetCompanies, 
                       </td>
                       <td className="text-center">{(
                           <>
-                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&index=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
                             <DeleteButton confirmDelete={(e)=> clickadminDeleteCompany({id: company._id, index})} itemName="Event"/>
                           </>
                         )}

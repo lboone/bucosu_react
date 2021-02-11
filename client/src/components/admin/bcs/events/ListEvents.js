@@ -79,7 +79,7 @@ const ListEvents = ( { adminBcsEvent:{bcsevents, loading}, adminGetBcsEvents, ad
                       </td>
                       <td className="text-center">{(
                           <>
-                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&index=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
                             <DeleteButton confirmDelete={(e)=> clickDeleteEvent({id: bcsevent._id, index})} itemName="Event"/>
                           </>
                         )}

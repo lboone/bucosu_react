@@ -8,13 +8,13 @@ import moment from 'moment'
 import {formatDate} from '../../../../utils/globalFunctions'
 import { Skeleton } from 'antd'
 
-const EditEvent = ({ adminBcsEvent:{bcsevents}, adminUpdateBcsEvent, setAlert, id , adminGetBcsEvents}) => {  
+const EditEvent = ({ adminBcsEvent:{bcsevents}, adminUpdateBcsEvent, setAlert, index , adminGetBcsEvents}) => {  
   const history = useHistory()
   const [bcsEvent, setBcsEvent] = useState(null)
   const [bcsEventIndex, setBcsEventIndex] = useState(null)
   
 
-  useEffect(()=> id && setBcsEventIndex(id), [id])
+  useEffect(()=> index && setBcsEventIndex(index), [index])
   useEffect(()=> bcsEventIndex && !bcsEvent && bcsevents && bcsevents.length > 0 && setBcsEvent(bcsevents[bcsEventIndex]),[bcsEventIndex, bcsEvent, bcsevents])
 
   
