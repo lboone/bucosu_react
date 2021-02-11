@@ -5,11 +5,12 @@ import { setAlert } from '../../../../redux/actions/alert'
 import { register } from '../../../../redux/actions/auth'
 import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
 import CompanyUserTypesSelect from '../../../layout/ui/fields/CompanyUserTypesSelect'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { adminGetUserProfiles } from '../../../../redux/actions/admin/user'
 
-const AddUser = ( { auth:{ userRegistered }, register, setAlert, adminGetUserProfiles } ) => {
-  
+const AddUser = ( { register, setAlert, adminGetUserProfiles } ) => {
+  const history = useHistory()
+
   const initialState = {
     username: '',
     email: '',
@@ -31,7 +32,7 @@ const AddUser = ( { auth:{ userRegistered }, register, setAlert, adminGetUserPro
     e.preventDefault();
     if(password !== password2) {
       console.log('Passwords do  not match')
-      setAlert('Passwords do not match', 'danger', 3000)
+      setAlert('Passwords do not match', 'danger', 2000)
     } else{
       if(company && usertype){
         register({
@@ -40,13 +41,16 @@ const AddUser = ( { auth:{ userRegistered }, register, setAlert, adminGetUserPro
         .then(()=>{
           setFormData({ ...initialState });
           adminGetUserProfiles()
-          setAlert('User has been registered.','success',3000)
+          setAlert('User has been registered.','success',2000)
+          setTimeout(()=>{
+            history.push('./admin/user/home')
+          },3000)
         })
         .catch((e)=>{
           console.log({error: e})
         })
       } else {
-        setAlert('You must select a Company & User Type!','danger',3000)
+        setAlert('You must select a Company & User Type!','danger',2000)
       }
     }
   }
@@ -163,14 +167,6 @@ AddUser.propTypes = {
   register: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
   adminGetUserProfiles: PropTypes.func.isRequired,
-  company: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
 }
-
-const mapStateToProps = state => ({
-  company: state.company,
-  auth: state.auth,
-})
-  
-export default connect(mapStateToProps, {register, setAlert, adminGetUserProfiles})(AddUser)
+export default connect(null, {register, setAlert, adminGetUserProfiles})(AddUser)
   

@@ -12,6 +12,8 @@ import {
   LOGIN_FAIL,
   PASSWORD_SUCCESS,
   PASSWORD_FAIL,
+  UPDATE_CURRENT_USER,
+  UPDATE_CURRENT_USER_ERROR,
   LOGOUT,
 } from '../actions/types'
 
@@ -60,6 +62,7 @@ const reduce = function(state = initialState, action){
       }
     case PASSWORD_SUCCESS:
     case PASSWORD_FAIL:
+    case UPDATE_CURRENT_USER_ERROR:
       return {
         ...state,
         loading: false
@@ -67,6 +70,7 @@ const reduce = function(state = initialState, action){
     case AUTH_ERROR:
     case LOGIN_FAIL:
     case LOGOUT:
+    case UPDATE_CURRENT_USER:
       removeItem('token')
       //localStorage.removeItem('token')
       return {

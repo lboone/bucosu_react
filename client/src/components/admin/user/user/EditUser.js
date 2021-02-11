@@ -87,7 +87,6 @@ const EditUser = ( { adminUser:{profiles}, id, getCompanyUserTypes, adminUpdateU
   }
 
 
-
   const onChangeUserTypes = (e) => {
     setCompanyUserType(e.target.value)
   }  

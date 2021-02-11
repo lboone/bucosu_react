@@ -1,42 +1,53 @@
 import React, { useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent } from '../../../../redux/actions/event'
+import { adminGetBcsEvents, adminUpdateBcsEvents, adminDeactivateBcsEvent, adminActivateBcsEvent, adminDeleteBcsEvent } from '../../../../redux/actions/admin/bcsevent'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import DisplayDate from '../../../layout/ui/fields/DisplayDate'
 import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
-const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent , setAlert} ) => {
-  useEffect(()=>{
-    getBcsEvents()
-  },[getBcsEvents])
+const ListEvents = ( { adminBcsEvent:{bcsevents, loading}, adminGetBcsEvents, adminDeactivateBcsEvent, adminActivateBcsEvent, adminDeleteBcsEvent , adminUpdateBcsEvents, setAlert} ) => {
+  useEffect(()=> loading && bcsevents && !bcsevents.length > 0 && adminGetBcsEvents(), [loading, bcsevents, adminGetBcsEvents])
 
-  const deactivate = async (id) => {
-    await deactivateBcsEvent(id)
-    await getBcsEvents()
-  }
-  const activate = async (id) => {
-    await activateBcsEvent(id)
-    await getBcsEvents()
-  }
-
-  const clickDeleteEvent = async (id) => {
-    await deleteBcsEvent(id)
+  const clickDeleteEvent = async ({id, index}) => {
+    await adminDeleteBcsEvent(id)
     .then(()=> {
+      const newBcsEvents = [...bcsevents]
+      newBcsEvents.splice(index,1)
+      adminUpdateBcsEvents(newBcsEvents)
       setAlert('Event deleted.','success',2000)
-      getBcsEvents()
     })
     .catch((err)=>{
       console.log(err)
     })
   }
+
+
+  const deactivate = async ({id, index}) => {
+    await adminDeactivateBcsEvent(id)
+    .then(()=>{
+      const newBcsEvents = [...bcsevents]
+      newBcsEvents[index].isactive = false
+      adminUpdateBcsEvents(newBcsEvents)
+    })
+  }
+  const activate = async ({id, index}) => {
+    await adminActivateBcsEvent(id)
+    .then(()=>{
+      const newBcsEvents = [...bcsevents]
+      newBcsEvents[index].isactive = true
+      adminUpdateBcsEvents(newBcsEvents)
+    })
+  }
+
+
     
   return (
     <>
       {
-        !events || loading ? 
+        !bcsevents || loading ? 
         ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
         (
@@ -53,23 +64,23 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
                 </tr>
               </thead>
               <tbody>
-                {events && !loading && events.map((event)=>{
+                {bcsevents && !loading && bcsevents.map((bcsevent, index)=>{
                   return (
-                    <tr key={event._id}>
-                      <td>{event.name}</td>
-                      <td className="hide-md">{(<DisplayDate origDate={event.startdate}/>)}</td>
-                      <td className="hide-md">{(<DisplayDate origDate={event.enddate}/>)}</td>
+                    <tr key={bcsevent._id}>
+                      <td>{bcsevent.name}</td>
+                      <td className="hide-md">{(<DisplayDate origDate={bcsevent.startdate}/>)}</td>
+                      <td className="hide-md">{(<DisplayDate origDate={bcsevent.enddate}/>)}</td>
                       <td className="hide-md text-center">{(
-                          event.isactive? 
-                            <Link className="text-primary" onClick={(e)=>{deactivate(event._id)}}>Active</Link>
+                          bcsevent.isactive? 
+                            <Link className="text-primary" onClick={(e)=>{deactivate({id: bcsevent._id, index})}}>Active</Link>
                             : 
-                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(event._id)}}>Inactive</Link>
+                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate({id: bcsevent._id, index})}}>Inactive</Link>
                         )}
                       </td>
                       <td className="text-center">{(
                           <>
-                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${event._id}`}><i className="fa fa-pen-nib"></i> Edit</Link>
-                            <DeleteButton confirmDelete={(e)=> clickDeleteEvent(event._id)} itemName="Event"/>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/events/?action=edit&id=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <DeleteButton confirmDelete={(e)=> clickDeleteEvent({id: bcsevent._id, index})} itemName="Event"/>
                           </>
                         )}
                       </td>
@@ -86,17 +97,18 @@ const ListEvents = ( { event:{events, loading}, getBcsEvents, deactivateBcsEvent
 }
 
 ListEvents.propTypes = {
-  event: PropTypes.object.isRequired,
-  getBcsEvents: PropTypes.func.isRequired,
-  deactivateBcsEvent: PropTypes.func.isRequired,
-  activateBcsEvent: PropTypes.func.isRequired,
-  deleteBcsEvent: PropTypes.func.isRequired,
+  adminBcsEvent: PropTypes.object.isRequired,
+  adminGetBcsEvents: PropTypes.func.isRequired,
+  adminDeactivateBcsEvent: PropTypes.func.isRequired,
+  adminActivateBcsEvent: PropTypes.func.isRequired,
+  adminDeleteBcsEvent: PropTypes.func.isRequired,
+  adminUpdateBcsEvents: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  event: state.event,
+  adminBcsEvent: state.adminBcsEvent,
 })
   
-export default connect(mapStateToProps, {getBcsEvents, deactivateBcsEvent, activateBcsEvent, deleteBcsEvent, setAlert})(ListEvents)
+export default connect(mapStateToProps, {adminGetBcsEvents, adminDeactivateBcsEvent, adminActivateBcsEvent, adminDeleteBcsEvent, adminUpdateBcsEvents, setAlert})(ListEvents)
   

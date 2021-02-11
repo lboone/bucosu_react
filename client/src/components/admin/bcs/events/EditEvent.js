@@ -1,17 +1,22 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { editBcsEvent, getBcsEvent } from '../../../../redux/actions/event'
+import { adminUpdateBcsEvent, adminGetBcsEvents } from '../../../../redux/actions/admin/bcsevent'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import moment from 'moment'
 import {formatDate} from '../../../../utils/globalFunctions'
 import { Skeleton } from 'antd'
 
-const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcsEvent}) => {  
+const EditEvent = ({ adminBcsEvent:{bcsevents}, adminUpdateBcsEvent, setAlert, id , adminGetBcsEvents}) => {  
   const history = useHistory()
+  const [bcsEvent, setBcsEvent] = useState(null)
+  const [bcsEventIndex, setBcsEventIndex] = useState(null)
+  
 
-  useEffect(()=>{ id && getBcsEvent(id) } , [ id , getBcsEvent ] )
+  useEffect(()=> id && setBcsEventIndex(id), [id])
+  useEffect(()=> bcsEventIndex && !bcsEvent && bcsevents && bcsevents.length > 0 && setBcsEvent(bcsevents[bcsEventIndex]),[bcsEventIndex, bcsEvent, bcsevents])
+
   
   const initialState = {
     name: "",
@@ -23,12 +28,12 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
 
   useEffect(()=>{
     setFormData({
-      name: loading || !event  ? '' : event.name,
-      startdate: loading || !event  ? '' : formatDate(event.startdate,'YYYY-MM-DD'),
-      enddate: loading || !event ? '' : formatDate(event.enddate,'YYYY-MM-DD'),
-      isactive: loading || !event ? '' : event.isactive,
+      name: !bcsEvent  ? '' : bcsEvent.name,
+      startdate: !bcsEvent  ? '' : formatDate(bcsEvent.startdate,'YYYY-MM-DD'),
+      enddate: !bcsEvent ? '' : formatDate(bcsEvent.enddate,'YYYY-MM-DD'),
+      isactive: !bcsEvent ? '' : bcsEvent.isactive,
     })
-  }, [ event, loading ])
+  }, [ bcsEvent ])
   
   const { name, startdate, enddate, isactive } = formData
   
@@ -36,19 +41,19 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
 
   const onSubmit = e => {
     e.preventDefault()
-    editBcsEvent({
+    adminUpdateBcsEvent({
       name, 
       startdate: moment(startdate).format('YYYY-MM-DD'), 
       enddate: moment(enddate).format('YYYY-MM-DD'), 
       isactive,
-      id
+      id:bcsEvent._id
     })
     .then(()=>{
-      setFormData({...initialState})
       setAlert('Event has been saved','success',2000)
+      adminGetBcsEvents()
       setTimeout(()=>{
-        history.push('./')
-      },2500)
+        history.push('/admin/bcs/events')
+      },3000)
     })
     .catch((e)=> {
       console.log({error: e})
@@ -56,7 +61,7 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
   }
   return (
     <div className="container-center" style={{marginTop: '5px'}}>
-      {event && !loading ? (
+      {bcsEvent ? (
       <form className="form" onSubmit= {e => onSubmit(e)}>
         <br />
         <p className="lead">
@@ -114,14 +119,14 @@ const EditEvent = ({ event:{loading, event}, editBcsEvent, setAlert, id , getBcs
 }
 
 EditEvent.propTypes = {
-  editBcsEvent: PropTypes.func.isRequired,
-  getBcsEvent: PropTypes.func.isRequired,
+  adminUpdateBcsEvent: PropTypes.func.isRequired,
+  adminGetBcsEvents: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
-  event: PropTypes.object.isRequired,
+  adminBcsEvent: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state)=> ({
-  event: state.event
+  adminBcsEvent: state.adminBcsEvent
 })
 
-export default connect(mapStateToProps,{editBcsEvent, setAlert, getBcsEvent})(EditEvent)
+export default connect(mapStateToProps,{adminUpdateBcsEvent, setAlert, adminGetBcsEvents})(EditEvent)

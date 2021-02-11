@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { createBcsEvent } from '../../../../redux/actions/event'
+import { adminCreateBcsEvent, adminGetBcsEvents } from '../../../../redux/actions/admin/bcsevent'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import moment from 'moment'
 
-const AddEvent = ({ createBcsEvent, setAlert }) => {  
-  const history = useHistory
+const AddEvent = ({ adminCreateBcsEvent, adminGetBcsEvents, setAlert }) => {  
+  const history = useHistory()
   const initialState = {
     name: "",
     startdate: "",
@@ -24,17 +24,19 @@ const AddEvent = ({ createBcsEvent, setAlert }) => {
 
   const onSubmit = e => {
     e.preventDefault()
-    createBcsEvent({
+    adminCreateBcsEvent({
       name, 
       startdate: moment(startdate).format('YYYY-MM-DD'), 
       enddate: moment(enddate).format('YYYY-MM-DD'), 
       isactive})
     .then(()=>{
       setFormData({...initialState})
-      setAlert('Event has been added','success',3000)
+      adminGetBcsEvents()
+      setAlert('Event has been added','success',2000)
+      
       setTimeout(()=>{
-        history.push('./')
-      },2500)
+        history.push('/admin/bcs/events')
+      },3000)
     })
     .catch((e)=> {
       console.log({error: e})
@@ -88,14 +90,14 @@ const AddEvent = ({ createBcsEvent, setAlert }) => {
         <Link to="#" onClick={(e)=>onSubmit(e)} className="btn btn-primary btn-outline"><i className="fa fa-save"></i> Save Event</Link>
         <Link to="/admin/bcs/events" className="btn btn-danger btn-outline"><i className="fa fa-times"></i> Cancel</Link>
       </form>
-      
     </div>
   )
 }
 
 AddEvent.propTypes = {
-  createBcsEvent: PropTypes.func.isRequired,
+  adminCreateBcsEvent: PropTypes.func.isRequired,
+  adminGetBcsEvents: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
-export default connect(null,{createBcsEvent, setAlert})(AddEvent)
+export default connect(null,{adminCreateBcsEvent, adminGetBcsEvents, setAlert})(AddEvent)

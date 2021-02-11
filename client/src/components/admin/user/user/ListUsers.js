@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import 'react-confirm-alert/src/react-confirm-alert.css'
 import {adminUpdateUserProfiles, adminActivateUser, adminDeactivateUser, adminDeleteUser, adminGetUserProfiles } from '../../../../redux/actions/admin/user'
 import { Tag } from 'antd'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
@@ -10,11 +9,8 @@ import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
 const ListUsers = ( { adminUser:{profiles, loading}, adminUpdateUserProfiles, adminGetUserProfiles, adminDeactivateUser, adminActivateUser, adminDeleteUser} ) => {
-  
-  useEffect(()=>{
-    if(loading && profiles && profiles.length < 1)
-    adminGetUserProfiles()
-  },[adminGetUserProfiles, loading, profiles])
+ 
+  useEffect(()=> loading && profiles && profiles.length < 1 && adminGetUserProfiles(), [adminGetUserProfiles, loading, profiles])
 
   const clickAdminDeleteUser = async ({id, index}) => {
     await adminDeleteUser(id)

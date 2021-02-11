@@ -1,49 +1,43 @@
 import axios from 'axios'
-import {setAlert} from './alert'
+import {setAlert} from '../alert'
 
 import {
-  GET_BCSEVENTS,
-  GET_BCSEVENT,
-  CREATE_BCSEVENT,
-  EDIT_BCSEVENT,
-  ACTIVATE_BCSEVENT,
-  DEACTIVATE_BCSEVENT,
-  DELETE_BCSEVENT,
-  BCSEVENT_ERROR,
-} from './types'
+  ADMIN_GET_BCSEVENTS,
+  ADMIN_UPDATE_BCSEVENTS,
+  ADMIN_CREATE_BCSEVENT,
+  ADMIN_UPDATE_BCSEVENT,
+  ADMIN_ACTIVATE_BCSEVENT,
+  ADMIN_DEACTIVATE_BCSEVENT,
+  ADMIN_DELETE_BCSEVENT,
+  ADMIN_BCSEVENT_ERROR,
+} from '../types'
 
 
-export const getBcsEvents = () => async dispatch => {
+export const adminGetBcsEvents = () => async dispatch => {
   try {
     const res = await axios.get('/api/bcsevents')
     dispatch({
-      type: GET_BCSEVENTS,
+      type: ADMIN_GET_BCSEVENTS,
       payload: res.data
     })
   } catch (err) {
     dispatch({
-      type: BCSEVENT_ERROR,
+      type: ADMIN_BCSEVENT_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
-    })    
+    })   
+    throw err 
   }
 }
 
-export const getBcsEvent = (bid) => async dispatch => {
-  try {
-    const res = await axios.get(`/api/bcsevents/${bid}`)
-    dispatch({
-      type: GET_BCSEVENT,
-      payload: res.data
-    })
-  } catch (err) {
-    dispatch({
-      type: BCSEVENT_ERROR,
-      payload: {msg: err.response.statusText, status: err.response.status}
-    })    
-  }
+export const adminUpdateBcsEvents = (bcsEvents) => dispatch => {
+  dispatch({
+    type: ADMIN_UPDATE_BCSEVENTS,
+    payload: bcsEvents
+  })
 }
 
-export const createBcsEvent = ({name, startdate, enddate, isactive}) => async dispatch => {
+
+export const adminCreateBcsEvent = ({name, startdate, enddate, isactive}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -53,23 +47,22 @@ export const createBcsEvent = ({name, startdate, enddate, isactive}) => async di
   try {
     const res = await axios.post('/api/bcsevents', body, config )
     dispatch({
-      type:   CREATE_BCSEVENT,
+      type:   ADMIN_CREATE_BCSEVENT,
       payload: res.data
     })
-    setAlert('BCS Event added successfully','success',3000)
   } catch (err) {
     const errors = err.response.data.errors
     if(errors){
       errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
     }
     dispatch({
-      type: BCSEVENT_ERROR
+      type: ADMIN_BCSEVENT_ERROR
     })
     throw err
   }
 }
 
-export const editBcsEvent = ({name, startdate, enddate, isactive, id}) => async dispatch => {
+export const adminUpdateBcsEvent = ({name, startdate, enddate, isactive, id}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -79,7 +72,7 @@ export const editBcsEvent = ({name, startdate, enddate, isactive, id}) => async 
   try {
     const res = await axios.put(`/api/bcsevents/${id}`, body, config )
     dispatch({
-      type:   EDIT_BCSEVENT,
+      type:   ADMIN_UPDATE_BCSEVENT,
       payload: res.data
     })
     setAlert('BCS Event successfully edited','success',3000)
@@ -89,56 +82,57 @@ export const editBcsEvent = ({name, startdate, enddate, isactive, id}) => async 
       errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
     }
     dispatch({
-      type: BCSEVENT_ERROR
+      type: ADMIN_BCSEVENT_ERROR
     })
     throw err
   }
 }
-export const activateBcsEvent = (bid) => async dispatch => {
+export const adminActivateBcsEvent = (bid) => async dispatch => {
   try {
     const res = await axios.put(`/api/bcsevents/${bid}/activate`)
     dispatch({
-      type: ACTIVATE_BCSEVENT,
+      type: ADMIN_ACTIVATE_BCSEVENT,
       payload: res.data
     })
   } catch (err) {
     dispatch({
-      type: BCSEVENT_ERROR,
+      type: ADMIN_BCSEVENT_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
-    })    
+    })
+    throw err    
   }
 }
 
-export const deactivateBcsEvent = (bid) => async dispatch => {
+export const adminDeactivateBcsEvent = (bid) => async dispatch => {
   try {
     const res = await axios.put(`/api/bcsevents/${bid}/deactivate`)
     dispatch({
-      type: DEACTIVATE_BCSEVENT,
+      type: ADMIN_DEACTIVATE_BCSEVENT,
       payload: res.data
     })
   } catch (err) {
     dispatch({
-      type: BCSEVENT_ERROR,
+      type: ADMIN_BCSEVENT_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
-    })    
+    })  
+    throw err  
   }
 }
 
-export const deleteBcsEvent = (bid) => async dispatch => {
+export const adminDeleteBcsEvent = (bid) => async dispatch => {
   try{
     const res = await axios.delete(`/api/bcsevents/${bid}`)
     dispatch({
-      type: DELETE_BCSEVENT,
+      type: ADMIN_DELETE_BCSEVENT,
       payload: res.data
     })
-    setAlert('BCS Event deleted successfully','success',3000)
   } catch (err) {
     const errors = err.response.data.errors
     if(errors){
       errors.forEach(error => dispatch(setAlert(error.msg,'danger', 6000)))
     }
     dispatch({
-      type: BCSEVENT_ERROR
+      type: ADMIN_BCSEVENT_ERROR
     })
     throw err
   }

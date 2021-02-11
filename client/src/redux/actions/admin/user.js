@@ -23,7 +23,8 @@ export const adminGetUserProfiles = () => async dispatch => {
     dispatch({
       type: ADMIN_USER_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
-    })    
+    })
+    throw err    
   }
 }
 
@@ -67,7 +68,8 @@ export const adminActivateUser = (uid) => async dispatch => {
     dispatch({
       type: ADMIN_USER_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
-    })    
+    }) 
+    throw err  
   }
 }
 
@@ -82,7 +84,8 @@ export const adminDeactivateUser = (uid) => async dispatch => {
     dispatch({
       type: ADMIN_USER_ERROR,
       payload: {msg: err.response.statusText, status: err.response.status}
-    })    
+    })
+    throw err    
   }
 }
 
@@ -101,5 +104,6 @@ export const adminDeleteUser = (uid) => async dispatch => {
     dispatch({
       type: ADMIN_USER_ERROR
     })
+    throw err
   }
 }

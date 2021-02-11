@@ -9,6 +9,8 @@ import {
   REGISTER_FAIL,
   PASSWORD_SUCCESS,
   PASSWORD_FAIL,
+  UPDATE_CURRENT_USER,
+  UPDATE_CURRENT_USER_ERROR,
   LOGOUT
 } from './types'
 import setAuthToken from '../../utils/setAuthToken'
@@ -108,6 +110,27 @@ export const register = ( { username, email, password, firstname, lastname, phon
   
 }
 
+export const updateCurrentUser = ({username, email, firstname, lastname, phone}) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+  const body = JSON.stringify({username, email, firstname, lastname, phone})
+try {
+  const res = await axios.put(`/api/users/me`, body, config)
+  dispatch({
+    type: UPDATE_CURRENT_USER,
+    payload: res.data
+  })
+} catch (err) {
+  dispatch({
+    type: UPDATE_CURRENT_USER_ERROR,
+    payload: {msg: err.response.statusText, status: err.response.status}
+  })
+  throw err
+}
+}
 
 // Reset User's password
 export const resetPassword = ({origpassword, password}) => async dispatch => {

@@ -10,7 +10,7 @@ const override = css`
 `
 
 
-const DeleteButton = ( {confirmDelete, itemName='item', title="Delete" } ) => {
+const DeleteButton = ( {confirmDelete, itemName='item', title="Delete", buttonIcon="trash", buttonClass="danger" } ) => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [buttonTitle, setButtonTitle] = useState("")
   useEffect(() => {setButtonTitle(title) }, [title])
@@ -60,13 +60,13 @@ const DeleteButton = ( {confirmDelete, itemName='item', title="Delete" } ) => {
     : 
     <Link 
       to="#"
-      className="btn btn-danger btn-outline" 
+      className={`btn btn-${buttonClass} btn-outline`}
       title={buttonTitle} 
       onClick={(e)=> activateFunc(e)}
     >
       <i 
         title={buttonTitle} 
-        className="fa fa-trash"
+        className={`fa fa-${buttonIcon}`}
       ></i> {buttonTitle}
     </Link>
   )

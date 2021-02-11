@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {updateCurrentUser } from '../../redux/actions/user'
+import {updateCurrentUser } from '../../redux/actions/auth'
 import PageWithNavbar from '../layout/page/PageWithNavbar'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
 import { setAlert} from '../../redux/actions/alert'
 import { logout } from '../../redux/actions/auth'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import DeleteButton from '../layout/ui/buttons/DeleteButton'
 
 const override = css`
   display: block;
@@ -49,7 +50,7 @@ const EditProfile = ( { profile:{loading, profile}, updateCurrentUser,logout , s
         username, email, firstname, lastname, phone
       })
       .then(()=>{
-        setAlert('Your user profile has been updated, you will be logged out now in 3 seconds.','success',3000)
+        setAlert('Your user profile has been updated, you will be logged out now in 3 seconds.','success',2000)
       })
       .then(()=> {
         setTimeout(logout,3000)
@@ -134,9 +135,14 @@ const EditProfile = ( { profile:{loading, profile}, updateCurrentUser,logout , s
               </small>
             </div>
             <br />
-            <Link className="btn btn-success btn-outline" to="#" onClick={(e)=> onSubmitClick()}><i className="fa fa-user-plus"></i> Update User</Link>
-            <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" id="updateCurrentUser" onClick={(e)=> onSubmitClick()}/>
-            <Link to="/user" className="btn btn-danger btn-outline" value="Cancel" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
+            <DeleteButton 
+              confirmDelete={e=>onSubmitClick(e)} 
+              title="Update & Logout" 
+              itemName="Website" 
+              buttonClass="success"
+              buttonIcon="sign-out-alt"
+            />
+            <Link to="/user/home/login-history" className="btn btn-danger btn-outline" value="Cancel" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
           </form>
         </div>
       )}
