@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { createCompany } from '../../../../redux/actions/company'
+import { adminCreateCompany, adminGetCompanies } from '../../../../redux/actions/admin/company'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import CompanyTypesSelect from '../../../layout/ui/fields/CompanyTypesSelect'
 
 
-const AddCompany = ({ createCompany, setAlert }) => {  
+const AddCompany = ({ adminCreateCompany, adminGetCompanies, setAlert }) => {  
   const history = useHistory()
   const initialState = {
     name: "",
@@ -34,7 +34,7 @@ const AddCompany = ({ createCompany, setAlert }) => {
 
   const onSubmit = e => {
     e.preventDefault()
-    createCompany({
+    adminCreateCompany({
       name, 
       address,
       city,
@@ -48,9 +48,10 @@ const AddCompany = ({ createCompany, setAlert }) => {
     })
     .then(()=>{
       setFormData({...initialState})
-      setAlert('Company has been added','success',3000)
+      adminGetCompanies()
+      setAlert('Company has been added','success',2000)
       setTimeout(()=>{
-        history.push('./')
+        history.push('/admin/bcs/companies')
       },2500)
     })
     .catch((e)=> {
@@ -58,6 +59,7 @@ const AddCompany = ({ createCompany, setAlert }) => {
     })
   }
 
+  //TODO: Add a field for relationships with.  When a company is created, we need to add it to other companies relationships.  Also, we need to pick what companies this company has relationships with.
   return (
     <div className="container-center" style={{marginTop: '5px'}}>
       <form className="form" onSubmit= {e => onSubmit(e)}>
@@ -170,8 +172,9 @@ const AddCompany = ({ createCompany, setAlert }) => {
 }
 
 AddCompany.propTypes = {
-  createCompany: PropTypes.func.isRequired,
+  adminCreateCompany: PropTypes.func.isRequired,
+  adminGetCompanies: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
-export default connect(null,{createCompany, setAlert})(AddCompany)
+export default connect(null,{adminCreateCompany, adminGetCompanies, setAlert})(AddCompany)

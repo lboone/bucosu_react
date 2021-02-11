@@ -9,6 +9,7 @@ import building from './building'
 import usertype from './usertype'
 import adminUser from './admin/user'
 import adminBcsEvent from './admin/bcsevent'
+import adminCompany from './admin/company'
 
 const appReducer = combineReducers({
   alert,
@@ -20,7 +21,8 @@ const appReducer = combineReducers({
   building,
   usertype,
   adminUser,
-  adminBcsEvent
+  adminBcsEvent,
+  adminCompany
 })
 
 const rootReducer = (state, action) => {

@@ -1,54 +1,55 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCompanies, deactivateCompany, activateCompany, deleteCompany } from '../../../../redux/actions/company'
+import { adminGetCompanies, adminDeactivateCompany, adminActivateCompany, adminDeleteCompany, adminUpdateCompanies } from '../../../../redux/actions/admin/company'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 import DeleteButton from '../../../layout/ui/buttons/DeleteButton'
 import { setAlert } from '../../../../redux/actions/alert'
 import {Tag } from 'antd'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
 
+const ListCompanies = ( { adminCompany:{companies, loading}, adminGetCompanies, adminDeactivateCompany, adminActivateCompany, adminDeleteCompany , adminUpdateCompanies, setAlert} ) => {
+  useEffect(()=> loading && companies && !companies.length > 0 && adminGetCompanies(), [loading, companies, adminGetCompanies])
 
-const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivateCompany, activateCompany, deleteCompany , setAlert} ) => {
-  useEffect(()=>{
-    getCompanies()
-  },[getCompanies])
-
-  const deactivate = async (id) => {
-    await deactivateCompany(id)
-    await getCompanies()
-  }
-  const activate = async (id) => {
-    await activateCompany(id)
-    await getCompanies()
-  }
-
-  const clickDeleteCompany = async (id) => {
-    await deleteCompany(id)
+  const clickadminDeleteCompany = async ({id, index}) => {
+    await adminDeleteCompany(id)
     .then(()=> {
+      const newCompanies = [...companies]
+      newCompanies.splice(index,1)
+      adminUpdateCompanies(newCompanies)
       setAlert('Company deleted.','success',2000)
-      getCompanies()
     })
     .catch((err)=>{
       console.log(err)
     })
   }
-  
 
- 
-
+  const deactivate = async ({id, index}) => {
+    await adminDeactivateCompany(id)
+    .then(()=>{
+      const newCompanies = [...companies]
+      newCompanies[index].isactive = false
+      adminUpdateCompanies(newCompanies)
+    })
+  }
+  const activate = async ({id, index}) => {
+    await adminActivateCompany(id)
+    .then(()=>{
+      const newCompanies = [...companies]
+      newCompanies[index].isactive = true
+      adminUpdateCompanies(newCompanies)
+    })
+  }
 
   return (
     <>
-      {
-        (    <>
       {
         !companies || loading ? 
         ( <SkeletonList  rows={4} paragraphs={4} /> )
         :
         (
           <>
-            <Link to="/admin/bcs/companies?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Building</Link>
+            <Link to="/admin/bcs/companies?action=add" className="btn btn-primary btn-outline pull-right mb-1"><i className="fa fa-plus mr-1"></i>New Company</Link>
             <table className="table">
               <thead>
                 <tr>
@@ -61,7 +62,7 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
                 </tr>
               </thead>
               <tbody>
-                {companies && !loading && companies.map((company)=>{
+                {companies && !loading && companies.map((company, index)=>{
                   return (
                     <tr key={company._id}>
                       <td>{company.name}</td>
@@ -81,15 +82,15 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
                       </td>
                       <td className="hide-md text-center">{(
                           company.isactive? 
-                            <Link className="text-primary" onClick={(e)=>{deactivate(company && company._id)}}>Active</Link>
+                            <Link className="text-primary" onClick={(e)=>{deactivate({id: company && company._id, index})}}>Active</Link>
                             : 
-                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate(company && company._id)}}>Inactive</Link>
+                            <Link className="text-light-gray text-strike" onClick={(e)=>{activate({id:company && company._id, index})}}>Inactive</Link>
                         )}
                       </td>
                       <td className="text-center">{(
                           <>
-                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${company._id}`}><i className="fa fa-pen-nib"></i> Edit</Link>
-                            <DeleteButton confirmDelete={(e)=> clickDeleteCompany(company._id)} itemName="Event"/>
+                            <Link className="btn btn-primary btn-outline" title="Edit" to={`/admin/bcs/companies/?action=edit&id=${index}`}><i className="fa fa-pen-nib"></i> Edit</Link>
+                            <DeleteButton confirmDelete={(e)=> clickadminDeleteCompany({id: company._id, index})} itemName="Event"/>
                           </>
                         )}
                       </td>
@@ -101,24 +102,23 @@ const ListCompanies = ( { company:{companies, loading}, getCompanies, deactivate
           </>
         )
       }
-    </>)
-      }
     </>
   )
 }
 
 ListCompanies.propTypes = {
-  company: PropTypes.object.isRequired,
-  getCompanies: PropTypes.func.isRequired,
-  deactivateCompany: PropTypes.func.isRequired,
-  activateCompany: PropTypes.func.isRequired,
-  deleteCompany: PropTypes.func.isRequired,
+  adminCompany: PropTypes.object.isRequired,
+  adminGetCompanies: PropTypes.func.isRequired,
+  adminDeactivateCompany: PropTypes.func.isRequired,
+  adminActivateCompany: PropTypes.func.isRequired,
+  adminDeleteCompany: PropTypes.func.isRequired,
+  adminUpdateCompanies: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
-  company: state.company,
+  adminCompany: state.adminCompany,
 })
   
-export default connect(mapStateToProps, {getCompanies, deactivateCompany, activateCompany, deleteCompany, setAlert})(ListCompanies)
+export default connect(mapStateToProps, {adminGetCompanies, adminDeactivateCompany, adminActivateCompany, adminDeleteCompany, adminUpdateCompanies, setAlert})(ListCompanies)
   

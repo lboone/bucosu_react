@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { getCompany, updateCompany } from '../../../../redux/actions/company'
+import { adminGetCompanies, adminUpdateCompany } from '../../../../redux/actions/admin/company'
 import { Link, useHistory } from 'react-router-dom'
 import { setAlert } from '../../../../redux/actions/alert'
 import SkeletonList from '../../../layout/feedback/SkeletonList'
@@ -10,10 +10,14 @@ import Relationships from './Relationships'
 import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
 const {TabPane} = Tabs
 
-const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany, setAlert }) => {  
+const EditCompany = ({ adminCompany:{companies, loading}, id, adminGetCompanies, adminUpdateCompany, setAlert }) => {  
   const history = useHistory()
+  const [company, setCompany] = useState(null)
+  const [companyIndex, setCompanyIndex] = useState(null)
 
-  useEffect(()=>{ id && getCompany(id) } , [ id , getCompany ] )
+
+  useEffect(()=> id && setCompanyIndex(id), [ id ])
+  useEffect(() => companyIndex && !company && companies && companies.length > 0 && setCompany(companies[companyIndex]), [ companyIndex,company, companies ])
 
   const initialState = {
     name: "",
@@ -34,26 +38,23 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
   useEffect(()=>{
     setFormData({
       ...formData,
-      name: loading || !company  ? '' : company.name,
-      address: loading || !company  ? '' : company.companyaddress.address,
-      city: loading || !company  ? '' : company.companyaddress.city,
-      state: loading || !company  ? '' : company.companyaddress.state,
-      zip: loading || !company  ? '' : company.companyaddress.zip,
-      phone: loading || !company  ? '' : company.contact.phone,
-      website: loading || !company  ? '' : company.contact.website,
-      logo: loading || !company  ? '' : company.contact.logo,
-      isactive: loading || !company ? '' : company.isactive,
+      name: !company  ? '' : company.name,
+      address: !company  ? '' : company.companyaddress.address,
+      city: !company  ? '' : company.companyaddress.city,
+      state: !company  ? '' : company.companyaddress.state,
+      zip: !company  ? '' : company.companyaddress.zip,
+      phone: !company  ? '' : company.contact.phone,
+      website: !company  ? '' : company.contact.website,
+      logo: !company  ? '' : company.contact.logo,
+      isactive: !company ? '' : company.isactive,
     })
-  }, [ company, loading ])
+  }, [ company ])
   
-
-  
-
   const onChange = e => setFormData({...formData, [e.target.name]: e.target.value})
 
   const onSubmit = e => {
     e.preventDefault()
-    updateCompany({
+    adminUpdateCompany({
       name, 
       address,
       city,
@@ -63,13 +64,14 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
       website,
       logo,
       isactive,
-      id
+      id: company._id
     })
     .then(()=>{
-      setAlert('Company has been updated','success',3000)
+      setAlert('Company has been updated','success',2000)
+      adminGetCompanies()
       setTimeout(()=>{
-        history.push('./')
-      },2500)
+        history.push('/admin/bcs/companies')
+      },3000)
     })
     .catch((e)=> {
       console.log({error: e})
@@ -218,8 +220,6 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
            : 
           (<h2>No Relationships</h2>)
         }
-      
-      
     </TabPane>
     <TabPane tab="All Buildings" key="3">
       <Divider>All Buildings</Divider>
@@ -230,13 +230,14 @@ const EditCompany = ({ company:{company, loading}, id, getCompany, updateCompany
 }
 
 EditCompany.propTypes = {
-  getCompany: PropTypes.func.isRequired,
-  updateCompany: PropTypes.func.isRequired,
+  adminGetCompanies: PropTypes.func.isRequired,
+  adminUpdateCompany: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
+  adminCompany: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state)=> ({
-  company: state.company
+  adminCompany: state.adminCompany
 })
 
-export default connect(mapStateToProps,{getCompany, setAlert, updateCompany})(EditCompany)
+export default connect(mapStateToProps,{adminGetCompanies, setAlert, adminUpdateCompany})(EditCompany)
