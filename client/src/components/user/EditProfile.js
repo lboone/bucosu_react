@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {updateUser } from '../../redux/actions/user'
+import {updateCurrentUser } from '../../redux/actions/user'
 import PageWithNavbar from '../layout/page/PageWithNavbar'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from '@emotion/core'
@@ -13,7 +13,7 @@ const override = css`
   display: block;
   margin: 0 auto;
 `
-const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert} ) => {
+const EditProfile = ( { profile:{loading, profile}, updateCurrentUser,logout , setAlert} ) => {
 
   useEffect(()=>{
       setFormData({
@@ -45,7 +45,7 @@ const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert
   }
 
   const onSubmitClick = (e) =>{
-      updateUser({
+      updateCurrentUser({
         username, email, firstname, lastname, phone
       })
       .then(()=>{
@@ -135,7 +135,7 @@ const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert
             </div>
             <br />
             <Link className="btn btn-success btn-outline" to="#" onClick={(e)=> onSubmitClick()}><i className="fa fa-user-plus"></i> Update User</Link>
-            <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" id="updateUser" onClick={(e)=> onSubmitClick()}/>
+            <input type="submit" className="btn btn-success btn-outline hidden" value="Update User" id="updateCurrentUser" onClick={(e)=> onSubmitClick()}/>
             <Link to="/user" className="btn btn-danger btn-outline" value="Cancel" id="cancelUpdateUser"><i className="fa fa-times"></i> Cancel</Link>
           </form>
         </div>
@@ -146,7 +146,7 @@ const EditProfile = ( { profile:{loading, profile}, updateUser,logout , setAlert
 
 EditProfile.propTypes = {
   profile: PropTypes.object.isRequired,
-  updateUser: PropTypes.func.isRequired,
+  updateCurrentUser: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
@@ -155,5 +155,5 @@ const mapStateToProps = (state,ownProps) => ({
   profile: state.profile
 })
   
-export default connect(mapStateToProps, {updateUser, logout, setAlert} )(EditProfile)
+export default connect(mapStateToProps, {updateCurrentUser, logout, setAlert} )(EditProfile)
   

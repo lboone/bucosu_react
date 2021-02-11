@@ -52,7 +52,7 @@ export const getUser = (uID) => async dispatch => {
   }
 }
 
-export const updateUser = ({username, email, firstname, lastname, phone}) => async dispatch => {
+export const updateCurrentUser = ({username, email, firstname, lastname, phone}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json'

@@ -6,6 +6,7 @@ const Profile = require('../../models/Profile')
 const User = require('../../models/User')
 const { check, validationResult } = require('express-validator')
 const {COMPANY, USER} = require('../../config/constants').ACCESSTYPES
+const TESTING = process.env.TESTING || true
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
@@ -97,7 +98,7 @@ router.post('/', [auth, [
 // @route   GET api/profile
 // @desc    Get all profiles
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', access(COMPANY.SCHOOLDISTRICT,USER.ADMIN), async (req, res) => {
   try {
     const profiles = await Profile.find().populate({path: 'user', model: 'user',populate: [{path: 'company',model:'company'}]}).select(['-settings', '-logins'])
     
@@ -106,6 +107,113 @@ router.get('/', auth, async (req, res) => {
     console.error(err.message)
     res.status(500).json({ errors: [{msg: 'Server error'}]})
   }
+})
+
+// @route   GET api/profile/mylevel
+// @desc    Get all profiles for current user level
+// @access  Private
+router.get('/mylevel',access(COMPANY.SCHOOLDISTRICT, USER.ADMIN),async (req,res) => {
+   try{
+    const user = await User.findById(req.user.id)
+    .populate({
+      path: 'usertype',
+      select: ['name','level']
+    })
+    .populate({
+      path: 'company',
+      model: 'company',
+      populate: [{
+        path: 'relationships',
+        select: ['name']
+      },{
+        path : 'companytype',
+        select:['level','name']
+      }]
+    })
+    const uLevel = user.usertype.level
+    const cLevel = user.company.companytype.level
+    const cRels =  user.company.relationships
+
+    const profiles = await Profile.find({user:{$ne:user._id}})
+      .select(['-logins', '-settings'])
+      .populate({
+        path: 'user',
+        model: 'user',
+        populate: [
+          {
+            path: 'usertype', 
+            select:['level','name']
+          },
+          {
+            path: 'company',
+            model: 'company',
+            populate: [{
+              path: 'relationships',
+              select: ['name']
+            },{
+              path : 'companytype',
+              select:['level','name']
+            }],
+          }
+        ]
+      })
+
+    if (cLevel === COMPANY.ADMIN && uLevel === USER.SUPERADMIN){
+      return res.status(200).json(profiles)
+    }
+
+    let allDetails = []
+    
+    console.log('made it here')
+    const filteredProfiles = profiles.filter((item) => {
+      const userLevel = item.user.usertype.level
+      const companyLevel = item.user.company.companytype.level
+      const companyName = item.user.company.name
+      let userPass, userPassOn;
+      if(uLevel === USER.ARCHITECT){
+        userPass = userLevel >= uLevel
+        userPassOn = 1
+      } else {
+        userPass = userLevel > uLevel
+        userPassOn = 2
+      }
+
+      let companyPass, companyPassOn;
+      if(companyLevel< cLevel){
+        companyPass = false
+        companyPassOn = 1
+      } else {
+        if(cRels.length >0){
+          companyPass = cRels.some((co) => {
+            return co.name === companyName 
+          })
+          companyPassOn = 2
+        } else {
+          companyPass = companyLevel > cLevel
+          companyPassOn = 3
+        }
+      }
+      
+      allDetails.push({
+        overall:userPass && companyPass,
+        [user.username]:{userLevel:uLevel,companyLevel:cLevel},
+        [item.username]:{userLevel:userLevel,companyLevel: companyLevel},
+        ["U"]:{userPassOn:userPassOn, userPass: userPass},
+        ["C"]:{companyPassOn:companyPassOn, companyPass: companyPass},
+      })
+        
+        
+      return userPass && companyPass
+    })
+    if (TESTING) console.log(allDetails)
+
+    return res.status(200).json(filteredProfiles)
+    
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).json({ errors: [{msg: 'Server error'}]})
+  } 
+
 })
 
 // @route   GET api/profile/user/:user_id

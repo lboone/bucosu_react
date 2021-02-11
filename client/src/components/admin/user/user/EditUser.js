@@ -1,36 +1,38 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {getUser, updateUserByID } from '../../../../redux/actions/user'
 import { Link, useHistory } from 'react-router-dom'
 import { getCompanyUserTypes } from '../../../../redux/actions/company'
 import { setAlert } from '../../../../redux/actions/alert'
 import CompanyUserTypesSelect from '../../../layout/ui/fields/CompanyUserTypesSelect'
 import { Skeleton } from 'antd'
+import { adminGetUserProfiles , adminUpdateUserByID} from '../../../../redux/actions/admin/user'
 
 
-const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, updateUserByID, setAlert } ) => {
+const EditUser = ( { adminUser:{profiles}, id, getCompanyUserTypes, adminUpdateUserByID, setAlert, adminGetUserProfiles } ) => {
   const history = useHistory()
-  const [userID, setuserID] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [userIndex, setUserIndex] = useState(null)
   const [updateEnabled, setUpdateEnabled] = useState(true)
   const [companyID, setCompanyID] = useState("")
   const [companyUserType, setCompanyUserType] = useState("")
   
-  useEffect(()=> id && setuserID(id), [id])
-  useEffect(()=>{ (userID !== null && !user) && getUser(userID) }, [ userID, user, getUser ])
-  useEffect(()=>{ (user && user.user && user.user.usertype && !loading ) && setCompanyUserType(user.user.usertype._id) }, [ user, loading ])
-  useEffect(()=>{ (user && user.user && !loading && user.user.company) && setCompanyID(user.user.company._id) }, [ user, loading ])
+  useEffect(()=> id && setUserIndex(id), [id])
+  useEffect(()=> userIndex && !profile && profiles && profiles.length > 0 && setProfile(profiles[userIndex]),[userIndex, profile, profiles])
+
+  useEffect(()=> profile && profile.user && profile.user.usertype && setCompanyUserType(profile.user.usertype._id), [ profile ])
+  useEffect(()=> profile && profile.user && profile.user.company && setCompanyID(profile.user.company._id), [ profile ])
 
   useEffect(()=>{
     const getData = async () => {
       try {
-          await getCompanyUserTypes(user.user.company._id)    
+          await getCompanyUserTypes(profile.user.company._id)    
       } catch (error) {
         console.log('nope')
       } 
     }
     getData()
-  },[ user, getCompanyUserTypes ])
+  },[ profile, getCompanyUserTypes ])
   
 
 
@@ -46,13 +48,13 @@ const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, upd
   const [formData, setFormData] = useState(initialState)
   useEffect(()=>{
     setFormData({
-      username: loading || !user || !user.user ? '' : user.user.username,
-      email: loading || !user || !user.user ? '' : user.user.email,
-      firstname: loading || !user ? '' : user.firstname,
-      lastname: loading || !user ? '' : user.lastname,
-      phone: loading || !user ? '' : user.phone      
+      username: !profile || !profile.user ? '' : profile.user.username,
+      email: !profile || !profile.user ? '' : profile.user.email,
+      firstname: !profile ? '' : profile.firstname,
+      lastname: !profile ? '' : profile.lastname,
+      phone: !profile ? '' : profile.phone      
     })
-  }, [ user, loading ])
+  }, [ profile ])
 
 
   const { username, email, firstname, lastname, phone } = formData
@@ -62,16 +64,17 @@ const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, upd
   const onSubmit = e => {
     setUpdateEnabled(false)
     e.preventDefault();
-    updateUserByID({
+    adminUpdateUserByID({
       username,
       email,
       firstname,
       lastname,
       phone,
       usertypeid: companyUserType,
-      uid: userID
-    }).then(()=>{
+      uid: profile.user._id
+    }).then( ()=>{
       setAlert('User has been updated.','success',2000)
+      adminGetUserProfiles()
       setTimeout(()=> {
         setUpdateEnabled(true)
         history.push('/admin/user/home')
@@ -88,10 +91,16 @@ const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, upd
   const onChangeUserTypes = (e) => {
     setCompanyUserType(e.target.value)
   }  
+/*
+ * TODO:  ADD USERTYPES TO THE COMPANY - COMPANYTYPE -USERTYPES WHEN PULLING ALL PROFILES
+ *        ADD ABILITY TO PASS THAT DATA TO THE CompanyUserTypesSelect COMPONENT.  
+ *        INSIDE OF COMPONENT, IF DATA NOT PASSED THEN LOOKUP ELSE USE PASSED DATA.
+ * 
+ */
 
   return (
     <>
-      {loading || !user ? (
+      {!profile || !companyUserType ? (
         <div className="container-center" style={{marginTop:'5px'}}>
         <Skeleton avatar active paragraph={{ rows: 5 }} /> 
         <Skeleton avatar active paragraph={{ rows: 5 }} />
@@ -174,16 +183,16 @@ const EditUser = ( { user:{loading, user}, getUser, id, getCompanyUserTypes, upd
 }
 
 EditUser.propTypes = {
-  user: PropTypes.object.isRequired,
-  getUser: PropTypes.func.isRequired,
+  adminUser: PropTypes.object.isRequired,
   getCompanyUserTypes: PropTypes.func.isRequired,
-  updateUserByID: PropTypes.func.isRequired,
+  adminUpdateUserByID: PropTypes.func.isRequired,
+  adminGetUserProfiles: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state,ownProps) => ({
-  user: state.user
+  adminUser: state.adminUser
 })
   
-export default connect(mapStateToProps, {getUser, getCompanyUserTypes, updateUserByID, setAlert} )(EditUser)
+export default connect(mapStateToProps, {getCompanyUserTypes, adminUpdateUserByID, adminGetUserProfiles, setAlert} )(EditUser)
   

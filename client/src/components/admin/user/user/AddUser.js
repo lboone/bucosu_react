@@ -6,8 +6,9 @@ import { register } from '../../../../redux/actions/auth'
 import CompaniesSelect from '../../../layout/ui/fields/CompaniesSelect'
 import CompanyUserTypesSelect from '../../../layout/ui/fields/CompanyUserTypesSelect'
 import { Link } from 'react-router-dom'
+import { adminGetUserProfiles } from '../../../../redux/actions/admin/user'
 
-const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
+const AddUser = ( { auth:{ userRegistered }, register, setAlert, adminGetUserProfiles } ) => {
   
   const initialState = {
     username: '',
@@ -38,6 +39,7 @@ const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
         })
         .then(()=>{
           setFormData({ ...initialState });
+          adminGetUserProfiles()
           setAlert('User has been registered.','success',3000)
         })
         .catch((e)=>{
@@ -94,6 +96,7 @@ const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
               value={password} 
               onChange={e => onChange(e)}
               minLength="6"
+              autoComplete={'false'}
               required
             />
           </div>
@@ -159,6 +162,7 @@ const AddUser = ( { auth:{ userRegistered }, register, setAlert } ) => {
 AddUser.propTypes = {
   register: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
+  adminGetUserProfiles: PropTypes.func.isRequired,
   company: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
 }
@@ -168,5 +172,5 @@ const mapStateToProps = state => ({
   auth: state.auth,
 })
   
-export default connect(mapStateToProps, {register, setAlert})(AddUser)
+export default connect(mapStateToProps, {register, setAlert, adminGetUserProfiles})(AddUser)
   
