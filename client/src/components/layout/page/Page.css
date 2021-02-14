@@ -82,17 +82,15 @@ h1.page-title {
   }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 800px) {
   .navigation-menu {
-    grid-column: span 12;
-    min-height: 60px;
-    max-height: 60px;
-    border-right: none;
+    grid-column: span 1;
+    /* border-right: none; */
     padding: 0px;
     padding-bottom: 1rem;
   }
   .main-content {
-    grid-column: span 12;
+    grid-column: span 11;
     height: 100vh;
   }
 
@@ -102,12 +100,5 @@ h1.page-title {
 
   h1 {
     text-align: center;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .navigation-menu {
-    min-height: 120px;
-    max-height: 120px;
   }
 }

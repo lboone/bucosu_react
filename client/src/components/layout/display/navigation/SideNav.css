@@ -42,8 +42,11 @@
   }
 }
 
-@media screen and (max-width: 750px) {
-  .sidenav {
+@media screen and (max-width: 800px) {
+  .sidenav a {
+    padding-right: 20px;
+  }
+  /* .sidenav {
     width: 100%;
     border: none;
     text-align: center;
@@ -57,7 +60,7 @@
     font-size: 18px;
     padding: 10px;
   }
-
+  
   .sidenav a:hover,
   .sidenav a.selected,
   .sidenav i:hover,
@@ -65,17 +68,17 @@
     border: none;
     background: rgb(231, 230, 228);
     padding: 10px;
-  }
+  } */
   span.hide-sm {
     display: none;
   }
 
-  .container-full {
+  /* .container-full {
     padding-left: 3rem !important;
     margin-top: 120px !important;
   }
   .header,
   .footer {
     padding-left: 1rem;
-  }
+  } */
 }

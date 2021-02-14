@@ -30,7 +30,8 @@ app.use('/api/companytypes',require('./routes/api/companytypes'))
 app.use('/api/buildings',require('./routes/api/buildings'))
 app.use('/api/menus',require('./routes/api/menus'))
 app.use('/api/ipgeolocation',require('./routes/api/ipgeolocation'))
-
+app.use('/api/bcsheadings',require('./routes/api/bcsheadings'))
+app.use('/api/bcsprofiles',require('./routes/api/bcsprofiles'))
 
 app.use('/api/endpoints', auth, function(req,res) {
   res.status(200).json(listEndpoints(app))
